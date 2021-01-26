@@ -1,0 +1,53 @@
+From 42ec85fe28306ae510f2e256626f1c800c910404 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Mon, 3 May 2021 10:14:45 +0200
+Subject: [PATCH 1/2] imx8mm_evk_defconfig: run jh_mmcboot by default
+
+Run jh_mmcboot by default.
+jh_mmcboot is simplified to remove XRDC programming of UART4 ownership:
+this is already done in ATF.
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+---
+ configs/imx8mm_evk_defconfig | 2 +-
+ include/configs/imx8mm_evk.h | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/configs/imx8mm_evk_defconfig b/configs/imx8mm_evk_defconfig
+index 2352e7be64..ad18902f04 100644
+--- a/configs/imx8mm_evk_defconfig
++++ b/configs/imx8mm_evk_defconfig
+@@ -23,7 +23,7 @@ CONFIG_SPL=y
+ CONFIG_DEFAULT_DEVICE_TREE="imx8mm-evk"
+ CONFIG_CSF_SIZE=0x2000
+ CONFIG_DISTRO_DEFAULTS=y
+-CONFIG_BOOTCOMMAND="run distro_bootcmd;run bsp_bootcmd"
++CONFIG_BOOTCOMMAND="run jh_bootcmd"
+ CONFIG_FIT=y
+ CONFIG_FIT_EXTERNAL_OFFSET=0x3000
+ CONFIG_SPL_LOAD_FIT=y
+diff --git a/include/configs/imx8mm_evk.h b/include/configs/imx8mm_evk.h
+index 42dbdec22a..26ddec8c1e 100644
+--- a/include/configs/imx8mm_evk.h
++++ b/include/configs/imx8mm_evk.h
+@@ -94,7 +94,7 @@
+  */
+ #define JAILHOUSE_ENV \
+ 	"jh_clk= \0 " \
+-	"jh_mmcboot=mw 0x303d0518 0xff; setenv fdtfile imx8mm-evk-root.dtb;" \
++	"jh_mmcboot=setenv fdtfile imx8mm-evk-lk.dtb;" \
+ 		"setenv jh_clk clk_ignore_unused mem=1340MB; " \
+ 			   "if run loadimage; then " \
+ 				   "run mmcboot; " \
+@@ -183,6 +183,8 @@
+ 				"echo WARN: Cannot load the DT; " \
+ 			"fi; " \
+ 		"fi;\0" \
++	"jh_bootcmd=echo Running JH bootcmd ...; " \
++		"run jh_mmcboot\0" \
+ 	"bsp_bootcmd=echo Running BSP bootcmd ...; " \
+ 		"mmc dev ${mmcdev}; if mmc rescan; then " \
+ 		   "if run loadbootscript; then " \
+-- 
+2.17.1
+

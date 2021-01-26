@@ -1,0 +1,87 @@
+NXP Software Content Register
+
+Release - Harpoon Linux 5.10.35-2.0.0
+ June 2021
+
+Outgoing License: LA_OPT_NXP_Software_License v24 June 2021 - Additional distribution license granted - Section 2.3 applies
+License File:     EULA.txt
+
+Yocto Project recipe manifest:
+repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-hardknott -m imx-5.10.35-2.0.0_harpoon.xml
+
+Release tag: lf-5.10.35-2.0.0-harpoon
+
+This file is an addendum to SCR-5.10.35_2.0.0.txt.
+
+--------------------------------------------
+BSP Packages
+--------------------------------------------
+
+Package:                     littlekernel
+Outgoing License:            MIT
+License File:                littlekernel-lk/LICENSE
+                             littlekernel-imx8/COPYING-MIT
+Package Category:            BSP
+Type of Content:             Source code
+Description and comments:    Little Kernel RTOS with i.MX8M base port
+Release Location:            https://github.com/NXPmicro/littlekernel-lk
+Origin:                      Little Kernel (MIT) - https://github.com/littlekernel/lk
+                             openlibm (ISC, MIT, LGPL-2.1+, BSD-2-Clause-FreeBSD) - https://github.com/JuliaMath/openlibm
+                             libfdt (BSD-2-Clause) - https://github.com/dgibson/dtc
+                             Zircon (MIT) - https://fuchsia.googlesource.com/fuchsia/+/master/zircon/kernel
+                             Little Kernel i.MX8 (MIT) - https://github.com/NXPmicro/littlekernel-imx8
+
+--------------------------------------------
+
+Package:                     jh-services
+Outgoing License:            GPL-2.0
+License File:                COPYING
+Package Category:            BSP
+Type of Content:             Source code
+Description and comments:    Linux kernel drivers for ivshmem communication
+Release Location:            https://github.com/NXPmicro/jh-services
+Origin                       NXP (GPL-2.0)
+
+
+--------------------------------------------
+PATCHES IN META-NXP-HARPOON
+--------------------------------------------
+
+Patch for:                   imx-atf.git
+Outgoing License:            BSD-3-Clause
+License File:                imx-atf/docs/license.rst
+Package Category:            BSP
+Type of Content:             source
+Description and comments:    ARM Trusted Firmware
+Origin:                      NXP (BSD-3-Clause) - https://source.codeaurora.org/external/imx/imx-atf
+
+--------------------------------------------
+
+Patch for:                   linux-imx.git
+Outgoing License:            GPL-2.0
+License File:                linux-imx/COPYING
+Package Category:            BSP
+Type of Content:             source
+Description and comments:    The Linux kernel with i.MX-specific drivers
+Origin:                      NXP (GPL-2.0) - https://source.codeaurora.org/external/imx/linux-imx
+
+--------------------------------------------
+
+Patch for:                   uboot-imx.git
+Outgoing License:            GPL-2.0
+License File:                uboot-imx/COPYING
+Package Category:            BSP
+Type of Content:             source
+Description and comments:    Bootloader with i.MX-specific capabilities
+Origin:                      NXP (GPL-2.0) - https://source.codeaurora.org/external/imx/uboot-imx
+
+--------------------------------------------
+
+Patch for:                   imx-jailhouse.git
+Outgoing License:            GPL-2.0
+License File:                imx-jailhouse/COPYING
+Package Category:            BSP
+Type of Content:             source
+Description and comments:    A partitioning Hypervisor based on Linux
+Origin:                      NXP (GPL-2.0)
+                             Siemens AG (GPL-2.0) - https://github.com/siemens/jailhouse

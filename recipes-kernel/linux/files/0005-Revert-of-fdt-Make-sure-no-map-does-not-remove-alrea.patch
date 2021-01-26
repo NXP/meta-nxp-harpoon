@@ -1,0 +1,36 @@
+From b18bc54c7dd62c4d3dd9172fda21cf2e4f10d5ed Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Fri, 9 Apr 2021 10:05:58 +0200
+Subject: [PATCH 4/5] Revert "of/fdt: Make sure no-map does not remove already
+ reserved regions"
+
+This reverts commit 54d3a5761951c82e3f8eb44eeb4b229201347652.
+---
+ drivers/of/fdt.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index f2e697000b96..e4d4a1e7ef7e 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1149,16 +1149,8 @@ int __init __weak early_init_dt_mark_hotplug_memory_arch(u64 base, u64 size)
+ int __init __weak early_init_dt_reserve_memory_arch(phys_addr_t base,
+ 					phys_addr_t size, bool nomap)
+ {
+-	if (nomap) {
+-		/*
+-		 * If the memory is already reserved (by another region), we
+-		 * should not allow it to be marked nomap.
+-		 */
+-		if (memblock_is_region_reserved(base, size))
+-			return -EBUSY;
+-
++	if (nomap)
+ 		return memblock_mark_nomap(base, size);
+-	}
+ 	return memblock_reserve(base, size);
+ }
+ 
+-- 
+2.30.2
+

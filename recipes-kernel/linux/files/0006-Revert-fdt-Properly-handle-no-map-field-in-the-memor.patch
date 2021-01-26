@@ -1,0 +1,27 @@
+From 1df87cecafebe6732dc95fab635cbc01a42c20a7 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Fri, 9 Apr 2021 10:06:11 +0200
+Subject: [PATCH 5/5] Revert "fdt: Properly handle "no-map" field in the memory
+ region"
+
+This reverts commit 0674fa99a7d8dca056edbfa8e4e4a0cd03ba3591.
+---
+ drivers/of/fdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index e4d4a1e7ef7e..4602e467ca8b 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1150,7 +1150,7 @@ int __init __weak early_init_dt_reserve_memory_arch(phys_addr_t base,
+ 					phys_addr_t size, bool nomap)
+ {
+ 	if (nomap)
+-		return memblock_mark_nomap(base, size);
++		return memblock_remove(base, size);
+ 	return memblock_reserve(base, size);
+ }
+ 
+-- 
+2.30.2
+

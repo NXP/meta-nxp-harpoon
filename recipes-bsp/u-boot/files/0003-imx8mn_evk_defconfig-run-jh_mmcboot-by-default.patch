@@ -1,0 +1,40 @@
+From b8c43a511d825a5ae83d8f2c0eef0ab8c5290413 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Fri, 28 May 2021 16:54:25 +0200
+Subject: [PATCH] imx8mn_evk_defconfig: run jh_mmcboot by default
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+---
+ configs/imx8mn_evk_defconfig | 2 +-
+ include/configs/imx8mn_evk.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/imx8mn_evk_defconfig b/configs/imx8mn_evk_defconfig
+index ef5647eadb..76267ee5df 100644
+--- a/configs/imx8mn_evk_defconfig
++++ b/configs/imx8mn_evk_defconfig
+@@ -24,7 +24,7 @@ CONFIG_SPL_IMX_ROMAPI_LOADADDR=0x48000000
+ CONFIG_DEFAULT_DEVICE_TREE="imx8mn-evk"
+ CONFIG_CSF_SIZE=0x2000
+ CONFIG_DISTRO_DEFAULTS=y
+-CONFIG_BOOTCOMMAND="run distro_bootcmd;run bsp_bootcmd"
++CONFIG_BOOTCOMMAND="run jh_bootcmd"
+ CONFIG_FIT=y
+ CONFIG_FIT_EXTERNAL_OFFSET=0x3000
+ CONFIG_SPL_LOAD_FIT=y
+diff --git a/include/configs/imx8mn_evk.h b/include/configs/imx8mn_evk.h
+index 82508554ac..332cb60dcd 100644
+--- a/include/configs/imx8mn_evk.h
++++ b/include/configs/imx8mn_evk.h
+@@ -80,7 +80,7 @@
+ #ifdef CONFIG_TARGET_IMX8MN_DDR4_EVK
+ #define JH_ROOT_DTB	"imx8mn-ddr4-evk-lk.dtb"
+ #else
+-#define JH_ROOT_DTB	"imx8mn-evk-root.dtb"
++#define JH_ROOT_DTB	"imx8mn-evk-lk.dtb"
+ #endif
+ 
+ #define JAILHOUSE_ENV \
+-- 
+2.17.1
+

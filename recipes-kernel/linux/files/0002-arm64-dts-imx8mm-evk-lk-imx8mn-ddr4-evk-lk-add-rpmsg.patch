@@ -1,0 +1,65 @@
+From d3e31697c60f45e6944bcdb32a9d4d55321284d1 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Mon, 22 Feb 2021 12:19:56 +0100
+Subject: [PATCH 2/5] arm64: dts: imx8mm-evk-lk, imx8mn-ddr4-evk-lk: add
+ rpmsg_console node
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mm-evk-lk.dts      | 11 ++++++++++-
+ arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk-lk.dts | 10 ++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-lk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-lk.dts
+index d750d25ba8e1..488103852702 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-lk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-lk.dts
+@@ -7,6 +7,16 @@
+ 
+ / {
+ 	interrupt-parent = <&gic>;
++
++	ivshm_rpmsg {
++		compatible = "fsl,ivshm-rpmsg";
++
++		rpmsg_console {
++			compatible = "fsl,rpmsg-console";
++			id = <2>;
++			size = <16384>;
++		};
++	};
+ };
+ 
+ &cpu_pd_wait {
+@@ -47,7 +57,6 @@ MX8MM_IOMUXC_UART4_TXD_UART4_DCE_TX	0x140
+ };
+ 
+ &{/reserved-memory} {
+-
+ 	ivshmem_reserved: ivshmem@bba00000 {
+ 		no-map;
+ 		reg = <0 0xbba00000 0x0 0x00400000>;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk-lk.dts b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk-lk.dts
+index 0c9b9fa1e5c1..6f6f21ddf029 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk-lk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk-lk.dts
+@@ -13,6 +13,16 @@ &cpu_pd_wait {
+ */
+ 
+ &{/} {
++	ivshm_rpmsg {
++		compatible = "fsl,ivshm-rpmsg";
++
++		rpmsg_console {
++			compatible = "fsl,rpmsg-console";
++			id = <2>;
++			size = <16384>;
++		};
++	};
++
+ 	reserved-memory {
+ 		#address-cells = <2>;
+ 		#size-cells = <2>;
+-- 
+2.30.2
+

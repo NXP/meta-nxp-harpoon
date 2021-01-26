@@ -1,0 +1,43 @@
+NXP Software Content Register
+
+Release - Harpoon Linux 5.15.5-1.0.0
+ March 2022
+
+Outgoing License: LA_OPT_NXP_Software_License v34 February 2022 - Additional distribution license granted - Section 2.3 applies
+License File:     EULA.txt
+
+Yocto Project recipe manifest:
+repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-hardknott -m imx-5.10.72-2.2.0_harpoon.xml
+
+Release tag: lf-5.15.5-1.0.0-harpoon
+
+This file is an addendum to SCR-5.15.5-1.0.0.txt.
+
+--------------------------------------------
+BSP Packages
+--------------------------------------------
+
+Package:                     littlekernel
+Outgoing License:            MIT
+License File:                littlekernel-lk/LICENSE
+                             littlekernel-imx8/COPYING-MIT
+Package Category:            BSP
+Type of Content:             Source code
+Description and comments:    Little Kernel RTOS with i.MX8M base port
+Release Location:            https://github.com/NXPmicro/littlekernel-lk
+Origin:                      Little Kernel (MIT) - https://github.com/littlekernel/lk
+                             openlibm (ISC, MIT, LGPL-2.1+, BSD-2-Clause-FreeBSD) - https://github.com/JuliaMath/openlibm
+                             libfdt (BSD-2-Clause) - https://github.com/dgibson/dtc
+                             Zircon (MIT) - https://fuchsia.googlesource.com/fuchsia/+/master/zircon/kernel
+                             Little Kernel i.MX8 (MIT) - https://github.com/NXPmicro/littlekernel-imx8
+
+--------------------------------------------
+
+Package:                     jh-services
+Outgoing License:            GPL-2.0
+License File:                COPYING
+Package Category:            BSP
+Type of Content:             Source code
+Description and comments:    Linux kernel drivers for ivshmem communication
+Release Location:            https://github.com/NXPmicro/jh-services
+Origin                       NXP (GPL-2.0)

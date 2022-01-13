@@ -1,0 +1,32 @@
+NXP Software Content Register
+
+Release - Real-time Edge Software 2.1.1 (includes Harpoon)
+ January 2022
+
+Outgoing License: LA_OPT_NXP_Software_License v31 December 2021 - Additional distribution license granted - Section 2.3 applies
+License File:     EULA.txt
+
+Yocto Project recipe manifest:
+repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-hardknott -m real-time-edge-2.1.1.xml
+
+Release tag: Real-Time-Edge-v2.1.1
+
+This file is an addendum to SCR-REAL-TIME-EDGE_2.1.txt and MCUX_2.10.0/SW-Content-Register.txt.
+
+--------------------------------------------
+Packages
+--------------------------------------------
+
+Package:                     Harpoon Apps
+Version:                     2.0.0
+Outgoing License:            BSD-3-Clause
+License File:                harpoon-apps/LICENSES/COPYING-BSD-3
+                             harpoon-apps/LICENSES/COPYING-Apache.txt (*/mmu.c)
+Type of Content:             source code, project files, linker files
+Description and comments:    Harpoon application examples
+                             SDK-based examples to show how to use peripheral
+                             drivers, integrate middleware and execute application
+                             inside jailhouse cells on a ARM Cortex-A53 core.
+Release Location:            https://github.com/NXPmicro/harpoon-apps
+Origin:                      NXP (BSD-3-Clause)
+--------------------------------------------

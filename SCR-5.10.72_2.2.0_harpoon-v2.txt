@@ -1,0 +1,32 @@
+NXP Software Content Register
+
+Release - Harpoon v2 Linux 5.10.72-2.2.0
+ January 2022
+
+Outgoing License: LA_OPT_NXP_Software_License v31 December 2021 - Additional distribution license granted - Section 2.3 applies
+License File:     EULA.txt
+
+Yocto Project recipe manifest:
+repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-hardknott -m imx-5.10.72-2.2.0_harpoon-v2.xml
+
+Release tag: lf-5.10.72-2.2.0-harpoon-2.0.0
+
+This file is an addendum to SCR-5.10.72_2.2.0.txt and MCUX_2.10.0/SW-Content-Register.txt.
+
+--------------------------------------------
+Packages
+--------------------------------------------
+
+Package:                     Harpoon Apps
+Version:                     2.0.0
+Outgoing License:            BSD-3-Clause
+License File:                harpoon-apps/LICENSES/COPYING-BSD-3
+                             harpoon-apps/LICENSES/COPYING-Apache.txt (*/mmu.c)
+Type of Content:             source code, project files, linker files
+Description and comments:    Harpoon application examples
+                             SDK-based examples to show how to use peripheral
+                             drivers, integrate middleware and execute application
+                             inside jailhouse cells on a ARM Cortex-A53 core.
+Release Location:            https://github.com/NXPmicro/harpoon-apps
+Origin:                      NXP (BSD-3-Clause)
+--------------------------------------------

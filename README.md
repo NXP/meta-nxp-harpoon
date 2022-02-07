@@ -21,19 +21,19 @@ Please refer to detailed README under the release branch.
 
 ### Examples
 
-To download the Real-time Edge 2.1.1 release
+To download the Real-time Edge 2.2.0 release
 
 ```
 $ mkdir yocto-real-time-edge
 $ cd yocto-real-time-edge
-$ repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-hardknott -m real-time-edge-2.1.1.xml
+$ repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-hardknott -m real-time-edge-2.2.0.xml
 $ repo sync
 ```
 
 ## Setup build project
 
 ```
-$ MACHINE=<Machine> DISTRO=<Distro> source ./harpoon-real-time-edge-setup-env.sh -b bld-<Name>
+$ MACHINE=<Machine> DISTRO=<Distro> source ./real-time-edge-setup-env.sh -b build-<Name>
 ```
 
 Machine:
@@ -49,7 +49,7 @@ Name:
 ### Examples
 
 ```
-$ DISTRO=nxp-real-time-edge MACHINE=imx8mp-lpddr4-evk source harpoon-real-time-edge-setup-env.sh -b build-imx8mpevk-real-time-edge
+$ DISTRO=nxp-real-time-edge MACHINE=imx8mp-lpddr4-evk source ./real-time-edge-setup-env.sh -b build-imx8mpevk-real-time-edge
 ```
 
 ## Build an image

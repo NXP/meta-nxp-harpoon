@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd38
 S = "${WORKDIR}/git"
 
 SRC_URI = "git://github.com/NXPmicro/harpoon-apps.git;protocol=https;branch=main"
-SRCREV = "b5c81fa4f0813a2b8973198c027b313dde02c07e"
+SRCREV = "acf62c6f96e2c8bf188cee5035b8a9bb9ca67f4c"
 
 inherit cmake
 

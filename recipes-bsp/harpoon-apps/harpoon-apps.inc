@@ -3,10 +3,10 @@
 SECTION = "bsp"
 
 LICENSE = "BSD-3-Clause & MIT & Proprietary"
-#LIC_FILES_CHKSUM = "file://harpoon-apps/LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd385e900f
 LIC_FILES_CHKSUM = " \
     file://mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=6c8be969fb3477739a057036fb2e9ee8 \
-    file://FreeRTOS-Kernel/LICENSE.md;md5=7ae2be7fb1637141840314b51970a9f7"
+    file://FreeRTOS-Kernel/LICENSE.md;md5=7ae2be7fb1637141840314b51970a9f7 \
+    file://harpoon-apps/LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd385e900f"
 
 S = "${WORKDIR}/git"
 
@@ -17,7 +17,7 @@ SRC_URI = "\
 "
 
 SRCREV_FORMAT = "harpoon-apps_mcux-sdk_FreeRTOS-Kernel"
-SRCREV_harpoon-apps = "b5c81fa4f0813a2b8973198c027b313dde02c07e"
+SRCREV_harpoon-apps = "acf62c6f96e2c8bf188cee5035b8a9bb9ca67f4c"
 SRCREV_mcux-sdk = "46d44c68e6cb7f97a68e6a1f75aaf4337dba90b5"
 SRCREV_FreeRTOS-Kernel = "51e25b23a8738b8326cd751ef3063e7ec2544633"
 SRCBRANCH_harpoon-apps = "main"

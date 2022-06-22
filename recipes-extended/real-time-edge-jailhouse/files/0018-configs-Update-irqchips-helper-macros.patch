@@ -1,0 +1,152 @@
+From 05d2900ad06f0488b3537cf7de67cd52b5f9ae6f Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Fri, 21 Jan 2022 16:40:42 +0000
+Subject: [PATCH 18/35] configs: Update irqchips helper macros
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/cell-create.h   | 22 +++++++++++++---------
+ configs/arm64/cell-helper.h   | 25 ++++++++++++++++++++++++-
+ configs/arm64/cell-template.c | 21 +++++++++++++++++----
+ 3 files changed, 54 insertions(+), 14 deletions(-)
+
+diff --git a/configs/arm64/cell-create.h b/configs/arm64/cell-create.h
+index 1473a06b..087e1928 100644
+--- a/configs/arm64/cell-create.h
++++ b/configs/arm64/cell-create.h
+@@ -2,7 +2,7 @@
+  * Cell Configuration - Structure definition
+  *
+  * Copyright (c) Siemens AG, 2014-2017
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  *
+  * Authors:
+  *  Jan Kiszka <jan.kiszka@siemens.com>
+@@ -18,6 +18,14 @@
+ 	(sizeof((struct jailhouse_memory[]){CONFIG_INMATE_REGIONS}) \
+ 	/ sizeof(struct jailhouse_memory))
+ 
++#if !defined(CONFIG_INMATE_IRQCHIPS)
++#define CONFIG_INMATE_IRQCHIP_NUM 0
++#else
++#define CONFIG_INMATE_IRQCHIP_NUM \
++	(sizeof((struct jailhouse_irqchip[]){CONFIG_INMATE_IRQCHIPS}) \
++	/ sizeof(struct jailhouse_irqchip))
++#endif
++
+ #if !defined(CONFIG_INMATE_PCI_DEVICES)
+ #define CONFIG_INMATE_PCI_NUM 0
+ #else
+@@ -30,7 +38,7 @@ struct {
+ 	struct jailhouse_cell_desc cell;
+ 	__u64 cpus[1];
+ 	struct jailhouse_memory mem_regions[CONFIG_INMATE_REGIONS_NUM + 1];
+-	struct jailhouse_irqchip irqchips[1];
++	struct jailhouse_irqchip irqchips[CONFIG_INMATE_IRQCHIP_NUM];
+ 	struct jailhouse_pci_device pci_devices[CONFIG_INMATE_PCI_NUM];
+ } __attribute__((packed)) config = {
+ 	.cell = {
+@@ -58,15 +66,11 @@ struct {
+ 		COMM_REGION_RW(0x80000000, KB(4)) /* communication region */
+ 	},
+ 
++#if defined(CONFIG_INMATE_IRQCHIPS)
+ 	.irqchips = {
+-		{
+-			.address = CONFIG_INMATE_IRQCHIPS_ADDR,
+-			.pin_base = CONFIG_INMATE_IRQCHIPS_BASE,
+-			.pin_bitmap = {
+-				CONFIG_INMATE_IRQCHIPS_BITMAP
+-			}
+-		}
++		CONFIG_INMATE_IRQCHIPS
+ 	},
++#endif
+ 
+ #if defined(CONFIG_INMATE_PCI_DEVICES)
+ 	.pci_devices = {
+diff --git a/configs/arm64/cell-helper.h b/configs/arm64/cell-helper.h
+index 3b40dd79..6ad357c8 100644
+--- a/configs/arm64/cell-helper.h
++++ b/configs/arm64/cell-helper.h
+@@ -1,7 +1,7 @@
+ /*
+  * Cell Configuration - Generic definitions
+  *
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  *
+  * Authors:
+  *  Stephane Viau <stephane.viau@nxp.com>
+@@ -88,6 +88,29 @@
+ 		         JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED, \
+ 	}
+ 
++#define IRQnMAP(x)	(1 << ((x) % 32))
++
++#define IRQCHIP_ENTRY(_index, _address, _base, _bitmap1, _bitmap2, _bitmap3, _bitmap4) \
++		[_index] = { \
++			.address = _address, \
++			.pin_base = _base, \
++			.pin_bitmap = { \
++				_bitmap1, \
++				_bitmap2, \
++				_bitmap3, \
++				_bitmap4, \
++			} \
++		}
++
++#define IRQCHIP0(_address, _bitmap1, _bitmap2, _bitmap3, _bitmap4) \
++	IRQCHIP_ENTRY(0, _address, 32, _bitmap1, _bitmap2, _bitmap3, _bitmap4)
++
++#define IRQCHIP1(_address, _bitmap1, _bitmap2, _bitmap3, _bitmap4) \
++	IRQCHIP_ENTRY(1, _address, 160, _bitmap1, _bitmap2, _bitmap3, _bitmap4)
++
++#define IRQCHIP2(_address, _bitmap1, _bitmap2, _bitmap3, _bitmap4) \
++	IRQCHIP_ENTRY(2, _address, 288, _bitmap1, _bitmap2, _bitmap3, _bitmap4)
++
+ #define PCI_IVSHMEM_UNDEFINED(_domain, _bdf, region, id, peers) \
+ 	{ \
+ 		.type = JAILHOUSE_PCI_TYPE_IVSHMEM, \
+diff --git a/configs/arm64/cell-template.c b/configs/arm64/cell-template.c
+index 03e6de90..ce6be1c5 100644
+--- a/configs/arm64/cell-template.c
++++ b/configs/arm64/cell-template.c
+@@ -1,7 +1,7 @@
+ /*
+  * Cell Configuration - Structure definition
+  *
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  *
+  * Authors:
+  *  Stephane Viau <stephane.viau@nxp.com>
+@@ -23,8 +23,21 @@
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000) /* GIC DISTRIBUTOR BASE ADDR */
+-#define CONFIG_INMATE_IRQCHIPS_BASE	(32)
+-#define CONFIG_INMATE_IRQCHIPS_BITMAP	\
+-	(1 << (29 + 32 - 32)) /* UART4 */
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                    \
++		IRQnMAP(61),           /* interrupts 32..63 */   \
++		0,                     /* interrupts 64..95 */   \
++		0,                     /* interrupts 96..127 */  \
++		0),                    /* interrupts 128..159 */ \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                    \
++		0,                     /* interrupts 160..191 */ \
++		0,                     /* interrupts 192..223 */ \
++		0,                     /* interrupts 224..255 */ \
++		0),                    /* interrupts 256..287 */ \
++	IRQCHIP2(CONFIG_INMATE_IRQCHIPS_ADDR,                    \
++		0,                    /* interrupts 288..319 */  \
++		0,                     /* interrupts 320..351 */ \
++		0,                     /* interrupts 352..383 */ \
++		0)                     /* interrupts 384..415 */ \
+ 
+ #include "cell-create.h"
+-- 
+2.25.1
+

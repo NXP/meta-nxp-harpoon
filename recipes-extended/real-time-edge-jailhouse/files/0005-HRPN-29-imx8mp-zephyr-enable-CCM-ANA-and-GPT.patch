@@ -1,0 +1,71 @@
+From c7303ca56afd0ca356827626630d7e50f854dd46 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Fri, 18 Jun 2021 17:55:54 +0800
+Subject: [PATCH 05/35] HRPN-29 imx8mp: zephyr: enable CCM-ANA and GPT
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+[Add JIRA ticket ID]
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/imx8mp-zephyr.c | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
+
+diff --git a/configs/arm64/imx8mp-zephyr.c b/configs/arm64/imx8mp-zephyr.c
+index 53e6ab6d..49ce9377 100644
+--- a/configs/arm64/imx8mp-zephyr.c
++++ b/configs/arm64/imx8mp-zephyr.c
+@@ -18,7 +18,7 @@
+ struct {
+ 	struct jailhouse_cell_desc cell;
+ 	__u64 cpus[1];
+-	struct jailhouse_memory mem_regions[4];
++	struct jailhouse_memory mem_regions[7];
+ 	struct jailhouse_irqchip irqchips[1];
+ } __attribute__((packed)) config = {
+ 	.cell = {
+@@ -39,6 +39,27 @@ struct {
+ 	},
+ 
+ 	.mem_regions = {
++		/* GPT1 */ {
++			.phys_start = 0x302d0000,
++			.virt_start = 0x302d0000,
++			.size = 0x10000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_IO,
++		},
++		/* GPT2 */ {
++			.phys_start = 0x302e0000,
++			.virt_start = 0x302e0000,
++			.size = 0x10000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_IO,
++		},
++		/* ANA_PLL */ {
++			.phys_start = 0x30360000,
++			.virt_start = 0x30360000,
++			.size = 0x10000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
++		},
+ 		/* CCM */ {
+ 			.phys_start = 0x30380000,
+ 			.virt_start = 0x30380000,
+@@ -69,11 +90,12 @@ struct {
+ 	},
+ 
+ 	.irqchips = {
+-		/* uart4 */ {
++		{
+ 			.address = 0x38800000,
+ 			.pin_base = 32,
+ 			.pin_bitmap = {
+-				(1 << (29 + 32 - 32))
++				(1 << (29 + 32 - 32)), /* uart4 */
++				(1 << (54 + 32 - 64)) | (1 << (55 + 32 - 64)), /* GPT1, GPT2 */
+ 			},
+ 		},
+ 	},
+-- 
+2.25.1
+

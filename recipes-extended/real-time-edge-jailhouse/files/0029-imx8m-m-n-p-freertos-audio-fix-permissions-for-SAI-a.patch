@@ -1,0 +1,89 @@
+From 58ceaf40299f9bc90ee024b0a40fd13d8605670f Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Thu, 10 Mar 2022 10:57:51 +0100
+Subject: [PATCH 29/35] imx8m{m,n,p}-freertos-audio: fix permissions for SAI
+ and I2C
+
+All SAI and I2C3 should not be accessed by Linux.
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+---
+ configs/arm64/imx8mm-freertos-audio.c | 12 ++++++------
+ configs/arm64/imx8mn-freertos-audio.c | 12 ++++++------
+ configs/arm64/imx8mp-freertos-audio.c | 14 +++++++-------
+ 3 files changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/configs/arm64/imx8mm-freertos-audio.c b/configs/arm64/imx8mm-freertos-audio.c
+index 93e70ba7..7eb4cb4a 100644
+--- a/configs/arm64/imx8mm-freertos-audio.c
++++ b/configs/arm64/imx8mm-freertos-audio.c
+@@ -28,12 +28,12 @@
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+ 	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+ 	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RWS(0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
+-	MMIO_REGION_RWS(0x30010000, 0x30010000, KB(64)),   /* SAI1 */   \
+-	MMIO_REGION_RWS(0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
+-	MMIO_REGION_RWS(0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
+-	MMIO_REGION_RWS(0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
+-	MMIO_REGION_RWS(0x30060000, 0x30060000, KB(64))    /* SAI6 */   \
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RW( 0x30010000, 0x30010000, KB(64)),   /* SAI1 */   \
++	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
++	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
++	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
++	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64))    /* SAI6 */   \
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+diff --git a/configs/arm64/imx8mn-freertos-audio.c b/configs/arm64/imx8mn-freertos-audio.c
+index d92f18f6..a73c84c1 100644
+--- a/configs/arm64/imx8mn-freertos-audio.c
++++ b/configs/arm64/imx8mn-freertos-audio.c
+@@ -28,12 +28,12 @@
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+ 	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+ 	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RWS(0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
+-	MMIO_REGION_RWS(0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
+-	MMIO_REGION_RWS(0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
+-	MMIO_REGION_RWS(0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
+-	MMIO_REGION_RWS(0x30060000, 0x30060000, KB(64)),   /* SAI6 */   \
+-	MMIO_REGION_RWS(0x300b0000, 0x300b0000, KB(64))    /* SAI7 */
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
++	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
++	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
++	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64)),   /* SAI6 */   \
++	MMIO_REGION_RW( 0x300b0000, 0x300b0000, KB(64))    /* SAI7 */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+diff --git a/configs/arm64/imx8mp-freertos-audio.c b/configs/arm64/imx8mp-freertos-audio.c
+index c1c4775a..7274cc37 100644
+--- a/configs/arm64/imx8mp-freertos-audio.c
++++ b/configs/arm64/imx8mp-freertos-audio.c
+@@ -32,13 +32,13 @@
+ 	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),    /* CCM */    \
+ 	MMIO_REGION_RWS(0x30388000, 0x30388000, KB(12)),   /* CCM */    \
+ 	MMIO_REGION_RW( 0x303a0000, 0x303a0000, KB(64)),   /* GPC */	\
+-	MMIO_REGION_RWS( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */	\
+-	MMIO_REGION_RWS( 0x30c10000, 0x30c10000, KB(64)),   /* SAI1 */	\
+-	MMIO_REGION_RWS( 0x30c20000, 0x30c20000, KB(64)),   /* SAI2 */	\
+-	MMIO_REGION_RWS( 0x30c30000, 0x30c30000, KB(64)),   /* SAI3 */	\
+-	MMIO_REGION_RWS( 0x30c50000, 0x30c50000, KB(64)),   /* SAI5 */	\
+-	MMIO_REGION_RWS( 0x30c60000, 0x30c60000, KB(64)),   /* SAI6 */	\
+-	MMIO_REGION_RWS( 0x30c80000, 0x30c80000, KB(64)),   /* SAI7 */	\
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */	\
++	MMIO_REGION_RW( 0x30c10000, 0x30c10000, KB(64)),   /* SAI1 */	\
++	MMIO_REGION_RW( 0x30c20000, 0x30c20000, KB(64)),   /* SAI2 */	\
++	MMIO_REGION_RW( 0x30c30000, 0x30c30000, KB(64)),   /* SAI3 */	\
++	MMIO_REGION_RW( 0x30c50000, 0x30c50000, KB(64)),   /* SAI5 */	\
++	MMIO_REGION_RW( 0x30c60000, 0x30c60000, KB(64)),   /* SAI6 */	\
++	MMIO_REGION_RW( 0x30c80000, 0x30c80000, KB(64)),   /* SAI7 */	\
+ 	MMIO_REGION_RWS(0x30e20000, 0x30e20000, KB(64))    /* AUDIOMIX */
+ 
+ /* GIC */
+-- 
+2.25.1
+

@@ -1,0 +1,39 @@
+From f366e55f8f189ebac6bb955ddaa1e73fad3355cb Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Thu, 23 Jun 2022 10:44:56 +0200
+Subject: [PATCH 9/9] arm64: dts: imx8mn-evk-root: disable busfreq
+
+Disable busfreq to prevent Linux from locking up Jailhouse inmate cells.
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts
+index 91bce566c584..41111300b658 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2020 NXP
++ * Copyright 2020-2022 NXP
+  */
+ 
+ #include "imx8mn-evk.dts"
+@@ -65,6 +65,11 @@ MX8MN_IOMUXC_UART4_TXD_UART4_DCE_TX	0x140
+ 	};
+ };
+ 
++&{/busfreq} {
++	/* Disable busfreq, to avoid 1st Linux busfreq crash other inmates */
++	status = "disabled";
++};
++
+ &clk {
+ 	init-on-array = <IMX8MN_CLK_NAND_USDHC_BUS
+ 			 IMX8MN_CLK_USDHC3_ROOT
+-- 
+2.25.1
+

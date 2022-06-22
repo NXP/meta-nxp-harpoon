@@ -1,0 +1,116 @@
+From 31ca3cc26925d9f2266dafa20345f9ab75cb65b6 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Mon, 21 Feb 2022 16:13:16 +0100
+Subject: [PATCH 6/9] arm64: dts: imx8m{m,n,p}-evk-harpoon: disable all SAIs
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+---
+ .../boot/dts/freescale/imx8mm-evk-harpoon.dts  | 18 +++++++++++++++++-
+ .../boot/dts/freescale/imx8mn-evk-harpoon.dts  | 16 ++++++++++++++++
+ .../boot/dts/freescale/imx8mp-evk-harpoon.dts  | 18 +++++++++++++++++-
+ 3 files changed, 50 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+index 94f28321f48a..6ef98b400a06 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  */
+ 
+ #include "imx8mm-evk-root.dts"
+@@ -9,6 +9,22 @@ &i2c3 {
+ 	status = "disabled";
+ };
+ 
++&sai1 {
++	status = "disabled";
++};
++
++&sai2 {
++	status = "disabled";
++};
++
++&sai3 {
++	status = "disabled";
++};
++
+ &sai5 {
+ 	status = "disabled";
+ };
++
++&sai6 {
++	status = "disabled";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+index 55f429879ea3..7d6b3ed96b1e 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+@@ -9,6 +9,22 @@ &i2c3 {
+ 	status = "disabled";
+ };
+ 
++&sai2 {
++	status = "disabled";
++};
++
++&sai3 {
++	status = "disabled";
++};
++
+ &sai5 {
+ 	status = "disabled";
+ };
++
++&sai6 {
++	status = "disabled";
++};
++
++&sai7 {
++	status = "disabled";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+index c4d2bce334c9..1267f0d3277e 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  */
+ 
+ #include "imx8mp-evk-root.dts"
+@@ -9,6 +9,14 @@ &i2c3 {
+ 	status = "disabled";
+ };
+ 
++&sai1 {
++	status = "disabled";
++};
++
++&sai2 {
++	status = "disabled";
++};
++
+ &sai3 {
+ 	status = "disabled";
+ };
+@@ -16,3 +24,11 @@ &sai3 {
+ &sai5 {
+ 	status = "disabled";
+ };
++
++&sai6 {
++	status = "disabled";
++};
++
++&sai7 {
++	status = "disabled";
++};
+-- 
+2.25.1
+

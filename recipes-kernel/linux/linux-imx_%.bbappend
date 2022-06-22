@@ -1,0 +1,11 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
+SRC_URI += "file://0001-arm64-dts-imx8mm-evk-harpoon-imx8mn-evk-harpoon-imx8.patch"
+SRC_URI += "file://0002-arm64-dts-imx8mm-evk-harpoon-remove-sai5.patch"
+SRC_URI += "file://0003-arm64-dts-imx8mp-evk-harpoon-Enable-SAI-audio-case-i.patch"
+SRC_URI += "file://0004-arm64-dts-imx8mn-evk-harpoon-Enable-SAI-audio-case-i.patch"
+SRC_URI += "file://0005-arm64-dts-imx8m-m-n-p-evk-harpoon-Remove-iomux-setti.patch"
+SRC_URI += "file://0006-arm64-dts-imx8m-m-n-p-evk-harpoon-disable-all-SAIs.patch"
+SRC_URI += "file://0007-arm64-dts-imx8m-m-n-p-evk-Create-DTS-file-for-indust.patch"
+SRC_URI += "file://0008-arm64-dts-imx8m-m-n-p-evk-Build-DTB-file-for-industr.patch"
+SRC_URI += "file://0009-arm64-dts-imx8mn-evk-root-disable-busfreq.patch"

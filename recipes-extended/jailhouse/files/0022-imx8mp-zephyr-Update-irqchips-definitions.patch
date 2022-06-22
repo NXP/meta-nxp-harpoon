@@ -1,0 +1,53 @@
+From 748ce273dfc43dd35579b2f33b477916962d37e3 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Fri, 21 Jan 2022 16:42:32 +0000
+Subject: [PATCH 22/35] imx8mp: zephyr: Update irqchips definitions
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/imx8mp-zephyr.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/configs/arm64/imx8mp-zephyr.c b/configs/arm64/imx8mp-zephyr.c
+index 6c53db2d..e77bb4df 100644
+--- a/configs/arm64/imx8mp-zephyr.c
++++ b/configs/arm64/imx8mp-zephyr.c
+@@ -1,7 +1,7 @@
+ /*
+  * i.MX8MP target - zephyr-demo
+  *
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  *
+  * Authors:
+  *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+@@ -28,16 +28,16 @@
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS_BASE	(32)
+-#define CONFIG_INMATE_IRQCHIPS_BITMAP	\
+-				/* interrupts 32..63 */        \
+-				RTOS_COMMON_IRQCHIPS_BITMAP1,  \
+-				/* interrupts 64..95 */        \
+-				RTOS_COMMON_IRQCHIPS_BITMAP2,  \
+-				/* interrupts 96..127 */       \
+-				RTOS_COMMON_IRQCHIPS_BITMAP3,  \
+-				/* interrupts 128..159 */      \
+-				RTOS_COMMON_IRQCHIPS_BITMAP4
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+-- 
+2.25.1
+

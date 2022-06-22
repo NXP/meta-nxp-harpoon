@@ -1,0 +1,48 @@
+From 4dd63a8523f956c0e895faedeea97c57227db0e1 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Thu, 2 Dec 2021 16:59:21 +0800
+Subject: [PATCH 10/35] imx8mp: remove trailing for freertos and zephyr cell
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ configs/arm64/imx8mp-freertos.c | 4 ++--
+ configs/arm64/imx8mp-zephyr.c   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/configs/arm64/imx8mp-freertos.c b/configs/arm64/imx8mp-freertos.c
+index 96f757d1..3c92ae93 100644
+--- a/configs/arm64/imx8mp-freertos.c
++++ b/configs/arm64/imx8mp-freertos.c
+@@ -26,7 +26,7 @@
+ 	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128 )), /* ITCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)) /* ITCM */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
+@@ -40,6 +40,6 @@
+ 	/* interrupts 96..127 */        \
+ 	RTOS_COMMON_IRQCHIPS_BITMAP3,   \
+ 	/* interrupts 128..159 */       \
+-	RTOS_COMMON_IRQCHIPS_BITMAP4    \
++	RTOS_COMMON_IRQCHIPS_BITMAP4
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-zephyr.c b/configs/arm64/imx8mp-zephyr.c
+index 51eb667c..20be0cc6 100644
+--- a/configs/arm64/imx8mp-zephyr.c
++++ b/configs/arm64/imx8mp-zephyr.c
+@@ -25,7 +25,7 @@
+ 		RTOS_COMMON_MEMORY_REGIONS,                                     \
+ 		MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)), /* CCM clock gating */ \
+ 		MMIO_REGION_RWS(0x3038b000, 0x3038b000, KB(4)), /* CCM TARGET_ROOT */  \
+-		MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(1)), /* RAM */              \
++		MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(1)) /* RAM */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
+-- 
+2.25.1
+

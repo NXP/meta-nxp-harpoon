@@ -1,0 +1,209 @@
+From 37a00f9a8b9547113dfc59cc09be158dda70f56d Mon Sep 17 00:00:00 2001
+From: Rui Sousa <rui.sousa@nxp.com>
+Date: Fri, 26 Nov 2021 12:15:39 +0100
+Subject: [PATCH 12/43] HRPN-199 configs: IVSHMEM PCI device helpers.
+
+Add helper functions to define IVSHMEM PCI devices.
+Align cell format (no trailing comma or backslash).
+
+Signed-off-by: Rui Sousa <rui.sousa@nxp.com>
+---
+ configs/arm64/cell-create.h           | 17 ++++++++++++++---
+ configs/arm64/cell-helper.h           | 25 +++++++++++++++++++++++++
+ configs/arm64/cell-template.c         |  2 +-
+ configs/arm64/imx8mm-freertos-audio.c | 12 ++++++------
+ configs/arm64/imx8mn-freertos-audio.c |  4 ++--
+ configs/arm64/imx8mp-freertos.c       |  2 +-
+ configs/arm64/imx8mp-zephyr.c         |  2 +-
+ 7 files changed, 50 insertions(+), 14 deletions(-)
+
+diff --git a/configs/arm64/cell-create.h b/configs/arm64/cell-create.h
+index 20bcff11..e3755d2b 100644
+--- a/configs/arm64/cell-create.h
++++ b/configs/arm64/cell-create.h
+@@ -13,11 +13,16 @@
+ #include <jailhouse/types.h>
+ #include <jailhouse/cell-config.h>
+ 
++#if !defined(CONFIG_INMATE_PCI_NUM)
++#define CONFIG_INMATE_PCI_NUM 0
++#endif
++
+ struct {
+ 	struct jailhouse_cell_desc cell;
+ 	__u64 cpus[1];
+ 	struct jailhouse_memory mem_regions[CONFIG_INMATE_REGIONS_NUM + 1];
+ 	struct jailhouse_irqchip irqchips[CONFIG_INMATE_IRQCHIPS_NUM];
++	struct jailhouse_pci_device pci_devices[CONFIG_INMATE_PCI_NUM];
+ } __attribute__((packed)) config = {
+ 	.cell = {
+ 		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
+@@ -28,7 +33,7 @@ struct {
+ 		.cpu_set_size = sizeof(config.cpus),
+ 		.num_memory_regions = ARRAY_SIZE(config.mem_regions),
+ 		.num_irqchips = ARRAY_SIZE(config.irqchips),
+-		.num_pci_devices = 0,
++		.num_pci_devices = ARRAY_SIZE(config.pci_devices),
+ 		.cpu_reset_address = CONFIG_INMATE_BASE,
+ 	},
+ 
+@@ -40,8 +45,8 @@ struct {
+ 	},
+ 
+ 	.mem_regions = {
+-		COMM_REGION_RW(0x80000000, KB(4)), /* communication region */
+-		CONFIG_INMATE_REGIONS
++		CONFIG_INMATE_REGIONS,
++		COMM_REGION_RW(0x80000000, KB(4)) /* communication region */
+ 	},
+ 
+ 	.irqchips = {
+@@ -53,4 +58,10 @@ struct {
+ 			}
+ 		}
+ 	},
++
++#if defined(CONFIG_INMATE_PCI_NUM) && (CONFIG_INMATE_PCI_NUM > 0)
++	.pci_devices = {
++		CONFIG_INMATE_PCI_DEVICES
++	},
++#endif
+ };
+diff --git a/configs/arm64/cell-helper.h b/configs/arm64/cell-helper.h
+index d35bc0fb..3b40dd79 100644
+--- a/configs/arm64/cell-helper.h
++++ b/configs/arm64/cell-helper.h
+@@ -21,12 +21,25 @@
+ 	.virt_start = (virt), \
+ 	.size = (bytes) \
+ 
++#define MEM_REGION_ROS(phys, virt, bytes) \
++	{ \
++		REGION(phys, virt, bytes), \
++		.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED, \
++	}
++
+ #define MEM_REGION_RW(phys, virt, bytes) \
+ 	{ \
+ 		REGION(phys, virt, bytes), \
+ 		.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE, \
+ 	}
+ 
++#define MEM_REGION_RWS(phys, virt, bytes) \
++	{ \
++		REGION(phys, virt, bytes), \
++		.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE | \
++			JAILHOUSE_MEM_ROOTSHARED, \
++	}
++
+ #define COMM_REGION_RW(virt, bytes) \
+ 	{ \
+ 		REGION(0x00000000, virt, bytes), \
+@@ -74,3 +87,15 @@
+ 		.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE | \
+ 		         JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED, \
+ 	}
++
++#define PCI_IVSHMEM_UNDEFINED(_domain, _bdf, region, id, peers) \
++	{ \
++		.type = JAILHOUSE_PCI_TYPE_IVSHMEM, \
++		.domain = _domain, \
++		.bdf = _bdf, \
++		.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX, \
++		.shmem_regions_start = region, \
++		.shmem_dev_id = id, \
++		.shmem_peers = peers, \
++		.shmem_protocol = JAILHOUSE_SHMEM_PROTO_UNDEFINED, \
++	}
+diff --git a/configs/arm64/cell-template.c b/configs/arm64/cell-template.c
+index bf731101..df0894fb 100644
+--- a/configs/arm64/cell-template.c
++++ b/configs/arm64/cell-template.c
+@@ -20,7 +20,7 @@
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS_NUM	(1)
+ #define CONFIG_INMATE_REGIONS		\
+-	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16))   /* RAM */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_NUM	(1)
+diff --git a/configs/arm64/imx8mm-freertos-audio.c b/configs/arm64/imx8mm-freertos-audio.c
+index e86e8655..8cc5d275 100644
+--- a/configs/arm64/imx8mm-freertos-audio.c
++++ b/configs/arm64/imx8mm-freertos-audio.c
+@@ -26,11 +26,11 @@
+ 	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)), /* ITCM */    \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)), /* ANA_PLL */  \
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)), /* CCM */      \
+-	MMIO_REGION_RWS(0x30a40000, 0x30a40000, KB(64)), /* I2C3 */     \
+-	MMIO_REGION_RWS(0x30050000, 0x30050000, KB(64)), /* SAI5 */     \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RWS(0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RWS(0x30050000, 0x30050000, KB(64))    /* SAI5 */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
+@@ -46,6 +46,6 @@
+ 	RTOS_COMMON_IRQCHIPS_BITMAP3 | \
+ 	(1 << (90 + 32 - 96)), /* SAI5 */ \
+ 	/* interrupts 128..159 */      \
+-	RTOS_COMMON_IRQCHIPS_BITMAP4   \
++	RTOS_COMMON_IRQCHIPS_BITMAP4
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-freertos-audio.c b/configs/arm64/imx8mn-freertos-audio.c
+index 81b66fb4..681f096f 100644
+--- a/configs/arm64/imx8mn-freertos-audio.c
++++ b/configs/arm64/imx8mn-freertos-audio.c
+@@ -30,7 +30,7 @@
+ 	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),  /* ANA_PLL */ \
+ 	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),  /* CCM */     \
+ 	MMIO_REGION_RWS(0x30a40000, 0x30a40000, KB(64)),  /* I2C3 */    \
+-	MMIO_REGION_RWS(0x30030000, 0x30030000, KB(64)),  /* SAI3 */    \
++	MMIO_REGION_RWS(0x30030000, 0x30030000, KB(64))   /* SAI3 */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
+@@ -46,6 +46,6 @@
+ 	/* interrupts 96..127 */        \
+ 	RTOS_COMMON_IRQCHIPS_BITMAP3,   \
+ 	/* interrupts 128..159 */       \
+-	RTOS_COMMON_IRQCHIPS_BITMAP4    \
++	RTOS_COMMON_IRQCHIPS_BITMAP4
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-freertos.c b/configs/arm64/imx8mp-freertos.c
+index 3c92ae93..1948f1c1 100644
+--- a/configs/arm64/imx8mp-freertos.c
++++ b/configs/arm64/imx8mp-freertos.c
+@@ -26,7 +26,7 @@
+ 	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)) /* ITCM */
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
+diff --git a/configs/arm64/imx8mp-zephyr.c b/configs/arm64/imx8mp-zephyr.c
+index 20be0cc6..66b553e1 100644
+--- a/configs/arm64/imx8mp-zephyr.c
++++ b/configs/arm64/imx8mp-zephyr.c
+@@ -25,7 +25,7 @@
+ 		RTOS_COMMON_MEMORY_REGIONS,                                     \
+ 		MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)), /* CCM clock gating */ \
+ 		MMIO_REGION_RWS(0x3038b000, 0x3038b000, KB(4)), /* CCM TARGET_ROOT */  \
+-		MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(1)) /* RAM */
++		MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(1))  /* RAM */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
+-- 
+2.25.1
+

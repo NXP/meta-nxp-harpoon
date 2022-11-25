@@ -1,0 +1,121 @@
+From 63c96b7fab313a4b04bca723ca6216e437fc6bf5 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Fri, 25 Feb 2022 18:15:58 +0800
+Subject: [PATCH 32/43] imx8m{m,n}: add new cell for running Zephyr on
+ Jailhouse
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ configs/arm64/imx8mm-zephyr.c | 46 +++++++++++++++++++++++++++++++++++
+ configs/arm64/imx8mn-zephyr.c | 46 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 92 insertions(+)
+ create mode 100644 configs/arm64/imx8mm-zephyr.c
+ create mode 100644 configs/arm64/imx8mn-zephyr.c
+
+diff --git a/configs/arm64/imx8mm-zephyr.c b/configs/arm64/imx8mm-zephyr.c
+new file mode 100644
+index 00000000..94d7f75d
+--- /dev/null
++++ b/configs/arm64/imx8mm-zephyr.c
+@@ -0,0 +1,46 @@
++/*
++ * i.MX8MM target - Zephyr
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-rtos.h"
++
++/* Name, cores, entry point */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++#define CONFIG_INMATE_BASE		(0x93c00000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS							\
++	RTOS_COMMON_MEMORY_REGIONS,						\
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),  /* RAM */		\
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)), /* OCRAM */		\
++	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),   /* CCM clock gating */ \
++	MMIO_REGION_RWS(0x3038b000, 0x3038b000, KB(4))    /* CCM TARGET_ROOT */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-zephyr.c b/configs/arm64/imx8mn-zephyr.c
+new file mode 100644
+index 00000000..e0f9d97d
+--- /dev/null
++++ b/configs/arm64/imx8mn-zephyr.c
+@@ -0,0 +1,46 @@
++/*
++ * i.MX8MN target - Zephyr
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mn-rtos.h"
++
++/* Name, cores, entry point */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++#define CONFIG_INMATE_BASE		(0x93c00000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS							\
++	RTOS_COMMON_MEMORY_REGIONS,						\
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),  /* RAM */		\
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)), /* OCRAM */		\
++	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),   /* CCM clock gating */ \
++	MMIO_REGION_RWS(0x3038b000, 0x3038b000, KB(4))    /* CCM TARGET_ROOT */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
++
++#include "cell-create.h"
+-- 
+2.25.1
+

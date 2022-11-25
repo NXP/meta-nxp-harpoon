@@ -1,0 +1,39 @@
+From f2fb5d88a3207076e43141b8a8d7c685dfa56a53 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Mon, 17 Oct 2022 10:13:48 +0800
+Subject: [PATCH 14/14] rpmsg: Kconfig: remove the selection of the
+ RPMSG_VIRTIO from HAVE_IMX_RPMSG
+
+Remove the selection of the RPMSG_VIRTIO from HAVE_IMX_RPMSG, so that
+the RPMSG_VIRTIO can be built as kernel module with the HAVE_IMX_RPMSG.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+[rebase on linux_5.15.52 branch]
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ drivers/rpmsg/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
+index 092490baf8c8..e464ff983e53 100644
+--- a/drivers/rpmsg/Kconfig
++++ b/drivers/rpmsg/Kconfig
+@@ -77,6 +77,7 @@ config RPMSG_QCOM_SMD
+ 
+ config RPMSG_VIRTIO
+ 	tristate "Virtio RPMSG bus driver"
++	default m
+ 	depends on HAS_DMA
+ 	select RPMSG
+ 	select RPMSG_NS
+@@ -86,7 +87,6 @@ config HAVE_IMX_RPMSG
+ 	bool "IMX RPMSG driver on the AMP SOCs"
+ 	default y
+ 	depends on IMX_MBOX || ARM_SGI_MAILBOX
+-	select RPMSG_VIRTIO
+ 	help
+ 	  Say y here to enable support for the iMX Rpmsg Driver	providing
+ 	  communication channels to remote processors in iMX asymmetric
+-- 
+2.25.1
+

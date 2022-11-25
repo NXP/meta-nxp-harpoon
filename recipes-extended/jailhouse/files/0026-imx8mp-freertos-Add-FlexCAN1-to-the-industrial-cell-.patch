@@ -1,0 +1,64 @@
+From 47a36ee9398924661d0d057f2090375f2c3b16c3 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Wed, 26 Jan 2022 17:26:13 +0000
+Subject: [PATCH 26/43] imx8mp: freertos: Add FlexCAN1 to the industrial cell
+ config
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/imx8mp-freertos-industrial.c | 10 +++++++---
+ configs/arm64/imx8mp-rtos.h                |  3 +++
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/configs/arm64/imx8mp-freertos-industrial.c b/configs/arm64/imx8mp-freertos-industrial.c
+index d0fef9df..6f421512 100644
+--- a/configs/arm64/imx8mp-freertos-industrial.c
++++ b/configs/arm64/imx8mp-freertos-industrial.c
+@@ -25,8 +25,11 @@
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4))     /* ANA_PLL */\
+-
++	MMIO_REGION_RWS(0x30240000, 0x30240000, KB(64)),   /* GPIO5 */  \
++	MMIO_REGION_RWS(0x30340000, 0x30340000, KB(64)),   /* GPR */    \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x308c0000, 0x308c0000, KB(64))    /* FLEXCAN1*/
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+@@ -42,7 +45,8 @@
+ 		RTOS_COMMON_IRQCHIPS_BITMAP4),             \
+ 	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+ 		/* interrupts 160..191 */                  \
+-		0,                                         \
++		IRQnMAP(CAN_FD1_IRQn) | /* FLEXCAN1 */     \
++		IRQnMAP(CAN_FD1_ERROR_IRQn),               \
+ 		/* interrupts 192..223 */                  \
+ 		0,                                         \
+ 		/* interrupts 224..255 */                  \
+diff --git a/configs/arm64/imx8mp-rtos.h b/configs/arm64/imx8mp-rtos.h
+index ed343c5a..6091484b 100644
+--- a/configs/arm64/imx8mp-rtos.h
++++ b/configs/arm64/imx8mp-rtos.h
+@@ -20,6 +20,8 @@ typedef enum IRQn {
+   GPT2_IRQn                    = 86,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
+   GPT1_IRQn                    = 87,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
+   I2S56_IRQn                   = 122,              /**< SAI5/6 Receive / Transmit Interrupt */
++  CAN_FD1_IRQn                 = 174,              /**< CAN-FD1 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
++  CAN_FD1_ERROR_IRQn           = 175,              /**< CAN-FD1 Interrupt from correctable error/non correctable error int host/ non correctable error int internal */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+@@ -29,6 +31,7 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xfd9fc000, 0xfd9fc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xfd9fe000, 0xfd9fe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_ROS(0x30270000, 0x30270000, KB(64)), /* ANA_OSC */              \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+ 	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
+-- 
+2.25.1
+

@@ -1,0 +1,51 @@
+From 36c6bfa5c3d03d66dc26c498cbc9fa6f3a1d2f91 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Thu, 20 Jan 2022 11:57:10 +0100
+Subject: [PATCH 04/14] arm64: dts: imx8mn-evk-harpoon: Enable SAI audio case
+ in inmate cell
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+(cherry picked from commit e515c0458306a4419c33fd44d868e834b4f2a350)
+---
+ .../boot/dts/freescale/imx8mn-evk-harpoon.dts | 20 +++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+index 2700440df445..e7329766f5f8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+@@ -1,15 +1,27 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  */
+ 
+ #include "imx8mn-evk-root.dts"
+ 
+ &i2c3 {
+-       status = "disabled";
++	status = "disabled";
+ };
+ 
+ &iomuxc {
+-       pinctrl-names = "default";
+-       pinctrl-0 = <&pinctrl_i2c3>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c3>, <&pinctrl_sai5>;
++	pinctrl_sai5: sai5grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_SAI5_RXD1_SAI5_TX_SYNC	0xd6
++			MX8MN_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK	0xd6
++			MX8MN_IOMUXC_SAI5_RXD3_SAI5_TX_DATA0	0xd6
++			MX8MN_IOMUXC_SAI5_RXD0_SAI5_RX_DATA0	0xd6
++		>;
++	};
++};
++
++&sai5 {
++	status = "disabled";
+ };
+-- 
+2.25.1
+

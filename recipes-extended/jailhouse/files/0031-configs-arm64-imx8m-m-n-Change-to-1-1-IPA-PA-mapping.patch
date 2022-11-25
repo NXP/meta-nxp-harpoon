@@ -1,0 +1,136 @@
+From ddacb1be86f412dfa0e976a8a6da807df621581a Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Mon, 14 Mar 2022 12:47:08 +0800
+Subject: [PATCH 31/43] configs: arm64: imx8m{m,n}: Change to 1:1 IPA-PA
+ mapping
+
+No SMMU implemented on these 2 platforms, so the current non 1:1 mapping
+will result in the DMAs access wrong physical address.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ configs/arm64/imx8mm-freertos-audio.c      | 4 ++--
+ configs/arm64/imx8mm-freertos-industrial.c | 4 ++--
+ configs/arm64/imx8mm-freertos.c            | 4 ++--
+ configs/arm64/imx8mn-freertos-audio.c      | 4 ++--
+ configs/arm64/imx8mn-freertos-industrial.c | 4 ++--
+ configs/arm64/imx8mn-freertos.c            | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/configs/arm64/imx8mm-freertos-audio.c b/configs/arm64/imx8mm-freertos-audio.c
+index 7eb4cb4a..93cccff8 100644
+--- a/configs/arm64/imx8mm-freertos-audio.c
++++ b/configs/arm64/imx8mm-freertos-audio.c
+@@ -17,12 +17,12 @@
+ /* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
++#define CONFIG_INMATE_BASE		(0x93c00000)
+ 
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS		\
+ 	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+diff --git a/configs/arm64/imx8mm-freertos-industrial.c b/configs/arm64/imx8mm-freertos-industrial.c
+index cdbc3976..9ee9783f 100644
+--- a/configs/arm64/imx8mm-freertos-industrial.c
++++ b/configs/arm64/imx8mm-freertos-industrial.c
+@@ -16,12 +16,12 @@
+ /* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
++#define CONFIG_INMATE_BASE		(0x93c00000)
+ 
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS		\
+ 	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+diff --git a/configs/arm64/imx8mm-freertos.c b/configs/arm64/imx8mm-freertos.c
+index 262754c7..87dc6b15 100644
+--- a/configs/arm64/imx8mm-freertos.c
++++ b/configs/arm64/imx8mm-freertos.c
+@@ -17,12 +17,12 @@
+ /* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
++#define CONFIG_INMATE_BASE		(0x93c00000)
+ 
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS		\
+ 	RTOS_COMMON_MEMORY_REGIONS,                                    \
+-	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */   \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */ \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */  \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
+diff --git a/configs/arm64/imx8mn-freertos-audio.c b/configs/arm64/imx8mn-freertos-audio.c
+index a73c84c1..eee9ba4c 100644
+--- a/configs/arm64/imx8mn-freertos-audio.c
++++ b/configs/arm64/imx8mn-freertos-audio.c
+@@ -17,12 +17,12 @@
+ /* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
++#define CONFIG_INMATE_BASE		(0x93c00000)
+ 
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS		\
+ 	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+diff --git a/configs/arm64/imx8mn-freertos-industrial.c b/configs/arm64/imx8mn-freertos-industrial.c
+index 8363a67b..1f923035 100644
+--- a/configs/arm64/imx8mn-freertos-industrial.c
++++ b/configs/arm64/imx8mn-freertos-industrial.c
+@@ -16,12 +16,12 @@
+ /* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
++#define CONFIG_INMATE_BASE		(0x93c00000)
+ 
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS		\
+ 	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+diff --git a/configs/arm64/imx8mn-freertos.c b/configs/arm64/imx8mn-freertos.c
+index 04ca6f41..3c7fb894 100644
+--- a/configs/arm64/imx8mn-freertos.c
++++ b/configs/arm64/imx8mn-freertos.c
+@@ -17,12 +17,12 @@
+ /* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
++#define CONFIG_INMATE_BASE		(0x93c00000)
+ 
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS		\
+ 	RTOS_COMMON_MEMORY_REGIONS,                                    \
+-	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */   \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */ \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */  \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
+-- 
+2.25.1
+

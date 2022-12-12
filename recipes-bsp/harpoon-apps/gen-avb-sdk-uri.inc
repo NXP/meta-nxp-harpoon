@@ -9,5 +9,5 @@ GENAVB_BRANCH="5_2"
 
 SRC_GEN_AVB_SDK = "git://github.com/NXP/GenAVB_TSN.git;protocol=https;branch=${GENAVB_BRANCH};destsuffix=git/gen_avb_sdk;name=gen-avb-sdk"
 
+SRCREV_gen-avb-sdk = "dac255860ac0f0f4d1437143596f06f30336095a"
 SRCREV_FORMAT:append = "_gen-avb-sdk"
-SRCREV_gen-avb-sdk = "b5f3515d6a6baf3d9b1763002890582d587588a3"

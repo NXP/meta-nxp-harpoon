@@ -1,7 +1,7 @@
-From ffc3c5a90699a21077da82ac6b0f9caf371a0816 Mon Sep 17 00:00:00 2001
+From 4dd02efa278089d3c3c4216435310fc94639cf5a Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@oss.nxp.com>
 Date: Mon, 6 Dec 2021 15:39:12 +0100
-Subject: [PATCH 15/35] HRPN-38 configs: get rid of *_NUM macros
+Subject: [PATCH 15/43] HRPN-38 configs: get rid of *_NUM macros
 
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 ---

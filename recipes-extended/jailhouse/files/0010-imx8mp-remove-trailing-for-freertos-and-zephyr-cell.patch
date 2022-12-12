@@ -1,7 +1,7 @@
-From 4dd63a8523f956c0e895faedeea97c57227db0e1 Mon Sep 17 00:00:00 2001
+From 7bff2e2b92ffe7877fcbe86a2886ea43d307716d Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 2 Dec 2021 16:59:21 +0800
-Subject: [PATCH 10/35] imx8mp: remove trailing for freertos and zephyr cell
+Subject: [PATCH 10/43] imx8mp: remove trailing for freertos and zephyr cell
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 ---

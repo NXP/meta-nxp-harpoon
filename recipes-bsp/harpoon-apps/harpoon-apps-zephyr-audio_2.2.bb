@@ -1,6 +1,7 @@
 # Copyright (C) 2022 NXP
 
 require harpoon-apps-zephyr.inc
+require harpoon-apps-zephyr-boards-singlecore.inc
 
 SUMMARY = "Harpoon Application - Audio (Zephyr)"
 

@@ -1,7 +1,7 @@
-From 6aa3fa66042d531f37920acad46919bfe1723b13 Mon Sep 17 00:00:00 2001
+From 136e86611b2138888498f503318fdb541e3f0c2f Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Wed, 17 Nov 2021 15:00:03 +0000
-Subject: [PATCH 03/35] HRPN-38 configs: Introduce helper files to create
+Subject: [PATCH 03/43] HRPN-38 configs: Introduce helper files to create
  inmate cell config
 
 Inmate cell configurations all look alike. Let's create a couple of

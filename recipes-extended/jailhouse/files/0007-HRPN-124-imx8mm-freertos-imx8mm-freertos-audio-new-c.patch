@@ -1,7 +1,7 @@
-From 2b222deeec9b214db6d40164eddf5fee27a10e50 Mon Sep 17 00:00:00 2001
+From 19944d61af04d22b42780383bca4936420a2cfbc Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 18 Nov 2021 15:02:24 +0100
-Subject: [PATCH 07/35] HRPN-124 imx8mm-freertos, imx8mm-freertos-audio: new
+Subject: [PATCH 07/43] HRPN-124 imx8mm-freertos, imx8mm-freertos-audio: new
  cells
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>

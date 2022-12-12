@@ -8,24 +8,21 @@ inherit python3native
 LICENSE = "BSD-3-Clause & Apache-2.0 & Proprietary"
 LIC_FILES_CHKSUM = " \
     file://zephyr/LICENSE;md5=fa818a259cbed7ce8bc2a22d35a464fc \
-    file://modules/hal/nxp/mcux/mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=c865d07a316b20c9df4d3bad5cba200c \
+    file://modules/hal/nxp/mcux/mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=e435b49b43aa6f17047226cf6158600b \
     file://harpoon-apps/LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd385e900f"
 
 SRC_URI = "\
     ${SRC_HARPOON_APPS} \
-    git://github.com/NXPmicro/zephyr.git;protocol=https;branch=${SRCBRANCH_zephyr};destsuffix=git/zephyr;name=zephyr \
-    git://github.com/NXPmicro/hal_nxp.git;protocol=https;branch=${SRCBRANCH_hal-nxp};destsuffix=git/modules/hal/nxp;name=hal-nxp \
+    git://github.com/nxp-zephyr/zephyr.git;protocol=https;branch=${SRCBRANCH_zephyr};destsuffix=git/zephyr;name=zephyr \
+    git://github.com/nxp-zephyr/hal_nxp.git;protocol=https;branch=${SRCBRANCH_hal-nxp};destsuffix=git/modules/hal/nxp;name=hal-nxp \
 "
 
 SRCREV_FORMAT = "harpoon-apps_zephyr_hal-nxp"
-SRCREV_zephyr = "aeb61cd2bd6d837d0161dc6174bde7279a9862f2"
-SRCREV_hal-nxp = "33ad103c6f21c324a7381aaa4c89ffd9450b28ce"
+
+SRCREV_zephyr = "33caa926d0e053897b2f4060cf1d51553fb4d8c2"
+SRCREV_hal-nxp = "1026ce5f52b3248b44586e1e2be1abe73a459ff9"
 SRCBRANCH_zephyr = "feature/aarch64_support"
 SRCBRANCH_hal-nxp = "feature/aarch64_support"
-
-BOARD:imx8mm-lpddr4-evk = "mimx8mm_evk_a53"
-BOARD:imx8mn-lpddr4-evk = "mimx8mn_evk_a53"
-BOARD:imx8mp-lpddr4-evk = "mimx8mp_evk_a53"
 
 INMATES_DIR ?= "${HARPOON_DATADIR}/inmates/zephyr"
 

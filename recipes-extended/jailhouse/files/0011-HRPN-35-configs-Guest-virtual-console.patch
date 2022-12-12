@@ -1,7 +1,7 @@
-From 1ec2a3bb7d50c1964bff728a0c4e5fc3ab93a47e Mon Sep 17 00:00:00 2001
+From bef2811976d21e758f5830af23e85cb3472e9d72 Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Tue, 30 Nov 2021 15:36:07 +0100
-Subject: [PATCH 11/35] HRPN-35 configs: Guest virtual console
+Subject: [PATCH 11/43] HRPN-35 configs: Guest virtual console
 
 Allow guest cells to use hypervisor calls for accessing hypervisor
 virtual console.

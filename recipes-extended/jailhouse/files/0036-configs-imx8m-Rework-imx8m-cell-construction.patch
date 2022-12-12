@@ -1,0 +1,1153 @@
+From e8fd164d63984d2a04624c0f7406273196ca6df2 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Fri, 30 Sep 2022 14:55:01 +0000
+Subject: [PATCH 36/43] configs: imx8m*: Rework imx8m cell construction
+
+Let's define all interfaces in a single device header file and create
+cell config helpers based on the use case, which is OS-agnostic.
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/imx8m-config-audio.h         | 52 +++++++++++++++++
+ configs/arm64/imx8m-config-industrial.h    | 51 ++++++++++++++++
+ configs/arm64/imx8mm-audio.h               | 55 -----------------
+ configs/arm64/imx8mm-freertos-audio.c      |  6 +-
+ configs/arm64/imx8mm-freertos-industrial.c |  6 +-
+ configs/arm64/imx8mm-freertos.c            |  6 +-
+ configs/arm64/imx8mm-industrial.h          | 48 ---------------
+ configs/arm64/imx8mm-rtos.h                | 57 ++++++++++++++++--
+ configs/arm64/imx8mm-zephyr-audio.c        |  6 +-
+ configs/arm64/imx8mm-zephyr-industrial.c   |  6 +-
+ configs/arm64/imx8mm-zephyr.c              |  6 +-
+ configs/arm64/imx8mn-audio.h               | 56 ------------------
+ configs/arm64/imx8mn-freertos-audio.c      |  6 +-
+ configs/arm64/imx8mn-freertos-industrial.c |  6 +-
+ configs/arm64/imx8mn-freertos.c            |  6 +-
+ configs/arm64/imx8mn-industrial.h          | 48 ---------------
+ configs/arm64/imx8mn-rtos.h                | 53 +++++++++++++++--
+ configs/arm64/imx8mn-zephyr-audio.c        |  6 +-
+ configs/arm64/imx8mn-zephyr-industrial.c   |  6 +-
+ configs/arm64/imx8mn-zephyr.c              |  6 +-
+ configs/arm64/imx8mp-audio.h               | 61 -------------------
+ configs/arm64/imx8mp-freertos-audio.c      |  6 +-
+ configs/arm64/imx8mp-freertos-industrial.c |  6 +-
+ configs/arm64/imx8mp-freertos.c            |  6 +-
+ configs/arm64/imx8mp-industrial.h          | 60 -------------------
+ configs/arm64/imx8mp-rtos.h                | 68 ++++++++++++++++++++--
+ configs/arm64/imx8mp-zephyr-audio.c        |  6 +-
+ configs/arm64/imx8mp-zephyr-industrial.c   |  6 +-
+ configs/arm64/imx8mp-zephyr.c              |  6 +-
+ 29 files changed, 345 insertions(+), 372 deletions(-)
+ create mode 100644 configs/arm64/imx8m-config-audio.h
+ create mode 100644 configs/arm64/imx8m-config-industrial.h
+ delete mode 100644 configs/arm64/imx8mm-audio.h
+ delete mode 100644 configs/arm64/imx8mm-industrial.h
+ delete mode 100644 configs/arm64/imx8mn-audio.h
+ delete mode 100644 configs/arm64/imx8mn-industrial.h
+ delete mode 100644 configs/arm64/imx8mp-audio.h
+ delete mode 100644 configs/arm64/imx8mp-industrial.h
+
+diff --git a/configs/arm64/imx8m-config-audio.h b/configs/arm64/imx8m-config-audio.h
+new file mode 100644
+index 00000000..b633990e
+--- /dev/null
++++ b/configs/arm64/imx8m-config-audio.h
+@@ -0,0 +1,52 @@
++/*
++ * i.MX8M family targets - Audio config
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                   \
++	RTOS_COMMON_MEMORY_REGIONS,                               \
++	RTOS_MEMRAM_MEMORY_REGIONS,                               \
++	RTOS_AUDIO_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR             \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS                  \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP1,                             \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP2,                             \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP3,                             \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP4),                            \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 160..191 */                                \
++		0,                                                       \
++		/* interrupts 192..223 */                                \
++		0,                                                       \
++		/* interrupts 224..255 */                                \
++		0,                                                       \
++		/* interrupts 256..287 */                                \
++		0)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                    \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx8m-config-industrial.h b/configs/arm64/imx8m-config-industrial.h
+new file mode 100644
+index 00000000..e5e9dfd1
+--- /dev/null
++++ b/configs/arm64/imx8m-config-industrial.h
+@@ -0,0 +1,51 @@
++/*
++ * i.MX8M family targets - Industrial config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                   \
++	RTOS_COMMON_MEMORY_REGIONS,                               \
++	RTOS_MEMRAM_MEMORY_REGIONS,                               \
++	RTOS_INDUS_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR                   \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS 	                      \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP1,                             \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP2,                             \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP3,                             \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP4),                            \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 160..191 */                                \
++		RTOS_INDUS_IRQCHIP1_BITMAP1,                             \
++		/* interrupts 192..223 */                                \
++		0,                                                       \
++		/* interrupts 224..255 */                                \
++		0,                                                       \
++		/* interrupts 256..287 */                                \
++		0)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                    \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx8mm-audio.h b/configs/arm64/imx8mm-audio.h
+deleted file mode 100644
+index 0f45eac4..00000000
+--- a/configs/arm64/imx8mm-audio.h
++++ /dev/null
+@@ -1,55 +0,0 @@
+-/*
+- * i.MX8MM target - Audio config
+- *
+- * Copyright 2021-2022 NXP
+- *
+- * Authors:
+- *  Stephane Viau <stephane.viau@nxp.com>
+- *  Fabrice Goucem <fabrice.goucem@nxp.com>
+- *
+- * This work is licensed under the terms of the GNU GPL, version 2.  See
+- * the COPYING file in the top-level directory.
+- */
+-
+-#include "cell-helper.h"
+-#include "imx8mm-rtos.h"
+-
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
+-	MMIO_REGION_RW( 0x30010000, 0x30010000, KB(64)),   /* SAI1 */   \
+-	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
+-	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
+-	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
+-	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64))    /* SAI6 */   \
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
+-		IRQnMAP(I2C3_IRQn) | /* I2C3 */            \
+-		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
+-		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */         \
+-		IRQnMAP(I2S1_IRQn),   /* SAI1 */           \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
+-		IRQnMAP(I2S2_IRQn))   /* SAI2 */
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mm-freertos-audio.c b/configs/arm64/imx8mm-freertos-audio.c
+index a392f774..e6539549 100644
+--- a/configs/arm64/imx8mm-freertos-audio.c
++++ b/configs/arm64/imx8mm-freertos-audio.c
+@@ -11,10 +11,14 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mm-audio.h"
++#include "cell-helper.h"
++#include "imx8mm-rtos.h"
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-audio.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-freertos-industrial.c b/configs/arm64/imx8mm-freertos-industrial.c
+index 950fa9e2..2cc47db0 100644
+--- a/configs/arm64/imx8mm-freertos-industrial.c
++++ b/configs/arm64/imx8mm-freertos-industrial.c
+@@ -10,9 +10,13 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mm-industrial.h"
++#include "cell-helper.h"
++#include "imx8mm-rtos.h"
+ 
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-industrial.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-freertos.c b/configs/arm64/imx8mm-freertos.c
+index 87dc6b15..d751c8cb 100644
+--- a/configs/arm64/imx8mm-freertos.c
++++ b/configs/arm64/imx8mm-freertos.c
+@@ -34,11 +34,11 @@
+ 		/* interrupts 32..63 */                    \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+ 		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP2,              \
+ 		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mm-industrial.h b/configs/arm64/imx8mm-industrial.h
+deleted file mode 100644
+index a5a1a7f9..00000000
+--- a/configs/arm64/imx8mm-industrial.h
++++ /dev/null
+@@ -1,48 +0,0 @@
+-/*
+- * i.MX8MM target - Industrial config
+- *
+- * Copyright 2022 NXP
+- *
+- * Authors:
+- *  Stephane Viau <stephane.viau@nxp.com>
+- *
+- * This work is licensed under the terms of the GNU GPL, version 2.  See
+- * the COPYING file in the top-level directory.
+- */
+-
+-#include "cell-helper.h"
+-#include "imx8mm-rtos.h"
+-
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
+-		IRQnMAP(ENET_IRQn)                  |      \
+-		IRQnMAP(ENET_1588_IRQn))
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mm-rtos.h b/configs/arm64/imx8mm-rtos.h
+index ccc8e80e..c529c523 100644
+--- a/configs/arm64/imx8mm-rtos.h
++++ b/configs/arm64/imx8mm-rtos.h
+@@ -12,6 +12,8 @@
+  *
+  */
+ 
++#define RTOS_INMATE_BASE		(0x93c00000)
++
+ typedef enum IRQn {
+ 
+   /* Device specific interrupts */
+@@ -40,25 +42,70 @@ typedef enum IRQn {
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+ 	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
+ 	MMIO_REGION_ROS(0x30360000, 0x30360000, KB(64)), /* ANA_PLL */              \
+-	MMIO_REGION_ROS(0x30380000, 0x30380000, KB(64)), /* CCM */                  \
+-	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */                \
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)), /* CCM */                  \
++	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */
++
++#define RTOS_MEMRAM_MEMORY_REGIONS \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
++
++#define RTOS_AUDIO_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RW( 0x30010000, 0x30010000, KB(64)),   /* SAI1 */   \
++	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
++	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
++	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
++	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64))    /* SAI6 */
++
++#define RTOS_INDUS_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
++
++/* GIC */
++#define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
+ 
+ /* interrupts 32..63 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP1 \
+ 	IRQnMAP(UART4_IRQn)
++#define RTOS_AUDIO_IRQCHIP0_BITMAP1 \
++	0
++#define RTOS_INDUS_IRQCHIP0_BITMAP1 \
++	0
+ 
+ /* interrupts 64..95 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP2 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP2 \
+ 	IRQnMAP(GPT2_IRQn) | \
+ 	IRQnMAP(GPT1_IRQn)
++#define RTOS_AUDIO_IRQCHIP0_BITMAP2 \
++		IRQnMAP(I2C3_IRQn) | /* I2C3 */ \
++		IRQnMAP(I2S3_IRQn)   /* SAI3 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP2 \
++	0
+ 
+ /* interrupts 96..127 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP3 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP3 \
++	0
++#define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
++		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */ \
++		IRQnMAP(I2S1_IRQn)    /* SAI1 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
+ 
+ /* interrupts 128..159 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP4 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP4 \
+ 	0
++#define RTOS_AUDIO_IRQCHIP0_BITMAP4 \
++		IRQnMAP(I2S2_IRQn)    /* SAI2 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP4 \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) | \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) | \
++		IRQnMAP(ENET_IRQn)                  | \
++		IRQnMAP(ENET_1588_IRQn)
++
++/* GIC */
++#define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
+ 
++/* IVSHMEM PCI */
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+ 	PCI_IVSHMEM_UNDEFINED(1, 0, 0, 1, 3)
+diff --git a/configs/arm64/imx8mm-zephyr-audio.c b/configs/arm64/imx8mm-zephyr-audio.c
+index 993c9e6f..b97282f3 100644
+--- a/configs/arm64/imx8mm-zephyr-audio.c
++++ b/configs/arm64/imx8mm-zephyr-audio.c
+@@ -10,10 +10,14 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mm-audio.h"
++#include "cell-helper.h"
++#include "imx8mm-rtos.h"
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"zephyr"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-audio.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-zephyr-industrial.c b/configs/arm64/imx8mm-zephyr-industrial.c
+index 74c0f91e..b9e221c1 100644
+--- a/configs/arm64/imx8mm-zephyr-industrial.c
++++ b/configs/arm64/imx8mm-zephyr-industrial.c
+@@ -10,9 +10,13 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mm-industrial.h"
++#include "cell-helper.h"
++#include "imx8mm-rtos.h"
+ 
+ #define CONFIG_INMATE_NAME		"zephyr"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-industrial.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-zephyr.c b/configs/arm64/imx8mm-zephyr.c
+index 94d7f75d..ac03e0ae 100644
+--- a/configs/arm64/imx8mm-zephyr.c
++++ b/configs/arm64/imx8mm-zephyr.c
+@@ -33,11 +33,11 @@
+ 		/* interrupts 32..63 */                    \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+ 		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP2,              \
+ 		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mn-audio.h b/configs/arm64/imx8mn-audio.h
+deleted file mode 100644
+index 9873605c..00000000
+--- a/configs/arm64/imx8mn-audio.h
++++ /dev/null
+@@ -1,56 +0,0 @@
+-/*
+- * i.MX8MN target - Audio config
+- *
+- * Copyright 2021-2022 NXP
+- *
+- * Authors:
+- *  Stephane Viau <stephane.viau@nxp.com>
+- *  Fabrice Goucem <fabrice.goucem@nxp.com>
+- *
+- * This work is licensed under the terms of the GNU GPL, version 2.  See
+- * the COPYING file in the top-level directory.
+- */
+-
+-#include "cell-helper.h"
+-#include "imx8mn-rtos.h"
+-
+-/* Entry point */
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
+-	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
+-	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
+-	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
+-	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64)),   /* SAI6 */   \
+-	MMIO_REGION_RW( 0x300b0000, 0x300b0000, KB(64))    /* SAI7 */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
+-		IRQnMAP(I2C3_IRQn) | /* I2C3 */            \
+-		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
+-		IRQnMAP(I2S56_IRQn),  /* SAI5-6 */         \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
+-		IRQnMAP(I2S2_IRQn) |  /* SAI2 */           \
+-		IRQnMAP(I2S7_IRQn))   /* SAI7 */
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mn-freertos-audio.c b/configs/arm64/imx8mn-freertos-audio.c
+index 594251e5..5a0c809a 100644
+--- a/configs/arm64/imx8mn-freertos-audio.c
++++ b/configs/arm64/imx8mn-freertos-audio.c
+@@ -11,10 +11,14 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mn-audio.h"
++#include "cell-helper.h"
++#include "imx8mn-rtos.h"
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-audio.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-freertos-industrial.c b/configs/arm64/imx8mn-freertos-industrial.c
+index 45d6a2c0..8e95e13a 100644
+--- a/configs/arm64/imx8mn-freertos-industrial.c
++++ b/configs/arm64/imx8mn-freertos-industrial.c
+@@ -10,9 +10,13 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mn-industrial.h"
++#include "cell-helper.h"
++#include "imx8mn-rtos.h"
+ 
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-industrial.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-freertos.c b/configs/arm64/imx8mn-freertos.c
+index 3c7fb894..ac7e1a08 100644
+--- a/configs/arm64/imx8mn-freertos.c
++++ b/configs/arm64/imx8mn-freertos.c
+@@ -34,11 +34,11 @@
+ 		/* interrupts 32..63 */                    \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+ 		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP2,              \
+ 		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mn-industrial.h b/configs/arm64/imx8mn-industrial.h
+deleted file mode 100644
+index 824a2622..00000000
+--- a/configs/arm64/imx8mn-industrial.h
++++ /dev/null
+@@ -1,48 +0,0 @@
+-/*
+- * i.MX8MN target - Industrial config
+- *
+- * Copyright 2022 NXP
+- *
+- * Authors:
+- *  Stephane Viau <stephane.viau@nxp.com>
+- *
+- * This work is licensed under the terms of the GNU GPL, version 2.  See
+- * the COPYING file in the top-level directory.
+- */
+-
+-#include "cell-helper.h"
+-#include "imx8mn-rtos.h"
+-
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
+-		IRQnMAP(ENET_IRQn)                  |      \
+-		IRQnMAP(ENET_1588_IRQn))
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mn-rtos.h b/configs/arm64/imx8mn-rtos.h
+index 47aeab01..ace59cbf 100644
+--- a/configs/arm64/imx8mn-rtos.h
++++ b/configs/arm64/imx8mn-rtos.h
+@@ -12,6 +12,8 @@
+  *
+  */
+ 
++#define RTOS_INMATE_BASE		(0x93c00000)
++
+ typedef enum IRQn {
+ 
+   /* Device specific interrupts */
+@@ -40,25 +42,66 @@ typedef enum IRQn {
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+ 	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
+ 	MMIO_REGION_ROS(0x30360000, 0x30360000, KB(64)), /* ANA_PLL */              \
+-	MMIO_REGION_ROS(0x30380000, 0x30380000, KB(64)), /* CCM */                  \
+-	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */                \
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)), /* CCM */                  \
++	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */
++
++#define RTOS_MEMRAM_MEMORY_REGIONS \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
++
++#define RTOS_AUDIO_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
++	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
++	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
++	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64)),   /* SAI6 */   \
++	MMIO_REGION_RW( 0x300b0000, 0x300b0000, KB(64))    /* SAI7 */
++
++#define RTOS_INDUS_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
++
++/* GIC */
++#define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
+ 
+ /* interrupts 32..63 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP1 \
+ 	IRQnMAP(UART4_IRQn)
++#define RTOS_AUDIO_IRQCHIP0_BITMAP1 \
++	0
++#define RTOS_INDUS_IRQCHIP0_BITMAP1 \
++	0
+ 
+ /* interrupts 64..95 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP2 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP2 \
+ 	IRQnMAP(GPT2_IRQn) | \
+ 	IRQnMAP(GPT1_IRQn)
++#define RTOS_AUDIO_IRQCHIP0_BITMAP2 \
++		IRQnMAP(I2C3_IRQn) | /* I2C3 */ \
++		IRQnMAP(I2S3_IRQn)   /* SAI3 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP2 \
++	0
+ 
+ /* interrupts 96..127 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP3 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP3 \
++	0
++#define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
++		IRQnMAP(I2S56_IRQn)  /* SAI5-6 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
+ 
+ /* interrupts 128..159 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP4 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP4 \
+ 	0
++#define RTOS_AUDIO_IRQCHIP0_BITMAP4 \
++		IRQnMAP(I2S2_IRQn) |  /* SAI2 */ \
++		IRQnMAP(I2S7_IRQn)    /* SAI7 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP4 \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) | \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) | \
++		IRQnMAP(ENET_IRQn)                  | \
++		IRQnMAP(ENET_1588_IRQn)
+ 
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+ 	PCI_IVSHMEM_UNDEFINED(0, 0, 0, 1, 3)
+diff --git a/configs/arm64/imx8mn-zephyr-audio.c b/configs/arm64/imx8mn-zephyr-audio.c
+index 8db153ab..445b0182 100644
+--- a/configs/arm64/imx8mn-zephyr-audio.c
++++ b/configs/arm64/imx8mn-zephyr-audio.c
+@@ -10,10 +10,14 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mn-audio.h"
++#include "cell-helper.h"
++#include "imx8mn-rtos.h"
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"zephyr"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-audio.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-zephyr-industrial.c b/configs/arm64/imx8mn-zephyr-industrial.c
+index f9dee1c4..bc9e82ac 100644
+--- a/configs/arm64/imx8mn-zephyr-industrial.c
++++ b/configs/arm64/imx8mn-zephyr-industrial.c
+@@ -10,9 +10,13 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mn-industrial.h"
++#include "cell-helper.h"
++#include "imx8mn-rtos.h"
+ 
+ #define CONFIG_INMATE_NAME		"zephyr"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-industrial.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-zephyr.c b/configs/arm64/imx8mn-zephyr.c
+index e0f9d97d..83f2e47b 100644
+--- a/configs/arm64/imx8mn-zephyr.c
++++ b/configs/arm64/imx8mn-zephyr.c
+@@ -33,11 +33,11 @@
+ 		/* interrupts 32..63 */                    \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+ 		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP2,              \
+ 		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mp-audio.h b/configs/arm64/imx8mp-audio.h
+deleted file mode 100644
+index 269b0b50..00000000
+--- a/configs/arm64/imx8mp-audio.h
++++ /dev/null
+@@ -1,61 +0,0 @@
+-/*
+- * i.MX8MP target - Audio config
+- *
+- * Copyright 2021-2022 NXP
+- *
+- * Authors:
+- *  Stephane Viau <stephane.viau@nxp.com>
+- *  Fabrice Goucem <fabrice.goucem@nxp.com>
+- *  Jiafei Pan <Jiafei.Pan@nxp.com>
+- *
+- * This work is licensed under the terms of the GNU GPL, version 2.  See
+- * the COPYING file in the top-level directory.
+- */
+-
+-#include "cell-helper.h"
+-#include "imx8mp-rtos.h"
+-
+-#define CONFIG_INMATE_BASE		(0xc0000000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RW( 0x30240000, 0x30240000, KB(64)),   /* GPIO5 */	\
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),    /* CCM */    \
+-	MMIO_REGION_RWS(0x30388000, 0x30388000, KB(16)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x303a0000, 0x303a0000, KB(64)),   /* GPC */	\
+-	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */	\
+-	MMIO_REGION_RW( 0x30c10000, 0x30c10000, KB(64)),   /* SAI1 */	\
+-	MMIO_REGION_RW( 0x30c20000, 0x30c20000, KB(64)),   /* SAI2 */	\
+-	MMIO_REGION_RW( 0x30c30000, 0x30c30000, KB(64)),   /* SAI3 */	\
+-	MMIO_REGION_RW( 0x30c50000, 0x30c50000, KB(64)),   /* SAI5 */	\
+-	MMIO_REGION_RW( 0x30c60000, 0x30c60000, KB(64)),   /* SAI6 */	\
+-	MMIO_REGION_RW( 0x30c80000, 0x30c80000, KB(64)),   /* SAI7 */	\
+-	MMIO_REGION_RWS(0x30e20000, 0x30e20000, KB(64))    /* AUDIOMIX */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
+-		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
+-		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */         \
+-		IRQnMAP(I2S1_IRQn),   /* SAI1 */           \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
+-		IRQnMAP(I2S2_IRQn) |  /* SAI2 */           \
+-		IRQnMAP(I2S7_IRQn))   /* SAI7 */
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mp-freertos-audio.c b/configs/arm64/imx8mp-freertos-audio.c
+index 16bf3b47..dfa62594 100644
+--- a/configs/arm64/imx8mp-freertos-audio.c
++++ b/configs/arm64/imx8mp-freertos-audio.c
+@@ -12,10 +12,14 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mp-audio.h"
++#include "cell-helper.h"
++#include "imx8mp-rtos.h"
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-audio.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-freertos-industrial.c b/configs/arm64/imx8mp-freertos-industrial.c
+index fac2ce70..4af50bfa 100644
+--- a/configs/arm64/imx8mp-freertos-industrial.c
++++ b/configs/arm64/imx8mp-freertos-industrial.c
+@@ -10,9 +10,13 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mp-industrial.h"
++#include "cell-helper.h"
++#include "imx8mp-rtos.h"
+ 
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-industrial.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-freertos.c b/configs/arm64/imx8mp-freertos.c
+index 01604f1c..c063e6a7 100644
+--- a/configs/arm64/imx8mp-freertos.c
++++ b/configs/arm64/imx8mp-freertos.c
+@@ -34,11 +34,11 @@
+ 		/* interrupts 32..63 */                    \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+ 		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP2,              \
+ 		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mp-industrial.h b/configs/arm64/imx8mp-industrial.h
+deleted file mode 100644
+index 77572092..00000000
+--- a/configs/arm64/imx8mp-industrial.h
++++ /dev/null
+@@ -1,60 +0,0 @@
+-/*
+- * i.MX8MP target - Industrial config
+- *
+- * Copyright 2022 NXP
+- *
+- * Authors:
+- *  Stephane Viau <stephane.viau@nxp.com>
+- *
+- * This work is licensed under the terms of the GNU GPL, version 2.  See
+- * the COPYING file in the top-level directory.
+- */
+-
+-#include "cell-helper.h"
+-#include "imx8mp-rtos.h"
+-
+-#define CONFIG_INMATE_BASE		(0xc0000000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30230000, 0x30230000, KB(64)),   /* GPIO4 */  \
+-	MMIO_REGION_RWS(0x30240000, 0x30240000, KB(64)),   /* GPIO5 */  \
+-	MMIO_REGION_RWS(0x30340000, 0x30340000, KB(64)),   /* GPR */    \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x308c0000, 0x308c0000, KB(64)),   /* FLEXCAN1*/\
+-	MMIO_REGION_RW( 0x30bf0000, 0x30bf0000, KB(64))    /* ENET_Q */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4),             \
+-	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 160..191 */                  \
+-		IRQnMAP(ENET_QOS_PMT_IRQn) |               \
+-		IRQnMAP(ENET_QOS_IRQn) |                   \
+-		IRQnMAP(CAN_FD1_IRQn) | /* FLEXCAN1 */     \
+-		IRQnMAP(CAN_FD1_ERROR_IRQn),               \
+-		/* interrupts 192..223 */                  \
+-		0,                                         \
+-		/* interrupts 224..255 */                  \
+-		0,                                         \
+-		/* interrupts 256..287 */                  \
+-		0)
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mp-rtos.h b/configs/arm64/imx8mp-rtos.h
+index f82a811a..9531914e 100644
+--- a/configs/arm64/imx8mp-rtos.h
++++ b/configs/arm64/imx8mp-rtos.h
+@@ -12,6 +12,8 @@
+  *
+  */
+ 
++#define RTOS_INMATE_BASE		(0xc0000000)
++
+ typedef enum IRQn {
+ 
+   /* Device specific interrupts */
+@@ -42,24 +44,82 @@ typedef enum IRQn {
+ 	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
+ 	MMIO_REGION_ROS(0x30360000, 0x30360000, KB(64)), /* ANA_PLL */              \
+ 	MMIO_REGION_ROS(0x30380000, 0x30380000, KB(64)), /* CCM */                  \
+-	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */                \
++	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */
++
++#define RTOS_MEMRAM_MEMORY_REGIONS \
++	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
++
++#define RTOS_AUDIO_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x30240000, 0x30240000, KB(64)),   /* GPIO5 */  \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),    /* CCM */    \
++	MMIO_REGION_RWS(0x30388000, 0x30388000, KB(16)),   /* CCM */    \
++	MMIO_REGION_RW( 0x303a0001, 0x303a0000, KB(64)),   /* GPC */    \
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RW( 0x30c10000, 0x30c10000, KB(64)),   /* SAI1 */   \
++	MMIO_REGION_RW( 0x30c20000, 0x30c20000, KB(64)),   /* SAI2 */   \
++	MMIO_REGION_RW( 0x30c30000, 0x30c30000, KB(64)),   /* SAI3 */   \
++	MMIO_REGION_RW( 0x30c50000, 0x30c50000, KB(64)),   /* SAI5 */   \
++	MMIO_REGION_RW( 0x30c60000, 0x30c60000, KB(64)),   /* SAI6 */   \
++	MMIO_REGION_RW( 0x30c80000, 0x30c80000, KB(64)),   /* SAI7 */   \
++	MMIO_REGION_RWS(0x30e20000, 0x30e20000, KB(64))    /* AUDIOMIX */
++
++#define RTOS_INDUS_MEMORY_REGIONS \
++	MMIO_REGION_RWS(0x30230000, 0x30230000, KB(64)),   /* GPIO4 */  \
++	MMIO_REGION_RWS(0x30240000, 0x30240000, KB(64)),   /* GPIO5 */  \
++	MMIO_REGION_RWS(0x30340000, 0x30340000, KB(64)),   /* GPR */    \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x308c0000, 0x308c0000, KB(64)),   /* FLEXCAN1*/\
++	MMIO_REGION_RW( 0x30bf0000, 0x30bf0000, KB(64))    /* ENET_Q */
++
++/* GIC */
++#define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
+ 
+ /* interrupts 32..63 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP1 \
+ 	IRQnMAP(UART4_IRQn)
++#define RTOS_AUDIO_IRQCHIP0_BITMAP1 \
++	0
++#define RTOS_INDUS_IRQCHIP0_BITMAP1 \
++	0
+ 
+ /* interrupts 64..95 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP2 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP2 \
+ 	IRQnMAP(GPT2_IRQn) | \
+ 	IRQnMAP(GPT1_IRQn)
++#define RTOS_AUDIO_IRQCHIP0_BITMAP2 \
++		IRQnMAP(I2S3_IRQn)   /* SAI3 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP2 \
++	0
+ 
+ /* interrupts 96..127 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP3 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP3 \
++	0
++#define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
++		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */ \
++		IRQnMAP(I2S1_IRQn)    /* SAI1 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
+ 
+ /* interrupts 128..159 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP4 \
++#define RTOS_COMMON_IRQCHIP0_BITMAP4 \
+ 	0
++#define RTOS_AUDIO_IRQCHIP0_BITMAP4 \
++		IRQnMAP(I2S2_IRQn) |  /* SAI2 */ \
++		IRQnMAP(I2S7_IRQn)    /* SAI7 */
++#define RTOS_INDUS_IRQCHIP0_BITMAP4 \
++	0
++
++/* interrupts 160..191 */
++#define RTOS_INDUS_IRQCHIP1_BITMAP1 \
++		IRQnMAP(ENET_QOS_PMT_IRQn) | \
++		IRQnMAP(ENET_QOS_IRQn) | \
++		IRQnMAP(CAN_FD1_IRQn) | /* FLEXCAN1 */ \
++		IRQnMAP(CAN_FD1_ERROR_IRQn)
+ 
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+ 	PCI_IVSHMEM_UNDEFINED(2, 0, 0, 1, 3)
+diff --git a/configs/arm64/imx8mp-zephyr-audio.c b/configs/arm64/imx8mp-zephyr-audio.c
+index 11dc1974..21a7ee23 100644
+--- a/configs/arm64/imx8mp-zephyr-audio.c
++++ b/configs/arm64/imx8mp-zephyr-audio.c
+@@ -10,10 +10,14 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mp-audio.h"
++#include "cell-helper.h"
++#include "imx8mp-rtos.h"
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"zephyr"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-audio.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-zephyr-industrial.c b/configs/arm64/imx8mp-zephyr-industrial.c
+index 93163f59..0b3f3f37 100644
+--- a/configs/arm64/imx8mp-zephyr-industrial.c
++++ b/configs/arm64/imx8mp-zephyr-industrial.c
+@@ -10,9 +10,13 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "imx8mp-industrial.h"
++#include "cell-helper.h"
++#include "imx8mp-rtos.h"
+ 
+ #define CONFIG_INMATE_NAME		"zephyr"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-config-industrial.h"
++
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-zephyr.c b/configs/arm64/imx8mp-zephyr.c
+index d666b3ba..032eb0bf 100644
+--- a/configs/arm64/imx8mp-zephyr.c
++++ b/configs/arm64/imx8mp-zephyr.c
+@@ -34,11 +34,11 @@
+ 		/* interrupts 32..63 */                    \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+ 		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP2,              \
+ 		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+-- 
+2.25.1
+

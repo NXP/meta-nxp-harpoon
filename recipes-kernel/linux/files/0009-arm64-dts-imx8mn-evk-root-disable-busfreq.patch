@@ -1,7 +1,7 @@
-From 283f117a913c40465a683681ddb91b2e38ce2dad Mon Sep 17 00:00:00 2001
+From 3f2cd3ee8c93aa7079921a846bb531c456dac0e4 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 23 Jun 2022 10:44:56 +0200
-Subject: [PATCH 9/9] arm64: dts: imx8mn-evk-root: disable busfreq
+Subject: [PATCH 09/20] arm64: dts: imx8mn-evk-root: disable busfreq
 
 Disable busfreq to prevent Linux from locking up Jailhouse inmate cells.
 
@@ -11,7 +11,7 @@ Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts
-index 91bce566c584..41111300b658 100644
+index 62d6cce07203..935df38c30d0 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-root.dts
 @@ -1,6 +1,6 @@
@@ -22,7 +22,7 @@ index 91bce566c584..41111300b658 100644
   */
  
  #include "imx8mn-evk.dts"
-@@ -65,6 +65,11 @@ MX8MN_IOMUXC_UART4_TXD_UART4_DCE_TX	0x140
+@@ -74,6 +74,11 @@ MX8MN_IOMUXC_UART4_TXD_UART4_DCE_TX	0x140
  	};
  };
  

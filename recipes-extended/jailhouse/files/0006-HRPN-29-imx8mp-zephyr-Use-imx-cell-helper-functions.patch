@@ -1,7 +1,7 @@
-From 2d292b51121c0ffafe374863a192413486c97dbc Mon Sep 17 00:00:00 2001
+From 9ce117f026774b59e4574809163ffe6466ab8c75 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 18 Jun 2021 17:05:43 +0200
-Subject: [PATCH 06/35] HRPN-29 imx8mp: zephyr: Use imx-cell helper functions
+Subject: [PATCH 06/43] HRPN-29 imx8mp: zephyr: Use imx-cell helper functions
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---

@@ -1,7 +1,7 @@
-From 35883af89181ba193f9cb3a1ce9e13d6cd21ee7a Mon Sep 17 00:00:00 2001
+From 969f998b934586b210b52d0d5d62932ab6a20173 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 21 Jan 2022 16:44:01 +0000
-Subject: [PATCH 20/35] imx8mn: freertos: Update irqchips definitions
+Subject: [PATCH 20/43] imx8mn: freertos: Update irqchips definitions
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---

@@ -1,7 +1,7 @@
-From e6da9c95a42d61fe5208eb73517c9839e176e759 Mon Sep 17 00:00:00 2001
+From 76e7dfe29f37f0bddf46b0fed53acada667979a4 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 3 Jan 2022 11:11:33 +0000
-Subject: [PATCH 17/35] HRPN-232 configs: Fix copyright
+Subject: [PATCH 17/43] HRPN-232 configs: Fix copyright
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---

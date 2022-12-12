@@ -1,7 +1,7 @@
-From 91f322cf25045c0ce34539ae7c4b207c4d4ae29c Mon Sep 17 00:00:00 2001
+From fe3c3d8a827dc42878774af32cf55ab1cd2ddaf6 Mon Sep 17 00:00:00 2001
 From: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
 Date: Fri, 4 Feb 2022 16:49:40 +0000
-Subject: [PATCH 27/35] imx8mp: freertos: Add ENET_QOS to the industrial cell
+Subject: [PATCH 27/43] imx8mp: freertos: Add ENET_QOS to the industrial cell
  config
 
 Signed-off-by: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>

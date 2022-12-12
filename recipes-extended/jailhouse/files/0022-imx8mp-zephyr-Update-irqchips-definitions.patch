@@ -1,7 +1,7 @@
-From 748ce273dfc43dd35579b2f33b477916962d37e3 Mon Sep 17 00:00:00 2001
+From 3e73523db1a90649faac83c56f1375effa8c774e Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 21 Jan 2022 16:42:32 +0000
-Subject: [PATCH 22/35] imx8mp: zephyr: Update irqchips definitions
+Subject: [PATCH 22/43] imx8mp: zephyr: Update irqchips definitions
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---

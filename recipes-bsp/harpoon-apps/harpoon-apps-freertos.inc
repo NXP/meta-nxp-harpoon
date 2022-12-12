@@ -5,7 +5,7 @@ require harpoon-apps-uri.inc
 
 LICENSE = "BSD-3-Clause & MIT & Proprietary"
 LIC_FILES_CHKSUM = " \
-    file://mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=c865d07a316b20c9df4d3bad5cba200c \
+    file://mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=e435b49b43aa6f17047226cf6158600b \
     file://FreeRTOS-Kernel/LICENSE.md;md5=7ae2be7fb1637141840314b51970a9f7 \
     file://harpoon-apps/LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd385e900f"
 
@@ -16,8 +16,9 @@ SRC_URI = "\
 "
 
 SRCREV_FORMAT = "harpoon-apps_mcux-sdk_FreeRTOS-Kernel"
-SRCREV_mcux-sdk = "0565630dc22c464feb346cac5b0d787e8a25229a"
-SRCREV_FreeRTOS-Kernel = "14dba01da5623497f76748bca6ccc7fb58ee6d36"
+
+SRCREV_mcux-sdk = "cb3b07a151bb27d3477f58bc5d1df3e259e4018a"
+SRCREV_FreeRTOS-Kernel = "8df2481c594a05d69f15e9052471586184fa88cc"
 SRCBRANCH_mcux-sdk = "feature/aarch64_support"
 SRCBRANCH_FreeRTOS-Kernel = "feature/aarch64_support"
 

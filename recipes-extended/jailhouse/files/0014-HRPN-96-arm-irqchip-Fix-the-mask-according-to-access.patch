@@ -1,7 +1,7 @@
-From aa7d46f88fcdfbc13d1da44665e8989d658e5753 Mon Sep 17 00:00:00 2001
+From cae257490d02df9a1bb42d9be939779e6e2c45af Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 23 Aug 2021 14:34:49 +0800
-Subject: [PATCH 14/35] HRPN-96 arm: irqchip: Fix the mask according to access
+Subject: [PATCH 14/43] HRPN-96 arm: irqchip: Fix the mask according to access
  address and size
 
 The current access_mask is implicitly assuming that it always

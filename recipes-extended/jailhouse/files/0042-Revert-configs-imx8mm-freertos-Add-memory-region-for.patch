@@ -1,0 +1,31 @@
+From 046c44fa95e5146b06139134c7b4c82df8e5efa3 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Thu, 3 Nov 2022 15:38:11 +0800
+Subject: [PATCH 42/43] Revert "configs: imx8mm-freertos: Add memory region for
+ SGI mailbox and RPMSG"
+
+This reverts commit 0d709abdad57b9382482d6ac4c99c381f0d98577.
+As the RTOS_COMMON_MEMORY_REGIONS has defined the memory regions.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ configs/arm64/imx8mm-freertos.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/configs/arm64/imx8mm-freertos.c b/configs/arm64/imx8mm-freertos.c
+index 6c646306..d751c8cb 100644
+--- a/configs/arm64/imx8mm-freertos.c
++++ b/configs/arm64/imx8mm-freertos.c
+@@ -22,9 +22,6 @@
+ /* Memory & peripherals */
+ #define CONFIG_INMATE_REGIONS		\
+ 	RTOS_COMMON_MEMORY_REGIONS,                                    \
+-	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),    /* SGI MBOX */   \
+-	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)),   /* RPMSG */      \
+-	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),    /* RPMSG BUF */  \
+ 	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */ \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */  \
+-- 
+2.25.1
+

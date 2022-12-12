@@ -1,7 +1,7 @@
-From 59c42803d41db7915eca00ed11426a15d055b0ed Mon Sep 17 00:00:00 2001
+From 2f338673132023382855346d734ee3e0e95ab2fb Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Fri, 26 Nov 2021 12:15:39 +0100
-Subject: [PATCH 12/35] HRPN-199 configs: IVSHMEM PCI device helpers.
+Subject: [PATCH 12/43] HRPN-199 configs: IVSHMEM PCI device helpers.
 
 Add helper functions to define IVSHMEM PCI devices.
 Align cell format (no trailing comma or backslash).

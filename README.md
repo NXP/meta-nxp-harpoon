@@ -1,4 +1,4 @@
-i.MX Linux Yocto Project BSP 5.15.32_2.0.0 Harpoon v2 Release
+i.MX Linux Yocto Project BSP 5.15.71-2.2.0 Harpoon v2 Release
 =============================================================
 
 The following boards were tested in this release:
@@ -13,7 +13,7 @@ See the i.MX Yocto Project User's Guide for instructions on installing repo.
 
 First install the i.MX Linux BSP repo:
 ```
-$ repo init -u git://source.codeaurora.org/external/imx/imx-manifest.git -b imx-linux-kirkstone -m imx-5.15.32-2.0.0_harpoon-v2.xml
+$ repo init -u git://source.codeaurora.org/external/imx/imx-manifest.git -b imx-linux-kirkstone -m imx-5.15.71-2.2.0_harpoon-v2.xml
 ```
 
 Download the Yocto Project Layers:

@@ -11,14 +11,13 @@ LIC_FILES_CHKSUM = " \
 
 SRC_URI = "\
     ${SRC_HARPOON_APPS} \
-    git://github.com/NXPmicro/mcux-sdk.git;protocol=https;branch=${SRCBRANCH_mcux-sdk};destsuffix=git/mcux-sdk;name=mcux-sdk \
+    git://github.com/NXPmicro/mcux-sdk.git;protocol=https;nobranch=1;destsuffix=git/mcux-sdk;name=mcux-sdk \
     git://github.com/NXPmicro/FreeRTOS-Kernel.git;protocol=https;branch=${SRCBRANCH_FreeRTOS-Kernel};destsuffix=git/FreeRTOS-Kernel;name=FreeRTOS-Kernel \
 "
 
 SRCREV_FORMAT = "harpoon-apps_mcux-sdk_FreeRTOS-Kernel"
 SRCREV_mcux-sdk = "0565630dc22c464feb346cac5b0d787e8a25229a"
 SRCREV_FreeRTOS-Kernel = "14dba01da5623497f76748bca6ccc7fb58ee6d36"
-SRCBRANCH_mcux-sdk = "feature/aarch64_support"
 SRCBRANCH_FreeRTOS-Kernel = "feature/aarch64_support"
 
 BOARD:imx8mp-lpddr4-evk = "evkmimx8mp"

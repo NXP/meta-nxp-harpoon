@@ -26,7 +26,7 @@ To download the Real-time Edge 2.3.0 release
 ```
 $ mkdir yocto-real-time-edge
 $ cd yocto-real-time-edge
-$ repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-honister -m real-time-edge-2.3.0.xml
+$ repo init -u https://github.com/nxp-real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-honister -m real-time-edge-2.3.0.xml
 $ repo sync
 ```
 

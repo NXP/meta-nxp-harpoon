@@ -1,4 +1,4 @@
-# Copyright (C) 2022 NXP
+# Copyright (C) 2022-2023 NXP
 
 require harpoon-apps-common.inc
 require harpoon-apps-uri.inc
@@ -13,15 +13,13 @@ LIC_FILES_CHKSUM = " \
 
 SRC_URI = "\
     ${SRC_HARPOON_APPS} \
-    git://github.com/NXPmicro/zephyr.git;protocol=https;branch=${SRCBRANCH_zephyr};destsuffix=git/zephyr;name=zephyr \
-    git://github.com/NXPmicro/hal_nxp.git;protocol=https;branch=${SRCBRANCH_hal-nxp};destsuffix=git/modules/hal/nxp;name=hal-nxp \
+    git://github.com/NXPmicro/zephyr.git;protocol=https;nobranch=1;destsuffix=git/zephyr;name=zephyr \
+    git://github.com/NXPmicro/hal_nxp.git;protocol=https;nobranch=1;destsuffix=git/modules/hal/nxp;name=hal-nxp \
 "
 
 SRCREV_FORMAT = "harpoon-apps_zephyr_hal-nxp"
 SRCREV_zephyr = "aeb61cd2bd6d837d0161dc6174bde7279a9862f2"
 SRCREV_hal-nxp = "33ad103c6f21c324a7381aaa4c89ffd9450b28ce"
-SRCBRANCH_zephyr = "feature/aarch64_support"
-SRCBRANCH_hal-nxp = "feature/aarch64_support"
 
 BOARD:imx8mm-lpddr4-evk = "mimx8mm_evk_a53"
 BOARD:imx8mn-lpddr4-evk = "mimx8mn_evk_a53"

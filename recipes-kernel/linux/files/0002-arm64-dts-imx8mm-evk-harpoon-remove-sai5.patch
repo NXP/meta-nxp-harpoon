@@ -1,7 +1,7 @@
-From 5abe9b3c89e6cb1b044c78db0f4ea2cbeb2cc478 Mon Sep 17 00:00:00 2001
+From b6092da30166519c268c85af5eedac33d146c377 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Tue, 23 Nov 2021 19:56:55 +0100
-Subject: [PATCH 02/14] arm64: dts: imx8mm-evk-harpoon: remove sai5
+Subject: [PATCH 02/18] arm64: dts: imx8mm-evk-harpoon: remove sai5
 
 sai5 is used by Harpoon's RTOS:
 * delete it from Linux device tree
@@ -46,5 +46,5 @@ index 47e16e606332..7b6f678e831c 100644
 +	status = "disabled";
  };
 -- 
-2.25.1
+2.34.1
 

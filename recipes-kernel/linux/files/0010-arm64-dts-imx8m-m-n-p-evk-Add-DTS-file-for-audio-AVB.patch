@@ -1,7 +1,7 @@
-From 7556d6c83f6dde394f30f80c9013b2a3fc3fe54e Mon Sep 17 00:00:00 2001
+From ede2c6d0b72faaa199560c319308a411ca4f18cb Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 3 Oct 2022 08:19:25 +0000
-Subject: [PATCH 10/14] arm64: dts: imx8m{m,n,p}-evk: Add DTS file for audio
+Subject: [PATCH 10/18] arm64: dts: imx8m{m,n,p}-evk: Add DTS file for audio
  AVB use case
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
@@ -63,5 +63,5 @@ index 000000000000..5625112e8236
 +	status = "disabled";
 +};
 -- 
-2.25.1
+2.34.1
 

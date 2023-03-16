@@ -1,7 +1,7 @@
-From a8cb4916e193f3ae06d114b449d0d8ea49363496 Mon Sep 17 00:00:00 2001
+From 167698fd2a4a89ddcc51a31f77cd78167846a8ec Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Tue, 30 Nov 2021 15:36:07 +0100
-Subject: [PATCH 11/43] HRPN-35 configs: Guest virtual console
+Subject: [PATCH 11/49] HRPN-35 configs: Guest virtual console
 
 Allow guest cells to use hypervisor calls for accessing hypervisor
 virtual console.
@@ -27,5 +27,5 @@ index 871784fc..20bcff11 100644
  		.cpu_set_size = sizeof(config.cpus),
  		.num_memory_regions = ARRAY_SIZE(config.mem_regions),
 -- 
-2.25.1
+2.34.1
 

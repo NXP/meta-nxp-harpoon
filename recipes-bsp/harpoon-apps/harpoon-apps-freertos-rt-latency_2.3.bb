@@ -1,6 +1,7 @@
-# Copyright (C) 2021-2022 NXP
+# Copyright (C) 2021-2023 NXP
 
 require harpoon-apps-freertos.inc
+require rpmsg-lite-uri.inc
 
 SUMMARY = "Harpoon Application - RT Latency (FreeRTOS)"
 

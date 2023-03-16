@@ -1,7 +1,7 @@
-From 85edde0869ea518df26a94bce2255fead965dbe1 Mon Sep 17 00:00:00 2001
+From ebb7ced986f189a86d8f98ea90389143f6e28db7 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@oss.nxp.com>
 Date: Mon, 6 Dec 2021 15:39:12 +0100
-Subject: [PATCH 15/43] HRPN-38 configs: get rid of *_NUM macros
+Subject: [PATCH 15/49] HRPN-38 configs: get rid of *_NUM macros
 
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 ---
@@ -66,5 +66,5 @@ index df0894fb..03e6de90 100644
  #define CONFIG_INMATE_IRQCHIPS_BASE	(32)
  #define CONFIG_INMATE_IRQCHIPS_BITMAP	\
 -- 
-2.25.1
+2.34.1
 

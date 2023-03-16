@@ -1,7 +1,7 @@
-From 3865b9820f58610f2ae671cd7aa79296ea46749e Mon Sep 17 00:00:00 2001
+From a6bdc5f43f1601b206813369dd147f8a6e96d390 Mon Sep 17 00:00:00 2001
 From: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
 Date: Fri, 4 Feb 2022 16:49:40 +0000
-Subject: [PATCH 27/43] imx8mp: freertos: Add ENET_QOS to the industrial cell
+Subject: [PATCH 27/49] imx8mp: freertos: Add ENET_QOS to the industrial cell
  config
 
 Signed-off-by: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
@@ -54,5 +54,5 @@ index 6091484b..47cb99f1 100644
    CAN_FD1_ERROR_IRQn           = 175,              /**< CAN-FD1 Interrupt from correctable error/non correctable error int host/ non correctable error int internal */
  } IRQn_Type;
 -- 
-2.25.1
+2.34.1
 

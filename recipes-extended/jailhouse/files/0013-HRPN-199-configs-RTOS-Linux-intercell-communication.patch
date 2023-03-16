@@ -1,7 +1,7 @@
-From 8c43be74c5bcfdb4eeaf2cf90da8185a672f8d95 Mon Sep 17 00:00:00 2001
+From 32b7ed4d1250e69d543d142615fbf2fc2e71e64f Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Fri, 26 Nov 2021 14:11:39 +0100
-Subject: [PATCH 13/43] HRPN-199 configs: RTOS<->Linux intercell communication
+Subject: [PATCH 13/49] HRPN-199 configs: RTOS<->Linux intercell communication
 
 Add definition of memory regions and PCI devices for intercell
 communication. Definition is aligned with the demo device definition
@@ -221,5 +221,5 @@ index 66b553e1..a7514525 100644
  #include "cell-create.h"
  
 -- 
-2.25.1
+2.34.1
 

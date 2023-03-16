@@ -1,37 +1,36 @@
-From 8d92b68477384d24bce9bfec03c1a59a1edc8057 Mon Sep 17 00:00:00 2001
+From 5462a5c9908a53dfdd40dceb818fe1aabbd5467f Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Mon, 25 Oct 2021 17:18:31 +0200
-Subject: [PATCH 01/14] arm64: dts: imx8mm-evk-harpoon, imx8mn-evk-harpoon,
+Subject: [PATCH 01/18] arm64: dts: imx8mm-evk-harpoon, imx8mn-evk-harpoon,
  imx8mp-evk-harpoon: new DTBs for real-time-edge
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
-[solved conflicts]
+[replace spaces by tabulations]
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
-(cherry picked from commit 82b9700c486433119fcf93632157c5ed587f1dc0)
+(rebase on lf-5-15.y @commit 29608d7e7544908730ab43e1a65056e345f5c1ae)
 ---
- arch/arm64/boot/dts/freescale/Makefile            |  6 +++---
+ arch/arm64/boot/dts/freescale/Makefile            |  5 +++--
  .../boot/dts/freescale/imx8mm-evk-harpoon.dts     | 15 +++++++++++++++
  .../boot/dts/freescale/imx8mn-evk-harpoon.dts     | 15 +++++++++++++++
  .../boot/dts/freescale/imx8mp-evk-harpoon.dts     | 15 +++++++++++++++
- 4 files changed, 48 insertions(+), 3 deletions(-)
+ 4 files changed, 48 insertions(+), 2 deletions(-)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 41a9a70a99b9..405a6661473c 100644
+index 11acb6a565d5..131e1b186fa0 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -81,7 +81,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb imx8mm-evk-rpmsg.dtb imx8mm-evk-rm67191
+@@ -79,6 +79,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb imx8mm-evk-rpmsg.dtb imx8mm-evk-rm67191
+ 			  imx8mm-evk-usd-wifi.dtb \
  			  imx8mm-evk-qca-wifi.dtb \
  			  imx8mm-evk-dpdk.dtb \
++			  imx8mm-evk-harpoon.dtb \
  			  imx8mm-evk-rm67199.dtb imx8mm-evk-rm67191-cmd-ram.dtb imx8mm-evk-rm67199-cmd-ram.dtb \
--			  imx8mm-evk-lk.dtb imx8mm-evk-rpmsg-wm8524-lpv.dtb
-+			  imx8mm-evk-lk.dtb imx8mm-evk-harpoon.dtb imx8mm-evk-rpmsg-wm8524-lpv.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-rpmsg-wm8524.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-rpmsg-ca53.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-ak4497.dtb imx8mm-evk-ak5558.dtb imx8mm-evk-audio-tdm.dtb
-@@ -120,14 +120,14 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk.dtb imx8mn-evk-rm67191.dtb imx8mn-evk-rpmsg
+ 			  imx8mm-evk-lk.dtb imx8mm-evk-rpmsg-wm8524-lpv.dtb \
+ 			  imx8mm-evk-rpmsg-8m-buf.dtb
+@@ -113,13 +114,13 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk.dtb imx8mn-evk-rm67191.dtb imx8mn-evk-rpmsg
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb imx8mn-ddr4-evk-ak5558.dtb imx8mn-ddr4-evk-rm67191.dtb \
  			  imx8mn-ddr4-evk-rpmsg.dtb imx8mn-ddr4-evk-usd-wifi.dtb imx8mn-ddr4-evk-rm67199.dtb \
  			  imx8mn-ddr4-evk-rm67191-cmd-ram.dtb imx8mn-ddr4-evk-rm67199-cmd-ram.dtb
@@ -39,7 +38,6 @@ index 41a9a70a99b9..405a6661473c 100644
 +dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk-root.dtb imx8mn-evk-inmate.dtb imx8mn-evk-lk.dtb imx8mn-ddr4-evk-lk.dtb imx8mn-evk-harpoon.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-ab2.dtb imx8mn-ddr4-ab2.dtb imx8mn-ddr3l-ab2.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
  			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
  			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
@@ -112,5 +110,5 @@ index 000000000000..cc153b97339e
 +	pinctrl-0 = <&pinctrl_i2c3>;
 +};
 -- 
-2.25.1
+2.34.1
 

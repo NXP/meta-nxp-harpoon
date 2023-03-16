@@ -1,7 +1,7 @@
-From 9d5e93ffdbb677df32c4d9402caf2d444a4346d6 Mon Sep 17 00:00:00 2001
+From dfef46182c99ffe2f8a138cee7051630a6639ae3 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Wed, 17 Nov 2021 15:00:03 +0000
-Subject: [PATCH 03/43] HRPN-38 configs: Introduce helper files to create
+Subject: [PATCH 03/49] HRPN-38 configs: Introduce helper files to create
  inmate cell config
 
 Inmate cell configurations all look alike. Let's create a couple of
@@ -201,5 +201,5 @@ index 00000000..bf731101
 +
 +#include "cell-create.h"
 -- 
-2.25.1
+2.34.1
 

@@ -1,7 +1,7 @@
-From 3f446f0e16b13c4811ac9a6bf71bae8644e8b07e Mon Sep 17 00:00:00 2001
+From 9558d3f9f531fd1c0345cb556ba474f3227ec895 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 23 Aug 2021 14:34:49 +0800
-Subject: [PATCH 14/43] HRPN-96 arm: irqchip: Fix the mask according to access
+Subject: [PATCH 14/49] HRPN-96 arm: irqchip: Fix the mask according to access
  address and size
 
 The current access_mask is implicitly assuming that it always
@@ -29,5 +29,5 @@ index 256af114..daae5512 100644
  		/* Restrict the read value */
  		mmio_perform_access(gicd_base, mmio);
 -- 
-2.25.1
+2.34.1
 

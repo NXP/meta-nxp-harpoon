@@ -13,16 +13,14 @@ LIC_FILES_CHKSUM = " \
 
 SRC_URI = "\
     ${SRC_HARPOON_APPS} \
-    git://github.com/nxp-zephyr/zephyr.git;protocol=https;branch=${SRCBRANCH_zephyr};destsuffix=git/zephyr;name=zephyr \
-    git://github.com/nxp-zephyr/hal_nxp.git;protocol=https;branch=${SRCBRANCH_hal-nxp};destsuffix=git/modules/hal/nxp;name=hal-nxp \
+    git://github.com/nxp-zephyr/zephyr.git;protocol=https;nobranch=1;destsuffix=git/zephyr;name=zephyr \
+    git://github.com/nxp-zephyr/hal_nxp.git;protocol=https;nobranch=1;destsuffix=git/modules/hal/nxp;name=hal-nxp \
 "
 
 SRCREV_FORMAT = "harpoon-apps_zephyr_hal-nxp"
 
-SRCREV_zephyr = "33caa926d0e053897b2f4060cf1d51553fb4d8c2"
-SRCREV_hal-nxp = "1026ce5f52b3248b44586e1e2be1abe73a459ff9"
-SRCBRANCH_zephyr = "feature/aarch64_support"
-SRCBRANCH_hal-nxp = "feature/aarch64_support"
+SRCREV_zephyr = "3b58bc3af6bbfb27af49c3e8521ab7fb1415c271"
+SRCREV_hal-nxp = "bee151b24100c3dd7b97ff29d2ecac23b9c52780"
 
 INMATES_DIR ?= "${HARPOON_DATADIR}/inmates/zephyr"
 

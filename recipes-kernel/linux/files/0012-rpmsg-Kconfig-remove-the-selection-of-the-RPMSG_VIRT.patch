@@ -1,7 +1,7 @@
-From f2fb5d88a3207076e43141b8a8d7c685dfa56a53 Mon Sep 17 00:00:00 2001
+From 3bebe9b8cfffad2493ca0ce73327423fcdddafb3 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 17 Oct 2022 10:13:48 +0800
-Subject: [PATCH 14/14] rpmsg: Kconfig: remove the selection of the
+Subject: [PATCH 12/18] rpmsg: Kconfig: remove the selection of the
  RPMSG_VIRTIO from HAVE_IMX_RPMSG
 
 Remove the selection of the RPMSG_VIRTIO from HAVE_IMX_RPMSG, so that
@@ -15,7 +15,7 @@ Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index 092490baf8c8..e464ff983e53 100644
+index 63b9584c5f9c..2c538bf57fa1 100644
 --- a/drivers/rpmsg/Kconfig
 +++ b/drivers/rpmsg/Kconfig
 @@ -77,6 +77,7 @@ config RPMSG_QCOM_SMD
@@ -35,5 +35,5 @@ index 092490baf8c8..e464ff983e53 100644
  	  Say y here to enable support for the iMX Rpmsg Driver	providing
  	  communication channels to remote processors in iMX asymmetric
 -- 
-2.25.1
+2.34.1
 

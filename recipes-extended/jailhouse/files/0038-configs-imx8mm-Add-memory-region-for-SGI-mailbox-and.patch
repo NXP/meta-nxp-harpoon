@@ -1,7 +1,7 @@
-From a12d4d45e5ece9b89195e16724660e40975a543b Mon Sep 17 00:00:00 2001
+From 7eb7916fbdf39608372e5355bc43771c3353aff5 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Wed, 28 Sep 2022 15:44:18 +0800
-Subject: [PATCH 40/43] configs: imx8mm: Add memory region for SGI mailbox and
+Subject: [PATCH 38/49] configs: imx8mm: Add memory region for SGI mailbox and
  RPMSG
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
@@ -24,5 +24,5 @@ index 98200cea..64b6b1ab 100644
  	MEM_REGION_RWS( 0xbbaf1000, 0xbbaf1000, KB(36)), /* IVSHMEM */              \
  	MEM_REGION_ROS( 0xbbafa000, 0xbbafa000, KB(8)),  /* IVSHMEM */              \
 -- 
-2.25.1
+2.34.1
 

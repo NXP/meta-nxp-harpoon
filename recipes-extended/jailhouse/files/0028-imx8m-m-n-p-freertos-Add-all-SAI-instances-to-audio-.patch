@@ -1,7 +1,7 @@
-From ee98beb598607e2f3ccb03dacaabf26628514913 Mon Sep 17 00:00:00 2001
+From 62511518f037826b96afa3c498ca98659b715d54 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 10 Mar 2022 10:55:49 +0100
-Subject: [PATCH 28/43] imx8m{m,n,p} freertos: Add all SAI instances to audio
+Subject: [PATCH 28/49] imx8m{m,n,p} freertos: Add all SAI instances to audio
  cell config
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
@@ -162,5 +162,5 @@ index 47cb99f1..f82a811a 100644
    ENET_QOS_IRQn                = 167,              /**< ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
    CAN_FD1_IRQn                 = 174,              /**< CAN-FD1 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
 -- 
-2.25.1
+2.34.1
 

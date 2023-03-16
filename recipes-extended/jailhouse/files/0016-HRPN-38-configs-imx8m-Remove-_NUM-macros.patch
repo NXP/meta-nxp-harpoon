@@ -1,7 +1,7 @@
-From c856995d749aa249058e8324c898a9caf7cd7d7a Mon Sep 17 00:00:00 2001
+From d62e5f2a0933cf6ff8c4d8fa313f778335097ae3 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@oss.nxp.com>
 Date: Mon, 6 Dec 2021 15:40:19 +0100
-Subject: [PATCH 16/43] HRPN-38 configs: imx8m*: Remove *_NUM macros
+Subject: [PATCH 16/49] HRPN-38 configs: imx8m*: Remove *_NUM macros
 
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 ---
@@ -295,5 +295,5 @@ index a7514525..6c53db2d 100644
  	RTOS_COMMON_PCI_IVSHMEM
  
 -- 
-2.25.1
+2.34.1
 

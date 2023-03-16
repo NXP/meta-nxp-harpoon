@@ -1,7 +1,8 @@
-# Copyright (C) 2022 NXP
+# Copyright (C) 2022-2023 NXP
 
 require harpoon-apps-freertos.inc
 require gen-avb-sdk-uri.inc
+require rpmsg-lite-uri.inc
 
 SUMMARY = "Harpoon Application - Industrial (FreeRTOS)"
 

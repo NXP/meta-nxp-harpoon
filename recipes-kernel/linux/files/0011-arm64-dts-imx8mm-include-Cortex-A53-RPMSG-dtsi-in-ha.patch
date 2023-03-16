@@ -1,7 +1,7 @@
-From 6775e45bfa9ce48aeb858d40cc7516ec3c30bf1e Mon Sep 17 00:00:00 2001
+From a8c6d847bd58564cc5f5eb5d53f06fcf8d08e036 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Wed, 28 Sep 2022 15:04:18 +0800
-Subject: [PATCH 13/14] arm64: dts: imx8mm: include Cortex-A53 RPMSG dtsi in
+Subject: [PATCH 11/18] arm64: dts: imx8mm: include Cortex-A53 RPMSG dtsi in
  harpoon DTS
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
@@ -35,5 +35,5 @@ index 6ef98b400a06..4640b7c52418 100644
  &i2c3 {
  	status = "disabled";
 -- 
-2.25.1
+2.34.1
 

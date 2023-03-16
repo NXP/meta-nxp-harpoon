@@ -1,7 +1,7 @@
-From 63c96b7fab313a4b04bca723ca6216e437fc6bf5 Mon Sep 17 00:00:00 2001
+From 76ab213821599af5265baa7ce67cf9730b6311f8 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Fri, 25 Feb 2022 18:15:58 +0800
-Subject: [PATCH 32/43] imx8m{m,n}: add new cell for running Zephyr on
+Subject: [PATCH 32/49] imx8m{m,n}: add new cell for running Zephyr on
  Jailhouse
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
@@ -117,5 +117,5 @@ index 00000000..e0f9d97d
 +
 +#include "cell-create.h"
 -- 
-2.25.1
+2.34.1
 

@@ -1,7 +1,7 @@
-From a9dba79cbd10339d09fca24bebb7fc79fa807dba Mon Sep 17 00:00:00 2001
+From b5bce58c96cc4c270b8969a3834aef4103103a76 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Fri, 28 Jan 2022 11:42:47 +0100
-Subject: [PATCH 05/14] arm64: dts: imx8m{m,n,p}-evk-harpoon: Remove iomux
+Subject: [PATCH 05/18] arm64: dts: imx8m{m,n,p}-evk-harpoon: Remove iomux
  settings
 
 Harpoon's pinmux is now directly managed by Harpoon RTOS application.
@@ -88,5 +88,5 @@ index 1fe8004a84f8..c4d2bce334c9 100644
  	status = "disabled";
  };
 -- 
-2.25.1
+2.34.1
 

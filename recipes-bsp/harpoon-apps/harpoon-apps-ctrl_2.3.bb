@@ -28,10 +28,12 @@ HARPOON_APPS_APP_BIN = "harpoon_ctrl"
 SOC:mx8mm-nxp-bsp = "imx8mm"
 SOC:mx8mn-nxp-bsp = "imx8mn"
 SOC:mx8mp-nxp-bsp = "imx8mp"
+SOC:mx93-nxp-bsp = "imx93"
 
 INMATE_ENTRY_ADDRESS:mx8mm-nxp-bsp = "0x93c00000"
 INMATE_ENTRY_ADDRESS:mx8mn-nxp-bsp = "0x93c00000"
 INMATE_ENTRY_ADDRESS:mx8mp-nxp-bsp = "0xc0000000"
+INMATE_ENTRY_ADDRESS:mx93-nxp-bsp = "0xd0000000"
 
 do_install() {
 	# Install Linux control application binary
@@ -64,7 +66,7 @@ RDEPENDS:${PN} += "bash"
 OECMAKE_SOURCEPATH = "${HARPOON_APPS_CODE_DIR}"
 OECMAKE_GENERATOR = "Unix Makefiles"
 
-COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk)"
+COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk)"
 FILES:${PN} += "${HARPOON_DATADIR}"
 FILES:${PN} += "${bindir}"
 FILES:${PN} += "${sysconfdir}"

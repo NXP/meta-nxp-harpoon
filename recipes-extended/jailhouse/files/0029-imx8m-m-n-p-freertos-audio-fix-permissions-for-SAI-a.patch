@@ -1,7 +1,7 @@
-From 4d3665be1903e711fc323b03809dcb9b855216d8 Mon Sep 17 00:00:00 2001
+From 4d639b58e227018d50180326d46adde20649c88d Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 10 Mar 2022 10:57:51 +0100
-Subject: [PATCH 29/43] imx8m{m,n,p}-freertos-audio: fix permissions for SAI
+Subject: [PATCH 29/49] imx8m{m,n,p}-freertos-audio: fix permissions for SAI
  and I2C
 
 All SAI and I2C3 should not be accessed by Linux.
@@ -85,5 +85,5 @@ index c1c4775a..7274cc37 100644
  
  /* GIC */
 -- 
-2.25.1
+2.34.1
 

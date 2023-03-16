@@ -33,7 +33,7 @@ OECMAKE_SOURCEPATH = "${HARPOON_APPS_CODE_DIR}"
 OECMAKE_GENERATOR = "Unix Makefiles"
 EXTRA_OECMAKE += "-DMBOX_TRANSPORT_RPMSG=on"
 
-COMPATIBLE_MACHINE = "(imx8mm-lpddr4-evk)"
+COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk)"
 FILES:${PN} += "${HARPOON_DATADIR}"
 FILES:${PN} += "${bindir}"
 PACKAGE_ARCH = "${MACHINE_ARCH}"

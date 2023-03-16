@@ -1,7 +1,7 @@
-From 599cb70194f7cacf08c611de7f880d9441c025b9 Mon Sep 17 00:00:00 2001
+From 1bb93717201eacb3525c5722077b01187674a700 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 18 Nov 2021 15:02:24 +0100
-Subject: [PATCH 07/43] HRPN-124 imx8mm-freertos, imx8mm-freertos-audio: new
+Subject: [PATCH 07/49] HRPN-124 imx8mm-freertos, imx8mm-freertos-audio: new
  cells
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
@@ -168,5 +168,5 @@ index 00000000..925a0784
 +#define RTOS_COMMON_IRQCHIPS_BITMAP4 \
 +	0
 -- 
-2.25.1
+2.34.1
 

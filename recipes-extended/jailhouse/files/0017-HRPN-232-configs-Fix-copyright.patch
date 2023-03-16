@@ -1,7 +1,7 @@
-From 358ce5c8b82d7ea8c88063b6f77084db3980d260 Mon Sep 17 00:00:00 2001
+From 097a151cdc9790e437b8f929c25a3783be9ea3e2 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 3 Jan 2022 11:11:33 +0000
-Subject: [PATCH 17/43] HRPN-232 configs: Fix copyright
+Subject: [PATCH 17/49] HRPN-232 configs: Fix copyright
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---
@@ -26,5 +26,5 @@ index 066f9407..1473a06b 100644
   * This work is licensed under the terms of the GNU GPL, version 2.  See
   * the COPYING file in the top-level directory.
 -- 
-2.25.1
+2.34.1
 

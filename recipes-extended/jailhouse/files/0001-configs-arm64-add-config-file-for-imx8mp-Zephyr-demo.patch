@@ -1,7 +1,7 @@
-From 7053ef3fdeda45321829e0ba08d7237267a04aa3 Mon Sep 17 00:00:00 2001
+From 73d182ffcb948aaa6978c96148cb3ecef164712f Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 19 Apr 2021 17:09:48 +0800
-Subject: [PATCH 01/43] configs: arm64: add config file for imx8mp Zephyr demo
+Subject: [PATCH 01/49] configs: arm64: add config file for imx8mp Zephyr demo
 
 This config file assigns core2 and core3 to Zephyr cell,
 and the UART4 is used as Zephyr console.
@@ -99,5 +99,5 @@ index 00000000..53e6ab6d
 +	},
 +};
 -- 
-2.25.1
+2.34.1
 

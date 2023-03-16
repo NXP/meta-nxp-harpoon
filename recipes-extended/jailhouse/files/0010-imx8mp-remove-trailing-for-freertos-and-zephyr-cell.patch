@@ -1,7 +1,7 @@
-From dc0c9dced15859ab388d76f2ac5d0d4f1d8f251c Mon Sep 17 00:00:00 2001
+From 673c6040e2c6da28b28082c6b9f4315bd3896e5b Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 2 Dec 2021 16:59:21 +0800
-Subject: [PATCH 10/43] imx8mp: remove trailing for freertos and zephyr cell
+Subject: [PATCH 10/49] imx8mp: remove trailing for freertos and zephyr cell
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 ---
@@ -44,5 +44,5 @@ index 51eb667c..20be0cc6 100644
  /* GIC */
  #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
 -- 
-2.25.1
+2.34.1
 

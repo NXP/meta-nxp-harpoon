@@ -1,7 +1,7 @@
-From db7d26de5d0ad02863f122fb2d99b9430eb7fc72 Mon Sep 17 00:00:00 2001
+From da970064d083014e59fdc7834c8d8ce0d5f989ef Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Thu, 12 Aug 2021 10:36:10 +0800
-Subject: [PATCH 02/43] arm: gic-v3: Inject IRQ priority for SGI
+Subject: [PATCH 02/49] arm: gic-v3: Inject IRQ priority for SGI
 
 Also inject the priority value for SGI to inmates.
 
@@ -42,5 +42,5 @@ index 6d523eb6..ec6d08ef 100644
  
  	gicv3_write_lr(free_lr, lr);
 -- 
-2.25.1
+2.34.1
 

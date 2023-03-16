@@ -3,3 +3,4 @@
 BOARD:imx8mm-lpddr4-evk = "mimx8mm_evk_a53"
 BOARD:imx8mn-lpddr4-evk = "mimx8mn_evk_a53"
 BOARD:imx8mp-lpddr4-evk = "mimx8mp_evk_a53"
+BOARD:imx93evk = "mimx93_evk_a55"

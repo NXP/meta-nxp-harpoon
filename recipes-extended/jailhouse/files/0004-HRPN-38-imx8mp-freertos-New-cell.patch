@@ -1,7 +1,7 @@
-From 4092fd62a82c35ee1659626bcc88597b47423aef Mon Sep 17 00:00:00 2001
+From 54bbc12c6702b0764f30fbd08501adf420982539 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 26 Apr 2021 15:48:20 +0200
-Subject: [PATCH 04/43] HRPN-38 imx8mp-freertos: New cell
+Subject: [PATCH 04/49] HRPN-38 imx8mp-freertos: New cell
 
 The -rtos header can be reused for multiple RTOS (such as upcoming Zephyr)
 cell configurations ;
@@ -112,5 +112,5 @@ index 00000000..a7f13350
 +#define RTOS_COMMON_IRQCHIPS_BITMAP4 \
 +	0
 -- 
-2.25.1
+2.34.1
 

@@ -1,7 +1,7 @@
-From 06eb0cb6fa77315685828e896a7b8369b4ed2d32 Mon Sep 17 00:00:00 2001
+From c0cb6f2199faa2d6fad1da8b5affb66e2c13e7db Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Thu, 3 Nov 2022 16:49:43 +0800
-Subject: [PATCH 43/43] configs: imx8mm: Move back the SGI mailbox and RPMSG
+Subject: [PATCH 40/49] configs: imx8mm: Move back the SGI mailbox and RPMSG
  memory entries definitions
 
 Move back the definitions of SGI mailbox and RPMSG regions, so that keep
@@ -36,5 +36,5 @@ index 1890de63..3f50860a 100644
  	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
  	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
 -- 
-2.25.1
+2.34.1
 

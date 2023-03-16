@@ -1,7 +1,7 @@
-From d1d4583af7b8e1d31a500be0981dec22936cb1cd Mon Sep 17 00:00:00 2001
+From a2401a0824d84c19591305c30bb29a1bb4b028a8 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 20 Jan 2022 09:46:03 +0100
-Subject: [PATCH 23/43] imx8mn-freertos-audio.c: use SAI5
+Subject: [PATCH 23/49] imx8mn-freertos-audio.c: use SAI5
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 ---
@@ -59,5 +59,5 @@ index 87dccfa9..8830716a 100644
  
  #define RTOS_COMMON_MEMORY_REGIONS \
 -- 
-2.25.1
+2.34.1
 

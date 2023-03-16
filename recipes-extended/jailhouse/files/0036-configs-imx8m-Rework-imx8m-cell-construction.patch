@@ -1,7 +1,7 @@
-From e1331ac91ae9b591ec20e9a86acd36f388d12cfe Mon Sep 17 00:00:00 2001
+From bfaf62ad6aa4baac6962b522eb4370d8c3d59e0c Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 30 Sep 2022 14:55:01 +0000
-Subject: [PATCH 36/43] configs: imx8m*: Rework imx8m cell construction
+Subject: [PATCH 36/49] configs: imx8m*: Rework imx8m cell construction
 
 Let's define all interfaces in a single device header file and create
 cell config helpers based on the use case, which is OS-agnostic.
@@ -1149,5 +1149,5 @@ index d666b3ba..032eb0bf 100644
  /* IVSHMEM PCI */
  #define CONFIG_INMATE_PCI_DEVICES \
 -- 
-2.25.1
+2.34.1
 

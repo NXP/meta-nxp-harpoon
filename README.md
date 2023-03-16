@@ -21,12 +21,12 @@ Please refer to detailed README under the release branch.
 
 ### Examples
 
-To download the Real-time Edge 2.4.0 release
+To download the Real-time Edge 2.5.0 release
 
 ```
 $ mkdir yocto-real-time-edge
 $ cd yocto-real-time-edge
-$ repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-kirkstone -m real-time-edge-2.4.0.xml
+$ repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-kirkstone -m real-time-edge-2.5.0.xml
 $ repo sync
 ```
 
@@ -39,6 +39,7 @@ $ MACHINE=<Machine> DISTRO=<Distro> source ./real-time-edge-setup-env.sh -b buil
 Machine:
 - imx8mm-lpddr4-evk
 - imx8mp-lpddr4-evk
+- imx93evk
 
 Distro:
 - nxp-real-time-edge – The regular image including Real-time Networking, Real-time System, and Industrial packages.

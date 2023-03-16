@@ -1,7 +1,7 @@
-From 37a00f9a8b9547113dfc59cc09be158dda70f56d Mon Sep 17 00:00:00 2001
+From 2b6ba97aeeb18b13abe459c833403b2ab6ba2bcc Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Fri, 26 Nov 2021 12:15:39 +0100
-Subject: [PATCH 12/43] HRPN-199 configs: IVSHMEM PCI device helpers.
+Subject: [PATCH 12/49] HRPN-199 configs: IVSHMEM PCI device helpers.
 
 Add helper functions to define IVSHMEM PCI devices.
 Align cell format (no trailing comma or backslash).
@@ -205,5 +205,5 @@ index 20be0cc6..66b553e1 100644
  /* GIC */
  #define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
 -- 
-2.25.1
+2.34.1
 

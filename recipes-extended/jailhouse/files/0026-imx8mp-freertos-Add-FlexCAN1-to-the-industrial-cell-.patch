@@ -1,7 +1,7 @@
-From 47a36ee9398924661d0d057f2090375f2c3b16c3 Mon Sep 17 00:00:00 2001
+From 59ae3d75824c867cc7ce6490bed7cae43ed902cb Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Wed, 26 Jan 2022 17:26:13 +0000
-Subject: [PATCH 26/43] imx8mp: freertos: Add FlexCAN1 to the industrial cell
+Subject: [PATCH 26/49] imx8mp: freertos: Add FlexCAN1 to the industrial cell
  config
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
@@ -60,5 +60,5 @@ index ed343c5a..6091484b 100644
  	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
  	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
 -- 
-2.25.1
+2.34.1
 

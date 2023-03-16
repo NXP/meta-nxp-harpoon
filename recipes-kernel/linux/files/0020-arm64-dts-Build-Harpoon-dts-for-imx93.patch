@@ -1,0 +1,25 @@
+From f93bd582df4744c5012db51e7cb613c8e1f11ab8 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Mon, 20 Feb 2023 13:46:42 +0000
+Subject: [PATCH 20/28] arm64: dts: Build Harpoon dts for imx93
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 873459aade0f..a64d9d2ce9f9 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -248,6 +248,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8qxp-mek-dom0.dtb imx8qxp-mek-root.dtb \
+ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
+ 			  imx93-14x14-evk-rm67199.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb \
++			  imx93-11x11-evk-harpoon.dtb imx93-11x11-evk-harpoon-industrial.dtb \
+ 			  imx93-11x11-evk-inmate.dtb imx93-11x11-evk-root.dtb imx93-11x11-evk-flexio-i2c.dtb \
+ 			  imx93-11x11-evk-lpspi.dtb imx93-11x11-evk-lpspi-slave.dtb \
+ 			  imx93-11x11-evk-i3c.dtb imx93-11x11-evk-lpuart.dtb \
+-- 
+2.34.1
+

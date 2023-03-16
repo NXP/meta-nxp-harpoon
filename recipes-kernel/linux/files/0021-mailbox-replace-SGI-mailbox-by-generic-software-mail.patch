@@ -1,0 +1,715 @@
+From 5f0f1e45c265000366e62a24fe96483247fb9642 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Tue, 14 Feb 2023 11:20:49 +0800
+Subject: [PATCH 21/28] mailbox: replace SGI mailbox by generic software
+ mailbox driver
+
+As SGI is used as IPI in Linux, so let's replace SGI with some SPI irqs
+which is not used by as hardware, SPI irq can also be triggered by
+writing to SGI interrupt by CPU Core.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ ...i-mbox.yaml => generic-software-mbox.yaml} |  25 +-
+ drivers/mailbox/Kconfig                       |  34 +--
+ drivers/mailbox/Makefile                      |   2 +-
+ drivers/mailbox/arm-sgi-mailbox.c             | 258 ----------------
+ drivers/mailbox/generic-software-mailbox.c    | 288 ++++++++++++++++++
+ 5 files changed, 311 insertions(+), 296 deletions(-)
+ rename Documentation/devicetree/bindings/mailbox/{arm,sgi-mbox.yaml => generic-software-mbox.yaml} (58%)
+ delete mode 100644 drivers/mailbox/arm-sgi-mailbox.c
+ create mode 100644 drivers/mailbox/generic-software-mailbox.c
+
+diff --git a/Documentation/devicetree/bindings/mailbox/arm,sgi-mbox.yaml b/Documentation/devicetree/bindings/mailbox/generic-software-mbox.yaml
+similarity index 58%
+rename from Documentation/devicetree/bindings/mailbox/arm,sgi-mbox.yaml
+rename to Documentation/devicetree/bindings/mailbox/generic-software-mbox.yaml
+index 70354954fa07..a0403d88dffd 100644
+--- a/Documentation/devicetree/bindings/mailbox/arm,sgi-mbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/generic-software-mbox.yaml
+@@ -1,22 +1,23 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/mailbox/arm,sgi-mbox.yaml#
++$id: http://devicetree.org/schemas/mailbox/generic-software-mbox.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: ARM SGI Mailbox
++title: Generic Software Mailbox
+ 
+ maintainers:
+   - Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+ 
+ description: |
+-  The SGI Mailbox is a virtual device, which uses SGI interrupt to
+-  notify remote side and share memory for device MMIO registers.
++  The Generic Software Mailbox is a virtual device, which uses unused
++  interrupt line to notify remote side and shared memory to emulate
++  device MMIO registers.
+ 
+ properties:
+   compatible:
+     oneOf:
+-      - const: fsl,arm-sgi-mbox
++      - const: fsl,generic-software-mbox
+   reg:
+     maxItems: 1
+ 
+@@ -28,8 +29,7 @@ properties:
+       channel   : Channel index
+ 
+       This mailbox support 3 type of unidirectional channels, each type
+-      has 4 channels. A total of 12 channels. Following types are
+-      supported:
++      has 32 channels. Following types are supported:
+       0 - TX channel with 32bit transmit register
+       1 - RX channel with 32bit receive register and IRQ support
+       2 - RX doorbell channel.
+@@ -39,20 +39,25 @@ required:
+   - compatible
+   - reg
+   - "#mbox-cells"
++  - interrupts
++  - interrupt-names
+ 
+ additionalProperties: false
+ 
+ examples:
+   - |
+     reserved-memory {
+-        sgi-mbox@b8500000 {
++        gen-sw-mbox@b8500000 {
+             no-map;
+             reg = <0 0xb8500000 0 0x1000>;
+         };
+     };
+ 
+-    sgi-mailbox@b8500000 {
+-        compatible = "fsl,arm-sgi-mbox";
++    generic-software-mailbox@b8500000 {
++        compatible = "fsl,generic-software-mbox";
+         reg = <0 0xb8500000 0 0x1000>;
+         #mbox-cells = <2>;
++        interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-names = "irq", "remote_irq";
+     };
+diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
+index 5c7b08c6e286..1f3efd50281b 100644
+--- a/drivers/mailbox/Kconfig
++++ b/drivers/mailbox/Kconfig
+@@ -294,33 +294,13 @@ config QCOM_IPCC
+ 	  acts as an interrupt controller for receiving interrupts from clients.
+ 	  Say Y here if you want to build this driver.
+ 
+-menuconfig ARM_SGI_MAILBOX
+-	tristate "ARM SGI Mailbox driver"
+-	depends on ARM64 && OF
++config GENERIC_SOFTWARE_MAILBOX
++	tristate "Generic software Mailbox driver"
++	depends on OF
++	select GENERIC_IRQ_INJECTION
++	select GIC_GENTLE_CONFIG if ARM_GIC_V3
+ 	help
+-	  This driver leverages SGI interrupt on ARM64 and sharing memory to
++	  This driver leverages unused interrupt line and sharing memory to
+ 	  implement a mailbox, which is used to send message between different
+-	  OSes running on different ARM64 CPU Cores.
+-
+-if ARM_SGI_MAILBOX
+-config ARM_SGI_MAILBOX_IPI_NR
+-	int "ARM SGI Mailbox IPI number"
+-	depends on ARM_SGI_MAILBOX
+-	default 10
+-	help
+-	  Select the IPI interrupt number to be used for mailbox notification.
+-	  Note:
+-	    Don't overlay with the ones already reserved by kernel, seeing
+-	    arch/arm64/kernel/smp.c.
+-
+-config ARM_SGI_MAILBOX_TARGET_CORE
+-	int "ARM SGI Mailbox target core"
+-	depends on ARM_SGI_MAILBOX
+-	default 3
+-	help
+-	  Select the target core, on which runs RTOS/Baremetal communicating
+-	  with this mailbox.
+-	  Note:
+-	    The core number is counted from 0.
+-endif
++	  OSes.
+ endif
+diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
+index 12583b5a7f53..aec06d2f2500 100644
+--- a/drivers/mailbox/Makefile
++++ b/drivers/mailbox/Makefile
+@@ -63,4 +63,4 @@ obj-$(CONFIG_QCOM_IPCC)		+= qcom-ipcc.o
+ 
+ obj-$(CONFIG_APPLE_MAILBOX)	+= apple-mailbox.o
+ 
+-obj-$(CONFIG_ARM_SGI_MAILBOX)	+= arm-sgi-mailbox.o
++obj-$(CONFIG_GENERIC_SOFTWARE_MAILBOX)	+= generic-software-mailbox.o
+\ No newline at end of file
+diff --git a/drivers/mailbox/arm-sgi-mailbox.c b/drivers/mailbox/arm-sgi-mailbox.c
+deleted file mode 100644
+index 309ce233c31e..000000000000
+--- a/drivers/mailbox/arm-sgi-mailbox.c
++++ /dev/null
+@@ -1,258 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Copyright 2022 NXP
+- */
+-
+-#include <linux/device.h>
+-#include <linux/interrupt.h>
+-#include <linux/io.h>
+-#include <linux/mailbox_controller.h>
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include <linux/of_device.h>
+-#include <linux/slab.h>
+-
+-/*
+- * status register brelf description:
+- *
+- * bit31                |bit11           |bit7            |bit3         bit0
+- * -------------------------------------------------------------------------
+- * |      |      |      | RXDB_CH status |  RX_CH status  |  TX_CH status  |
+- * -------------------------------------------------------------------------
+- * TX_CH field: Each bit for a TX channel
+- * RX_CH field: Each bit for a RX channel
+- * RXDB_CH field: Each bit for a RXDB channel
+- *
+- * Set by the initiator to indicate the 'data' in the TX_CH register valid;
+- * And clear by the terminator to indicate TX done.
+- */
+-
+-#define SR_RX_SHIFT		(4)
+-#define SR_RXDB_SHIFT		(8)
+-#define SR_RX_MASK		(0xf << SR_RX_SHIFT)
+-#define SR_RXDB_MASK		(0xf << SR_RXDB_SHIFT)
+-
+-#define MBOX_TX_CHAN		(4)
+-#define MBOX_RX_CHAN		(4)
+-#define MBOX_RXDB_CHAN		(4)
+-#define MBOX_CHAN_MAX		(12)
+-
+-struct arm_sgi_mbox_reg {
+-	uint32_t status;
+-	uint32_t tx_ch[MBOX_TX_CHAN];
+-	uint32_t rx_ch[MBOX_RX_CHAN];
+-};
+-
+-enum sgi_mbox_type {
+-	ARM_SGI_TYPE_TX,     /* Tx */
+-	ARM_SGI_TYPE_RX,     /* Rx */
+-	ARM_SGI_TYPE_RXDB,   /* Rx doorbell */
+-};
+-
+-struct arm_sgi_mbox_con_priv {
+-	uint32_t idx;
+-	enum sgi_mbox_type type;
+-	struct arm_sgi_mbox *priv;
+-};
+-
+-struct arm_sgi_mbox {
+-	struct device *dev;
+-	struct arm_sgi_mbox_reg __iomem *base;
+-	struct arm_sgi_mbox_con_priv cp[MBOX_CHAN_MAX];
+-	struct mbox_chan chan[MBOX_CHAN_MAX];
+-	struct mbox_controller controller;
+-	uint32_t target_core;
+-};
+-
+-static struct arm_sgi_mbox *mbox_global;
+-
+-static bool arm_sgi_mbox_last_tx_done(struct mbox_chan *chan)
+-{
+-	struct arm_sgi_mbox_con_priv *cp = chan->con_priv;
+-	struct arm_sgi_mbox *mbox = cp->priv;
+-	uint32_t idx = cp->idx;
+-
+-	if (((mbox->base->status) & (1 << idx)) == 0)
+-		return true;
+-
+-	return false;
+-}
+-
+-static int arm_sgi_mbox_send_data(struct mbox_chan *chan, void *msg)
+-{
+-	struct arm_sgi_mbox_con_priv *cp = chan->con_priv;
+-	struct arm_sgi_mbox *mbox = cp->priv;
+-	uint32_t idx = cp->idx;
+-	uint32_t *data = msg;
+-
+-	if (cp->type != ARM_SGI_TYPE_TX)
+-		return -EINVAL;
+-
+-	writel(*data, &mbox->base->tx_ch[idx]);
+-	mbox->base->status |= (1 << idx);
+-
+-	/* sync before trigger IPI */
+-	mb();
+-
+-	sgi_mbox_send_ipi_single(mbox->target_core);
+-
+-	return 0;
+-}
+-
+-int arm_sgi_mbox_interrupt(uint32_t irq)
+-{
+-	struct arm_sgi_mbox *mbox = mbox_global;
+-	uint32_t status = mbox->base->status;
+-	int i;
+-
+-	status &= SR_RX_MASK | SR_RXDB_MASK;
+-	if (!status)
+-		return IRQ_NONE;
+-
+-	for (i = 0; i < MBOX_RX_CHAN && status & 1 << (i + SR_RX_SHIFT); i++)
+-		mbox_chan_received_data(&mbox->chan[i + SR_RX_SHIFT],
+-					(void *)&mbox->base->rx_ch[i]);
+-
+-	for (i = 0; i < MBOX_RXDB_CHAN && status & 1 << (i + SR_RXDB_SHIFT);
+-	     i++)
+-		mbox_chan_received_data(&mbox->chan[i + SR_RXDB_SHIFT], NULL);
+-
+-	mbox->base->status &= ~status;
+-
+-	/* sync */
+-	mb();
+-
+-	return IRQ_HANDLED;
+-}
+-
+-static int arm_sgi_mbox_startup(struct mbox_chan *chan)
+-{
+-	return 0;
+-}
+-
+-static void arm_sgi_mbox_shutdown(struct mbox_chan *chan)
+-{
+-}
+-
+-static const struct mbox_chan_ops arm_sgi_mbox_ops = {
+-	.send_data    = arm_sgi_mbox_send_data,
+-	.startup      = arm_sgi_mbox_startup,
+-	.shutdown     = arm_sgi_mbox_shutdown,
+-	.last_tx_done = arm_sgi_mbox_last_tx_done,
+-};
+-
+-
+-static struct mbox_chan *arm_sgi_mbox_xlate(struct mbox_controller *mbox,
+-					    const struct of_phandle_args *sp)
+-{
+-	uint32_t type, idx, chan;
+-
+-	if (sp->args_count != 2) {
+-		dev_err(mbox->dev, "Invalid argument count %d\n", sp->args_count);
+-		return ERR_PTR(-EINVAL);
+-	}
+-
+-	type = sp->args[0];
+-	idx = sp->args[1];
+-
+-	switch (type) {
+-	case ARM_SGI_TYPE_TX:
+-		chan = idx;
+-		break;
+-	case ARM_SGI_TYPE_RX:
+-		chan = MBOX_TX_CHAN + idx;
+-		break;
+-	case ARM_SGI_TYPE_RXDB:
+-		chan = MBOX_TX_CHAN + MBOX_TX_CHAN + idx;
+-		break;
+-	default:
+-		dev_err(mbox->dev, "Invalid chan type: %d\n", type);
+-		return ERR_PTR(-EINVAL);
+-	}
+-
+-	if (chan >= MBOX_CHAN_MAX) {
+-		dev_err(mbox->dev, "Not supported channel number: %d. (type: %d, idx: %d)\n",
+-			chan, type, idx);
+-		return ERR_PTR(-EINVAL);
+-	}
+-
+-	return &mbox->chans[chan];
+-}
+-
+-static const struct of_device_id arm_sgi_mbox_of_match[] = {
+-	{ .compatible = "fsl,arm-sgi-mbox", },
+-	{},
+-};
+-MODULE_DEVICE_TABLE(of, arm_sgi_mbox_of_match);
+-
+-static int arm_sgi_mailbox_probe(struct platform_device *pdev)
+-{
+-	struct device *dev = &pdev->dev;
+-	struct arm_sgi_mbox *mbox;
+-	int err, i;
+-
+-	mbox = devm_kzalloc(dev, sizeof(*mbox), GFP_KERNEL);
+-	if (!mbox)
+-		return -ENOMEM;
+-	mbox->dev = dev;
+-
+-	mbox->target_core = CONFIG_ARM_SGI_MAILBOX_TARGET_CORE;
+-
+-	mbox->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(mbox->base))
+-		return PTR_ERR(mbox->base);
+-	memset_io(&mbox->base->status, 0, 4);
+-
+-	mbox->controller.dev = dev;
+-	mbox->controller.chans = mbox->chan;
+-	mbox->controller.num_chans = MBOX_CHAN_MAX;
+-	mbox->controller.ops = &arm_sgi_mbox_ops;
+-	mbox->controller.of_xlate = arm_sgi_mbox_xlate;
+-	mbox->controller.txdone_poll = true;
+-
+-	for (i = 0; i < MBOX_CHAN_MAX; i++) {
+-		mbox->chan[i].con_priv = &mbox->cp[i];
+-		mbox->cp[i].priv = mbox;
+-		mbox->cp[i].idx = i;
+-	}
+-
+-	/*
+-	 * TODO: improve
+-	 * this hack results in the driver cannot support multiple instances
+-	 */
+-	mbox_global = mbox;
+-
+-	err = devm_mbox_controller_register(dev, &mbox->controller);
+-	if (err) {
+-		dev_err(dev, "Failed to register mailbox %d\n", err);
+-		return err;
+-	}
+-
+-	platform_set_drvdata(pdev, mbox);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver arm_sgi_mbox_driver = {
+-	.driver = {
+-		.name = "arm-sgi-mailbox",
+-		.of_match_table = arm_sgi_mbox_of_match,
+-	},
+-	.probe = arm_sgi_mailbox_probe,
+-};
+-
+-static int __init arm_sgi_mbox_init(void)
+-{
+-	return platform_driver_register(&arm_sgi_mbox_driver);
+-}
+-
+-static void __exit arm_sgi_mbox_exit(void)
+-{
+-	platform_driver_unregister(&arm_sgi_mbox_driver);
+-}
+-
+-module_init(arm_sgi_mbox_init);
+-module_exit(arm_sgi_mbox_exit);
+-
+-MODULE_DESCRIPTION("ARM SGI mailbox driver");
+-MODULE_LICENSE("GPL v2");
+diff --git a/drivers/mailbox/generic-software-mailbox.c b/drivers/mailbox/generic-software-mailbox.c
+new file mode 100644
+index 000000000000..109c0e251046
+--- /dev/null
++++ b/drivers/mailbox/generic-software-mailbox.c
+@@ -0,0 +1,288 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2022 NXP
++ */
++
++#include <linux/device.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/mailbox_controller.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/of_device.h>
++#include <linux/slab.h>
++
++/*
++ * Generic software Registers:
++ *
++ * TX_STATUS: Each bit for a TX channel
++ * RX_STATUS: Each bit for a RX channel
++ * RXDB_STATUS: Each bit for a RXDB channel
++ * TX_STATUS, RX_STATUS and RXDB_STATUS registers description:
++ *     bit31                        bit0
++ *     ---------------------------------
++ *     | CH31 |     ...    | CH1 | CH0 |
++ *     ---------------------------------
++ *
++ * TX_CH[n]: Transmit data register for channeln
++ * RX_CH[n]: Receive data register for channeln, valid if RX_STATUS[bitn] set.
++ *
++ * To send a message:
++ * Update the data register TX_CH[n] with the message, then set the
++ * TX_STATUS[bitn], inject a interrupt to remote side.
++ *
++ * When received a message:
++ * Get the received data from RX_CH[n] and then clear the RX_STATUS[bitn] to
++ * indicate the remote side transmit done.
++ */
++
++#define MBOX_TX_CHAN		(32)
++#define MBOX_RX_CHAN		(32)
++#define MBOX_RXDB_CHAN		(32)
++#define RX_CHAN_SHFT		(MBOX_TX_CHAN)
++#define RXDB_CHAN_SHFT		(MBOX_TX_CHAN + MBOX_RX_CHAN)
++#define MBOX_CHAN_MAX		(MBOX_TX_CHAN + MBOX_RX_CHAN + MBOX_RXDB_CHAN)
++
++struct sw_mbox_reg {
++	uint32_t tx_status;
++	uint32_t rx_status;
++	uint32_t rxdb_status;
++	uint32_t tx_ch[MBOX_TX_CHAN];
++	uint32_t rx_ch[MBOX_RX_CHAN];
++};
++
++enum sw_mbox_type {
++	SW_TYPE_TX,     /* Tx */
++	SW_TYPE_RX,     /* Rx */
++	SW_TYPE_RXDB,   /* Rx doorbell */
++};
++
++struct sw_mbox_con_priv {
++	uint32_t idx;
++	enum sw_mbox_type type;
++	struct sw_mbox *priv;
++};
++
++struct sw_mbox {
++	struct device *dev;
++	struct sw_mbox_reg __iomem *base;
++	struct sw_mbox_con_priv cp[MBOX_CHAN_MAX];
++	struct mbox_chan chan[MBOX_CHAN_MAX];
++	struct mbox_controller controller;
++	int irq;
++	int remote_irq;
++};
++
++static bool sw_mbox_last_tx_done(struct mbox_chan *chan)
++{
++	struct sw_mbox_con_priv *cp = chan->con_priv;
++	struct sw_mbox *mbox = cp->priv;
++	uint32_t idx = cp->idx;
++
++	if ((readl(&mbox->base->tx_status) & (1 << idx)) == 0)
++		return true;
++
++	return false;
++}
++
++static int sw_mbox_send_data(struct mbox_chan *chan, void *msg)
++{
++	struct sw_mbox_con_priv *cp = chan->con_priv;
++	struct sw_mbox *mbox = cp->priv;
++	uint32_t idx = cp->idx;
++	uint32_t *data = msg;
++	int ret;
++
++	if (cp->type != SW_TYPE_TX) {
++		dev_err(mbox->dev, "Channel type error\n");
++		return -EINVAL;
++	}
++
++	writel(*data, &mbox->base->tx_ch[idx]);
++	writel(readl(&mbox->base->tx_status) | (1 << idx),
++	       &mbox->base->tx_status);
++	ret = irq_set_irqchip_state(mbox->remote_irq, IRQCHIP_STATE_PENDING,
++				    true);
++	if (ret) {
++		dev_err(mbox->dev, "Fail to inject IRQ\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static irqreturn_t sw_mbox_interrupt(int irq, void *dev_id)
++{
++	struct sw_mbox *mbox = dev_id;
++	uint32_t rx_status = readl(&mbox->base->rx_status);
++	uint32_t rxdb_status = readl(&mbox->base->rxdb_status);
++	uint32_t rx_ch[MBOX_RX_CHAN];
++	int i;
++
++	if (!rx_status && !rxdb_status)
++		return IRQ_NONE;
++
++	if (rx_status) {
++		memcpy_fromio(rx_ch, mbox->base->rx_ch, sizeof(rx_ch));
++		writel(0, &mbox->base->rx_status);
++	}
++
++	if (rxdb_status)
++		writel(0, &mbox->base->rxdb_status);
++
++	for (i = 0; i < MBOX_RX_CHAN && rx_status; i++)
++		if (rx_status & (1 << i))
++			mbox_chan_received_data(&mbox->chan[i + RX_CHAN_SHFT],
++						(void *)&rx_ch[i]);
++
++	for (i = 0; i < MBOX_RXDB_CHAN && rxdb_status; i++)
++		if (rxdb_status & (1 << i))
++			mbox_chan_received_data(&mbox->chan[i + RXDB_CHAN_SHFT],
++						NULL);
++
++	return IRQ_HANDLED;
++}
++
++static int sw_mbox_startup(struct mbox_chan *chan)
++{
++	return 0;
++}
++
++static void sw_mbox_shutdown(struct mbox_chan *chan)
++{
++}
++
++static const struct mbox_chan_ops sw_mbox_ops = {
++	.send_data    = sw_mbox_send_data,
++	.startup      = sw_mbox_startup,
++	.shutdown     = sw_mbox_shutdown,
++	.last_tx_done = sw_mbox_last_tx_done,
++};
++
++
++static struct mbox_chan *sw_mbox_xlate(struct mbox_controller *mbox,
++				       const struct of_phandle_args *sp)
++{
++	uint32_t type, idx, chan;
++
++	if (sp->args_count != 2) {
++		dev_err(mbox->dev, "Invalid argument count %d\n",
++			sp->args_count);
++		return ERR_PTR(-EINVAL);
++	}
++
++	type = sp->args[0];
++	idx = sp->args[1];
++
++	switch (type) {
++	case SW_TYPE_TX:
++		chan = idx;
++		break;
++	case SW_TYPE_RX:
++		chan = RX_CHAN_SHFT + idx;
++		break;
++	case SW_TYPE_RXDB:
++		chan = RXDB_CHAN_SHFT + idx;
++		break;
++	default:
++		dev_err(mbox->dev, "Invalid chan type: %d\n", type);
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (chan >= MBOX_CHAN_MAX) {
++		dev_err(mbox->dev, "Not supported channel number: %d. (type: %d, idx: %d)\n",
++			chan, type, idx);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return &mbox->chans[chan];
++}
++
++static const struct of_device_id sw_mbox_of_match[] = {
++	{ .compatible = "fsl,generic-software-mbox", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, sw_mbox_of_match);
++
++static int sw_mailbox_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct sw_mbox *mbox;
++	int err, i;
++
++	mbox = devm_kzalloc(dev, sizeof(*mbox), GFP_KERNEL);
++	if (!mbox)
++		return -ENOMEM;
++	mbox->dev = dev;
++
++	mbox->irq = platform_get_irq_byname(pdev, "irq");
++	if (mbox->irq <= 0) {
++		dev_err(dev, "Failed to get irq\n");
++		return mbox->irq;
++	}
++	mbox->remote_irq = platform_get_irq_byname(pdev, "remote_irq");
++	if (mbox->remote_irq <= 0) {
++		dev_err(dev, "Failed to get remote irq\n");
++		return mbox->remote_irq;
++	}
++
++	err = devm_request_irq(dev, mbox->irq, sw_mbox_interrupt, IRQF_SHARED,
++			       pdev->name, mbox);
++	if (err)
++		return err;
++
++	mbox->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(mbox->base))
++		return PTR_ERR(mbox->base);
++
++	memset_io(&mbox->base->tx_status, 0, 4);
++	memset_io(&mbox->base->rx_status, 0, 4);
++	memset_io(&mbox->base->rxdb_status, 0, 4);
++
++	mbox->controller.dev = dev;
++	mbox->controller.chans = mbox->chan;
++	mbox->controller.num_chans = MBOX_CHAN_MAX;
++	mbox->controller.ops = &sw_mbox_ops;
++	mbox->controller.of_xlate = sw_mbox_xlate;
++	mbox->controller.txdone_poll = true;
++
++	for (i = 0; i < MBOX_CHAN_MAX; i++) {
++		mbox->chan[i].con_priv = &mbox->cp[i];
++		mbox->cp[i].priv = mbox;
++		mbox->cp[i].idx = i;
++	}
++
++	err = devm_mbox_controller_register(dev, &mbox->controller);
++	if (err) {
++		dev_err(dev, "Failed to register mailbox %d\n", err);
++		return err;
++	}
++
++	platform_set_drvdata(pdev, mbox);
++
++	return 0;
++}
++
++static struct platform_driver sw_mbox_driver = {
++	.driver = {
++		.name = "generic-software-mailbox",
++		.of_match_table = sw_mbox_of_match,
++	},
++	.probe = sw_mailbox_probe,
++};
++
++static int __init sw_mbox_init(void)
++{
++	return platform_driver_register(&sw_mbox_driver);
++}
++
++static void __exit sw_mbox_exit(void)
++{
++	platform_driver_unregister(&sw_mbox_driver);
++}
++
++module_init(sw_mbox_init);
++module_exit(sw_mbox_exit);
++
++MODULE_DESCRIPTION("Generic Software mailbox driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.34.1
+

@@ -1,0 +1,24 @@
+From 5aab04e3a53375e6f291177f8825c79d1e609668 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Mon, 30 Jan 2023 11:27:23 +0800
+Subject: [PATCH 22/28] arm64: imx_v8_defconfig: fix generic software mailbox
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ arch/arm64/configs/imx_v8_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/configs/imx_v8_defconfig b/arch/arm64/configs/imx_v8_defconfig
+index 5e847f9ca86a..7f0fb24efb8a 100644
+--- a/arch/arm64/configs/imx_v8_defconfig
++++ b/arch/arm64/configs/imx_v8_defconfig
+@@ -1099,4 +1099,4 @@ CONFIG_CRYPTO_SM3_GENERIC=m
+ CONFIG_CRYPTO_SM4_GENERIC=m
+ CONFIG_CRYPTO_ARIA=m
+ CONFIG_CRYPTO_POLYVAL_ARM64_CE=m
+-CONFIG_ARM_SGI_MAILBOX=y
++CONFIG_GENERIC_SOFTWARE_MAILBOX=y
+-- 
+2.34.1
+

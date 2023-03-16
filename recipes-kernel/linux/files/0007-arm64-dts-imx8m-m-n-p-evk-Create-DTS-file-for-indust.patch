@@ -1,0 +1,71 @@
+From e8e4832bf307fa456844aedf25e6261be2e3ae82 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Wed, 23 Mar 2022 11:04:09 +0000
+Subject: [PATCH 07/28] arm64: dts: imx8m{m,n,p}-evk: Create DTS file for
+ industrial use case
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ .../freescale/imx8mm-evk-harpoon-industrial.dts    | 10 ++++++++++
+ .../freescale/imx8mn-evk-harpoon-industrial.dts    | 10 ++++++++++
+ .../freescale/imx8mp-evk-harpoon-industrial.dts    | 14 ++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+new file mode 100644
+index 000000000000..28c12283ed39
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 NXP
++ */
++
++#include "imx8mm-evk-root.dts"
++
++&fec1 {
++	status = "disabled";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
+new file mode 100644
+index 000000000000..c227e414b094
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 NXP
++ */
++
++#include "imx8mn-evk-root.dts"
++
++&fec1 {
++	status = "disabled";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
+new file mode 100644
+index 000000000000..470d01190af1
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 NXP
++ */
++
++#include "imx8mp-evk-root.dts"
++
++&eqos {
++	status = "disabled";
++};
++
++&flexcan1 {
++	status = "disabled";
++};
+-- 
+2.34.1
+

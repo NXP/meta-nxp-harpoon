@@ -1,0 +1,342 @@
+From 7de2bc23c50f8364cd246c47f20291832b100ece Mon Sep 17 00:00:00 2001
+From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+Date: Thu, 9 Feb 2023 18:33:57 +0100
+Subject: [PATCH 27/28] arm64: dts: add dts files to support rpmsg on imx8mn,
+ imx8mp and imx8mm fr harpoon
+
+Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+---
+ .../dts/freescale/imx8mm-evk-harpoon-avb.dts  |  3 +-
+ .../imx8mm-evk-harpoon-industrial.dts         |  2 +-
+ .../boot/dts/freescale/imx8mm-evk-harpoon.dts |  2 +-
+ ...ric-mbox.dtsi => imx8mm-generic-mbox.dtsi} |  0
+ ...rpmsg-ca53.dtsi => imx8mm-rpmsg-ca53.dtsi} |  2 +-
+ .../dts/freescale/imx8mn-evk-harpoon-avb.dts  |  3 +-
+ .../imx8mn-evk-harpoon-industrial.dts         |  3 +-
+ .../boot/dts/freescale/imx8mn-evk-harpoon.dts |  3 +-
+ .../dts/freescale/imx8mn-generic-mbox.dtsi    | 27 ++++++++++++++
+ .../boot/dts/freescale/imx8mn-rpmsg-ca53.dtsi | 36 +++++++++++++++++++
+ .../dts/freescale/imx8mp-evk-harpoon-avb.dts  |  3 +-
+ .../imx8mp-evk-harpoon-industrial.dts         |  3 +-
+ .../boot/dts/freescale/imx8mp-evk-harpoon.dts |  3 +-
+ .../dts/freescale/imx8mp-generic-mbox.dtsi    | 27 ++++++++++++++
+ .../boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi | 36 +++++++++++++++++++
+ 15 files changed, 143 insertions(+), 10 deletions(-)
+ rename arch/arm64/boot/dts/freescale/{imx8m-generic-mbox.dtsi => imx8mm-generic-mbox.dtsi} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8m-rpmsg-ca53.dtsi => imx8mm-rpmsg-ca53.dtsi} (95%)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-generic-mbox.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-rpmsg-ca53.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts
+index e193a7f73cfb..445126edae24 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mm-evk-harpoon.dts"
++#include "imx8mm-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+index bedfd8da1e70..cfe3b95a8d31 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+@@ -4,7 +4,7 @@
+  */
+ 
+ #include "imx8mm-evk-root.dts"
+-#include "imx8m-rpmsg-ca53.dtsi"
++#include "imx8mm-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+index 70b2fa9b6b31..83ae0201f423 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+@@ -4,7 +4,7 @@
+  */
+ 
+ #include "imx8mm-evk-root.dts"
+-#include "imx8m-rpmsg-ca53.dtsi"
++#include "imx8mm-rpmsg-ca53.dtsi"
+ 
+ &i2c3 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8m-generic-mbox.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-generic-mbox.dtsi
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8m-generic-mbox.dtsi
+rename to arch/arm64/boot/dts/freescale/imx8mm-generic-mbox.dtsi
+diff --git a/arch/arm64/boot/dts/freescale/imx8m-rpmsg-ca53.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-rpmsg-ca53.dtsi
+similarity index 95%
+rename from arch/arm64/boot/dts/freescale/imx8m-rpmsg-ca53.dtsi
+rename to arch/arm64/boot/dts/freescale/imx8mm-rpmsg-ca53.dtsi
+index 95d56dd208e0..29ed6bbc579c 100644
+--- a/arch/arm64/boot/dts/freescale/imx8m-rpmsg-ca53.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-rpmsg-ca53.dtsi
+@@ -3,7 +3,7 @@
+  * Copyright 2022-2023 NXP
+  */
+ 
+-#include "imx8m-generic-mbox.dtsi"
++#include "imx8mm-generic-mbox.dtsi"
+ 
+ / {
+ 	reserved-memory {
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts
+index f1a78ad9648d..593ba55a9c3f 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mn-evk-harpoon.dts"
++#include "imx8mn-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
+index c227e414b094..cad5b96f25a2 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2023 NXP
+  */
+ 
+ #include "imx8mn-evk-root.dts"
++#include "imx8mn-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+index 7d6b3ed96b1e..67b066efee81 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  */
+ 
+ #include "imx8mn-evk-root.dts"
++#include "imx8mn-rpmsg-ca53.dtsi"
+ 
+ &i2c3 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-generic-mbox.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-generic-mbox.dtsi
+new file mode 100644
+index 000000000000..ba9d30231baa
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mn-generic-mbox.dtsi
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++/ {
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		gen_sw_mbox_reserved: gen-sw-mbox@b8500000 {
++			reg = <0 0xb8500000 0 0x1000>;
++			no-map;
++		};
++
++	};
++
++	gen_sw_mbox: generic-software-mailbox@b8500000 {
++		compatible = "fsl,generic-software-mbox";
++		reg = <0 0xb8500000 0 0x1000>;
++		#mbox-cells = <2>;
++		/* Use 2 unused SPI interrupts */
++		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "irq", "remote_irq";
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-rpmsg-ca53.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-rpmsg-ca53.dtsi
+new file mode 100644
+index 000000000000..ae412f2e0b43
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mn-rpmsg-ca53.dtsi
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022-2023 NXP
++ */
++
++#include "imx8mn-generic-mbox.dtsi"
++
++/ {
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		rpmsg_ca53_reserved: rpmsg-ca53@b8600000 {
++			reg = <0 0xb8600000 0 0x10000>;
++			no-map;
++		};
++
++		vdevbuffer_ca53: vdevbuffer-ca53@b8700000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0xb8700000 0 0x100000>;
++			no-map;
++		};
++	};
++
++	rpmsg-ca53 {
++		compatible = "fsl,imx8mm-rpmsg";
++		reg = <0x0 0xb8600000 0x0 0x10000>; /* 64K for one rpmsg instance */
++		memory-region = <&vdevbuffer_ca53>;
++		mbox-names = "tx", "rx", "rxdb";
++		mboxes = <&gen_sw_mbox 0 0
++			  &gen_sw_mbox 1 0
++			  &gen_sw_mbox 2 0>;
++		vdev-nums = <1>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts
+index 5625112e8236..4604d7e98644 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mp-evk-harpoon.dts"
++#include "imx8mp-rpmsg-ca53.dtsi"
+ 
+ &eqos {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
+index 470d01190af1..1bc31b6d52f7 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mp-evk-root.dts"
++#include "imx8mp-rpmsg-ca53.dtsi"
+ 
+ &eqos {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+index 1267f0d3277e..828d15424e8a 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  */
+ 
+ #include "imx8mp-evk-root.dts"
++#include "imx8mp-rpmsg-ca53.dtsi"
+ 
+ &i2c3 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi
+new file mode 100644
+index 000000000000..73c3b560dcb8
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++/ {
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		gen_sw_mbox_reserved: gen-sw-mbox@fe000000 {
++			reg = <0 0xfe000000 0 0x1000>;
++			no-map;
++		};
++
++	};
++
++	gen_sw_mbox: generic-software-mailbox@fe000000 {
++		compatible = "fsl,generic-software-mbox";
++		reg = <0 0xfe000000 0 0x1000>;
++		#mbox-cells = <2>;
++		/* Use 2 unused SPI interrupts */
++		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "irq", "remote_irq";
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi
+new file mode 100644
+index 000000000000..dcc4afb47300
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022-2023 NXP
++ */
++
++#include "imx8mp-generic-mbox.dtsi"
++
++/ {
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		rpmsg_ca53_reserved: rpmsg-ca53@fe100000 {
++			reg = <0 0xfe100000 0 0x10000>;
++			no-map;
++		};
++
++		vdevbuffer_ca53: vdevbuffer-ca53@fe200000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0xfe200000 0 0x100000>;
++			no-map;
++		};
++	};
++
++	rpmsg-ca53 {
++		compatible = "fsl,imx8mm-rpmsg";
++		reg = <0x0 0xfe100000 0x0 0x10000>; /* 64K for one rpmsg instance */
++		memory-region = <&vdevbuffer_ca53>;
++		mbox-names = "tx", "rx", "rxdb";
++		mboxes = <&gen_sw_mbox 0 0
++			  &gen_sw_mbox 1 0
++			  &gen_sw_mbox 2 0>;
++		vdev-nums = <1>;
++	};
++};
+-- 
+2.34.1
+

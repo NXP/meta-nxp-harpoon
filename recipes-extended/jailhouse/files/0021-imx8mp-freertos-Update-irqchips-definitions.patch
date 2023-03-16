@@ -1,0 +1,147 @@
+From fb74c5363c880fbf601d473851eacf807e2dcda5 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Fri, 21 Jan 2022 16:43:09 +0000
+Subject: [PATCH 21/48] imx8mp: freertos: Update irqchips definitions
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/imx8mp-freertos-audio.c | 26 +++++++++++++-------------
+ configs/arm64/imx8mp-freertos.c       | 22 +++++++++++-----------
+ configs/arm64/imx8mp-rtos.h           | 20 +++++++++++++++-----
+ 3 files changed, 39 insertions(+), 29 deletions(-)
+
+diff --git a/configs/arm64/imx8mp-freertos-audio.c b/configs/arm64/imx8mp-freertos-audio.c
+index bb0eb32e..fd9c4664 100644
+--- a/configs/arm64/imx8mp-freertos-audio.c
++++ b/configs/arm64/imx8mp-freertos-audio.c
+@@ -1,7 +1,7 @@
+ /*
+  * i.MX8MP target - FreeRTOS
+  *
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  *
+  * Authors:
+  *  Stephane Viau <stephane.viau@nxp.com>
+@@ -39,18 +39,18 @@
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS_BASE	(32)
+-#define CONFIG_INMATE_IRQCHIPS_BITMAP	\
+-	/* interrupts 32..63 */         \
+-	RTOS_COMMON_IRQCHIPS_BITMAP1,   \
+-	/* interrupts 64..95 */         \
+-	RTOS_COMMON_IRQCHIPS_BITMAP2 |   \
+-	(1 << (50 + 32 - 64)), /* SAI3 */ \
+-	/* interrupts 96..127 */        \
+-	RTOS_COMMON_IRQCHIPS_BITMAP3 |   \
+-	(1 << (90 + 32 - 96)), /* SAI5 */ \
+-	/* interrupts 128..159 */       \
+-	RTOS_COMMON_IRQCHIPS_BITMAP4
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
++		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
++		IRQnMAP(I2S56_IRQn), /* SAI5 */            \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mp-freertos.c b/configs/arm64/imx8mp-freertos.c
+index f04972ea..01604f1c 100644
+--- a/configs/arm64/imx8mp-freertos.c
++++ b/configs/arm64/imx8mp-freertos.c
+@@ -1,7 +1,7 @@
+ /*
+  * i.MX8MP target - FreeRTOS
+  *
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  *
+  * Authors:
+  *  Stephane Viau <stephane.viau@nxp.com>
+@@ -29,16 +29,16 @@
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS_BASE	(32)
+-#define CONFIG_INMATE_IRQCHIPS_BITMAP	\
+-	/* interrupts 32..63 */         \
+-	RTOS_COMMON_IRQCHIPS_BITMAP1,   \
+-	/* interrupts 64..95 */         \
+-	RTOS_COMMON_IRQCHIPS_BITMAP2,   \
+-	/* interrupts 96..127 */        \
+-	RTOS_COMMON_IRQCHIPS_BITMAP3,   \
+-	/* interrupts 128..159 */       \
+-	RTOS_COMMON_IRQCHIPS_BITMAP4
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mp-rtos.h b/configs/arm64/imx8mp-rtos.h
+index 4214dd4c..4781dbf8 100644
+--- a/configs/arm64/imx8mp-rtos.h
++++ b/configs/arm64/imx8mp-rtos.h
+@@ -1,7 +1,7 @@
+ /*
+  * i.MX8MP target - common RTOS config
+  *
+- * Copyright 2021 NXP
++ * Copyright 2021-2022 NXP
+  *
+  * Authors:
+  *  Stephane Viau <stephane.viau@nxp.com>
+@@ -11,6 +11,16 @@
+  *
+  */
+ 
++typedef enum IRQn {
++
++  /* Device specific interrupts */
++  UART4_IRQn                   = 61,               /**< UART-4 ORed interrupt */
++  I2S3_IRQn                    = 82,               /**< SAI3 Receive / Transmit Interrupt */
++  GPT2_IRQn                    = 86,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
++  GPT1_IRQn                    = 87,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
++  I2S56_IRQn                   = 122,              /**< SAI5/6 Receive / Transmit Interrupt */
++} IRQn_Type;
++
+ #define RTOS_COMMON_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+@@ -24,13 +34,13 @@
+ 	MEM_REGION_ROS( 0xfd9fe000, 0xfd9fe000, KB(8))   /* IVSHMEM */
+ 
+ /* interrupts 32..63 */
+-#define RTOS_COMMON_IRQCHIPS_BITMAP1 \
+-	(1 << (29 + 32 - 32)) /* UART4 */
++#define RTOS_COMMON_IRQCHIP0_BITMAP1 \
++	IRQnMAP(UART4_IRQn)
+ 
+ /* interrupts 64..95 */
+ #define RTOS_COMMON_IRQCHIPS_BITMAP2 \
+-	(1 << (54 + 32 - 64)) | /* GPT2 */ \
+-	(1 << (55 + 32 - 64))   /* GPT1 */
++	IRQnMAP(GPT2_IRQn) | \
++	IRQnMAP(GPT1_IRQn)
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIPS_BITMAP3 \
+-- 
+2.34.1
+

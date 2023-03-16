@@ -1,0 +1,28 @@
+From 6679eadd741aac1b946d4e70eefc7be53d4fb72d Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Fri, 11 Nov 2022 15:57:18 +0800
+Subject: [PATCH 17/28] mailbox: arm-sgi-mbox: Clear the Status register
+
+The shared memory probably has random data, so clear the Status
+register to avoid fake messages.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ drivers/mailbox/arm-sgi-mailbox.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mailbox/arm-sgi-mailbox.c b/drivers/mailbox/arm-sgi-mailbox.c
+index 033dd5e48eb6..309ce233c31e 100644
+--- a/drivers/mailbox/arm-sgi-mailbox.c
++++ b/drivers/mailbox/arm-sgi-mailbox.c
+@@ -201,6 +201,7 @@ static int arm_sgi_mailbox_probe(struct platform_device *pdev)
+ 	mbox->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(mbox->base))
+ 		return PTR_ERR(mbox->base);
++	memset_io(&mbox->base->status, 0, 4);
+ 
+ 	mbox->controller.dev = dev;
+ 	mbox->controller.chans = mbox->chan;
+-- 
+2.34.1
+

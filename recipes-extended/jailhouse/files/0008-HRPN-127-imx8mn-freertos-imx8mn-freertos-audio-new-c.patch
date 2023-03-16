@@ -1,0 +1,172 @@
+From 42bca7346b16a27e4cc31a20dfdb2604e04c89f2 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Thu, 18 Nov 2021 15:45:24 +0100
+Subject: [PATCH 08/48] HRPN-127 imx8mn-freertos, imx8mn-freertos-audio: new
+ cells
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+---
+ configs/arm64/imx8mn-freertos-audio.c | 51 +++++++++++++++++++++++++++
+ configs/arm64/imx8mn-freertos.c       | 45 +++++++++++++++++++++++
+ configs/arm64/imx8mn-rtos.h           | 39 ++++++++++++++++++++
+ 3 files changed, 135 insertions(+)
+ create mode 100644 configs/arm64/imx8mn-freertos-audio.c
+ create mode 100644 configs/arm64/imx8mn-freertos.c
+ create mode 100644 configs/arm64/imx8mn-rtos.h
+
+diff --git a/configs/arm64/imx8mn-freertos-audio.c b/configs/arm64/imx8mn-freertos-audio.c
+new file mode 100644
+index 00000000..81b66fb4
+--- /dev/null
++++ b/configs/arm64/imx8mn-freertos-audio.c
+@@ -0,0 +1,51 @@
++/*
++ * i.MX8MN target - FreeRTOS
++ *
++ * Copyright 2021 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mn-rtos.h"
++
++/* Name, cores, entry point */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++#define CONFIG_INMATE_BASE		(0xc0000000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS_NUM	(RTOS_COMMON_MEMORY_REGIONS_NUM + 8)
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),  /* RAM */     \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)), /* OCRAM */   \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)), /* DTCM */    \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)), /* ITCM */    \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),  /* ANA_PLL */ \
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),  /* CCM */     \
++	MMIO_REGION_RWS(0x30a40000, 0x30a40000, KB(64)),  /* I2C3 */    \
++	MMIO_REGION_RWS(0x30030000, 0x30030000, KB(64)),  /* SAI3 */    \
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS_BASE	(32)
++#define CONFIG_INMATE_IRQCHIPS_BITMAP	\
++	/* interrupts 32..63 */         \
++	RTOS_COMMON_IRQCHIPS_BITMAP1,   \
++	/* interrupts 64..95 */         \
++	RTOS_COMMON_IRQCHIPS_BITMAP2 |  \
++	(1 << (37 + 32 - 64)) | /* I2C3 */ \
++	(1 << (50 + 32 - 64)), /* SAI3 */ \
++	/* interrupts 96..127 */        \
++	RTOS_COMMON_IRQCHIPS_BITMAP3,   \
++	/* interrupts 128..159 */       \
++	RTOS_COMMON_IRQCHIPS_BITMAP4    \
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-freertos.c b/configs/arm64/imx8mn-freertos.c
+new file mode 100644
+index 00000000..6ba9ecfe
+--- /dev/null
++++ b/configs/arm64/imx8mn-freertos.c
+@@ -0,0 +1,45 @@
++/*
++ * i.MX8MN target - FreeRTOS
++ *
++ * Copyright 2021 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mn-rtos.h"
++
++/* Name, cores, entry point */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++#define CONFIG_INMATE_BASE		(0xc0000000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS_NUM	(RTOS_COMMON_MEMORY_REGIONS_NUM + 4)
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                    \
++	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */   \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */ \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */  \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_NUM	(RTOS_COMMON_IRQCHIPS_NUM)
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS_BASE	(32)
++#define CONFIG_INMATE_IRQCHIPS_BITMAP	\
++	/* interrupts 32..63 */         \
++	RTOS_COMMON_IRQCHIPS_BITMAP1,   \
++	/* interrupts 64..95 */         \
++	RTOS_COMMON_IRQCHIPS_BITMAP2,   \
++	/* interrupts 96..127 */        \
++	RTOS_COMMON_IRQCHIPS_BITMAP3,   \
++	/* interrupts 128..159 */       \
++	RTOS_COMMON_IRQCHIPS_BITMAP4
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-rtos.h b/configs/arm64/imx8mn-rtos.h
+new file mode 100644
+index 00000000..c487e6e4
+--- /dev/null
++++ b/configs/arm64/imx8mn-rtos.h
+@@ -0,0 +1,39 @@
++/*
++ * i.MX8MN target - common RTOS config
++ *
++ * Copyright 2021 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ *
++ */
++
++#define RTOS_COMMON_MEMORY_REGIONS_NUM                       5
++#define RTOS_COMMON_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
++	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
++	MMIO_REGION_ROS(0x30360000, 0x30360000, KB(64)), /* ANA_PLL */              \
++	MMIO_REGION_ROS(0x30380000, 0x30380000, KB(64)), /* CCM */                  \
++	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */
++
++#define RTOS_COMMON_IRQCHIPS_NUM                             1
++/* interrupts 32..63 */
++#define RTOS_COMMON_IRQCHIPS_BITMAP1 \
++	(1 << (29 + 32 - 32)) /* UART4 */
++
++/* interrupts 64..95 */
++#define RTOS_COMMON_IRQCHIPS_BITMAP2 \
++	(1 << (54 + 32 - 64)) | /* GPT2 */ \
++	(1 << (55 + 32 - 64))   /* GPT1 */
++
++/* interrupts 96..127 */
++#define RTOS_COMMON_IRQCHIPS_BITMAP3 \
++	0
++
++/* interrupts 128..159 */
++#define RTOS_COMMON_IRQCHIPS_BITMAP4 \
++	0
+-- 
+2.34.1
+

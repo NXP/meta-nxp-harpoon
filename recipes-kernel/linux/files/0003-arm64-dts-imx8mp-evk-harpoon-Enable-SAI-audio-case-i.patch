@@ -1,0 +1,48 @@
+From 9a1c253e1656b293dbf28bd4114fb1e39c06ccca Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Mon, 13 Dec 2021 10:07:53 +0800
+Subject: [PATCH 03/28] arm64: dts: imx8mp-evk-harpoon: Enable SAI audio case
+ in inmate cell
+
+1. Set pinmux in root cell.
+2. Disabled SAI in root cell.
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+[Move changes from -root to -harpoon dts]
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+(cherry picked from commit 67e6b53ef9137c97aa369d1dc93e26b18a505f5a)
+---
+ .../boot/dts/freescale/imx8mp-evk-harpoon.dts | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+index cc153b97339e..1fe8004a84f8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+@@ -11,5 +11,22 @@ &i2c3 {
+ 
+ &iomuxc {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_i2c3>;
++	pinctrl-0 = <&pinctrl_i2c3>, <&pinctrl_sai3>, <&pinctrl_sai5>;
++
++	pinctrl_sai5: sai5grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI5_RXD1__AUDIOMIX_SAI5_TX_SYNC	0xd6
++			MX8MP_IOMUXC_SAI5_RXD2__AUDIOMIX_SAI5_TX_BCLK	0xd6
++			MX8MP_IOMUXC_SAI5_RXD3__AUDIOMIX_SAI5_TX_DATA00	0xd6
++			MX8MP_IOMUXC_SAI5_RXD0__AUDIOMIX_SAI5_RX_DATA00	0xd6
++		>;
++	};
++};
++
++&sai3 {
++	status = "disabled";
++};
++
++&sai5 {
++	status = "disabled";
+ };
+-- 
+2.34.1
+

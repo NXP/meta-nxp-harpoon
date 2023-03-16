@@ -1,0 +1,22 @@
+From a506b9e72b14eb47f19a18810fda8eaf0700877c Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Fri, 21 Oct 2022 15:19:53 +0800
+Subject: [PATCH 16/28] arm64: imx_v8_defconfig: Enable the SGI mailbox
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ arch/arm64/configs/imx_v8_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/imx_v8_defconfig b/arch/arm64/configs/imx_v8_defconfig
+index 2e98cdaa1fbc..5e847f9ca86a 100644
+--- a/arch/arm64/configs/imx_v8_defconfig
++++ b/arch/arm64/configs/imx_v8_defconfig
+@@ -1099,3 +1099,4 @@ CONFIG_CRYPTO_SM3_GENERIC=m
+ CONFIG_CRYPTO_SM4_GENERIC=m
+ CONFIG_CRYPTO_ARIA=m
+ CONFIG_CRYPTO_POLYVAL_ARM64_CE=m
++CONFIG_ARM_SGI_MAILBOX=y
+-- 
+2.34.1
+

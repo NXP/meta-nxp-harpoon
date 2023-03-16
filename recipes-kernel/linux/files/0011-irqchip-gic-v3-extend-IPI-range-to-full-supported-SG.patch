@@ -1,0 +1,34 @@
+From e2840cb2bb42dcaeb849dfaa92a8d650c323dace Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Fri, 14 Oct 2022 10:18:59 +0800
+Subject: [PATCH 11/28] irqchip: gic-v3: extend IPI range to full supported SGI
+ number
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ drivers/irqchip/irq-gic-v3.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 67db8aee06cd..1dad3825fcf8 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -1351,13 +1351,13 @@ static void __init gic_smp_init(void)
+ 				  gic_starting_cpu, NULL);
+ 
+ 	/* Register all 8 non-secure SGIs */
+-	base_sgi = __irq_domain_alloc_irqs(gic_data.domain, -1, 8,
++	base_sgi = __irq_domain_alloc_irqs(gic_data.domain, -1, 16,
+ 					   NUMA_NO_NODE, &sgi_fwspec,
+ 					   false, NULL);
+ 	if (WARN_ON(base_sgi <= 0))
+ 		return;
+ 
+-	set_smp_ipi_range(base_sgi, 8);
++	set_smp_ipi_range(base_sgi, 16);
+ }
+ 
+ static int gic_set_affinity(struct irq_data *d, const struct cpumask *mask_val,
+-- 
+2.34.1
+

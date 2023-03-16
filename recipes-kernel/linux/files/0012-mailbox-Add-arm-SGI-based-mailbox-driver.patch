@@ -1,0 +1,417 @@
+From 0125ae4663b7d42e9d50d821d7bcdbb5b6477d67 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Wed, 14 Sep 2022 10:52:36 +0800
+Subject: [PATCH 12/28] mailbox: Add arm SGI based mailbox driver
+
+This driver is introduced for RPMSG usecases between A core Linux
+and A core RTOS or Baremetal.
+
+Signed-off-by: Hang Zhang <hang.zhang_1@nxp.com>
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ arch/arm64/include/asm/smp.h      |   5 +
+ arch/arm64/kernel/smp.c           |  29 ++++
+ drivers/mailbox/Kconfig           |  29 ++++
+ drivers/mailbox/Makefile          |   2 +
+ drivers/mailbox/arm-sgi-mailbox.c | 257 ++++++++++++++++++++++++++++++
+ 5 files changed, 322 insertions(+)
+ create mode 100644 drivers/mailbox/arm-sgi-mailbox.c
+
+diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
+index fc55f5a57a06..944e26d39b79 100644
+--- a/arch/arm64/include/asm/smp.h
++++ b/arch/arm64/include/asm/smp.h
+@@ -88,6 +88,11 @@ extern void secondary_entry(void);
+ extern void arch_send_call_function_single_ipi(int cpu);
+ extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
+ 
++#ifdef CONFIG_ARM_SGI_MAILBOX
++extern void sgi_mbox_send_ipi_mask(const struct cpumask *mask);
++extern void sgi_mbox_send_ipi_single(int cpu);
++#endif
++
+ #ifdef CONFIG_ARM64_ACPI_PARKING_PROTOCOL
+ extern void arch_send_wakeup_ipi_mask(const struct cpumask *mask);
+ #else
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index d2a829481f39..ab79c6e199db 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -54,6 +54,10 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/ipi.h>
+ 
++#ifdef CONFIG_ARM_SGI_MAILBOX
++extern int arm_sgi_mbox_interrupt(uint32_t irq);
++#endif
++
+ DEFINE_PER_CPU_READ_MOSTLY(int, cpu_number);
+ EXPORT_PER_CPU_SYMBOL(cpu_number);
+ 
+@@ -74,6 +78,9 @@ enum ipi_msg_type {
+ 	IPI_TIMER,
+ 	IPI_IRQ_WORK,
+ 	IPI_WAKEUP,
++#ifdef CONFIG_ARM_SGI_MAILBOX
++	IPI_ARM_SGI_MAILBOX = CONFIG_ARM_SGI_MAILBOX_IPI_NR,
++#endif
+ 	NR_IPI
+ };
+ 
+@@ -770,6 +777,10 @@ static const char *ipi_types[NR_IPI] __tracepoint_string = {
+ 	[IPI_TIMER]		= "Timer broadcast interrupts",
+ 	[IPI_IRQ_WORK]		= "IRQ work interrupts",
+ 	[IPI_WAKEUP]		= "CPU wake-up interrupts",
++
++#ifdef CONFIG_ARM_SGI_MAILBOX
++	[IPI_ARM_SGI_MAILBOX]	= "SGI Mailbox interrupts",
++#endif
+ };
+ 
+ static void smp_cross_call(const struct cpumask *target, unsigned int ipinr);
+@@ -802,6 +813,18 @@ void arch_send_call_function_single_ipi(int cpu)
+ 	smp_cross_call(cpumask_of(cpu), IPI_CALL_FUNC);
+ }
+ 
++#ifdef CONFIG_ARM_SGI_MAILBOX
++void sgi_mbox_send_ipi_mask(const struct cpumask *mask)
++{
++	smp_cross_call(mask, IPI_ARM_SGI_MAILBOX);
++}
++
++void sgi_mbox_send_ipi_single(int cpu)
++{
++	smp_cross_call(cpumask_of(cpu), IPI_ARM_SGI_MAILBOX);
++}
++#endif
++
+ #ifdef CONFIG_ARM64_ACPI_PARKING_PROTOCOL
+ void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
+ {
+@@ -908,6 +931,12 @@ static void do_handle_IPI(int ipinr)
+ 		break;
+ #endif
+ 
++#ifdef CONFIG_ARM_SGI_MAILBOX
++	case IPI_ARM_SGI_MAILBOX:
++		arm_sgi_mbox_interrupt(ipinr);
++		break;
++#endif
++
+ 	default:
+ 		pr_crit("CPU%u: Unknown IPI message 0x%x\n", cpu, ipinr);
+ 		break;
+diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
+index 05d6fae800e3..5c7b08c6e286 100644
+--- a/drivers/mailbox/Kconfig
++++ b/drivers/mailbox/Kconfig
+@@ -294,4 +294,33 @@ config QCOM_IPCC
+ 	  acts as an interrupt controller for receiving interrupts from clients.
+ 	  Say Y here if you want to build this driver.
+ 
++menuconfig ARM_SGI_MAILBOX
++	tristate "ARM SGI Mailbox driver"
++	depends on ARM64 && OF
++	help
++	  This driver leverages SGI interrupt on ARM64 and sharing memory to
++	  implement a mailbox, which is used to send message between different
++	  OSes running on different ARM64 CPU Cores.
++
++if ARM_SGI_MAILBOX
++config ARM_SGI_MAILBOX_IPI_NR
++	int "ARM SGI Mailbox IPI number"
++	depends on ARM_SGI_MAILBOX
++	default 10
++	help
++	  Select the IPI interrupt number to be used for mailbox notification.
++	  Note:
++	    Don't overlay with the ones already reserved by kernel, seeing
++	    arch/arm64/kernel/smp.c.
++
++config ARM_SGI_MAILBOX_TARGET_CORE
++	int "ARM SGI Mailbox target core"
++	depends on ARM_SGI_MAILBOX
++	default 3
++	help
++	  Select the target core, on which runs RTOS/Baremetal communicating
++	  with this mailbox.
++	  Note:
++	    The core number is counted from 0.
++endif
+ endif
+diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
+index fc9376117111..12583b5a7f53 100644
+--- a/drivers/mailbox/Makefile
++++ b/drivers/mailbox/Makefile
+@@ -62,3 +62,5 @@ obj-$(CONFIG_SPRD_MBOX)		+= sprd-mailbox.o
+ obj-$(CONFIG_QCOM_IPCC)		+= qcom-ipcc.o
+ 
+ obj-$(CONFIG_APPLE_MAILBOX)	+= apple-mailbox.o
++
++obj-$(CONFIG_ARM_SGI_MAILBOX)	+= arm-sgi-mailbox.o
+diff --git a/drivers/mailbox/arm-sgi-mailbox.c b/drivers/mailbox/arm-sgi-mailbox.c
+new file mode 100644
+index 000000000000..033dd5e48eb6
+--- /dev/null
++++ b/drivers/mailbox/arm-sgi-mailbox.c
+@@ -0,0 +1,257 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2022 NXP
++ */
++
++#include <linux/device.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/mailbox_controller.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/of_device.h>
++#include <linux/slab.h>
++
++/*
++ * status register brelf description:
++ *
++ * bit31                |bit11           |bit7            |bit3         bit0
++ * -------------------------------------------------------------------------
++ * |      |      |      | RXDB_CH status |  RX_CH status  |  TX_CH status  |
++ * -------------------------------------------------------------------------
++ * TX_CH field: Each bit for a TX channel
++ * RX_CH field: Each bit for a RX channel
++ * RXDB_CH field: Each bit for a RXDB channel
++ *
++ * Set by the initiator to indicate the 'data' in the TX_CH register valid;
++ * And clear by the terminator to indicate TX done.
++ */
++
++#define SR_RX_SHIFT		(4)
++#define SR_RXDB_SHIFT		(8)
++#define SR_RX_MASK		(0xf << SR_RX_SHIFT)
++#define SR_RXDB_MASK		(0xf << SR_RXDB_SHIFT)
++
++#define MBOX_TX_CHAN		(4)
++#define MBOX_RX_CHAN		(4)
++#define MBOX_RXDB_CHAN		(4)
++#define MBOX_CHAN_MAX		(12)
++
++struct arm_sgi_mbox_reg {
++	uint32_t status;
++	uint32_t tx_ch[MBOX_TX_CHAN];
++	uint32_t rx_ch[MBOX_RX_CHAN];
++};
++
++enum sgi_mbox_type {
++	ARM_SGI_TYPE_TX,     /* Tx */
++	ARM_SGI_TYPE_RX,     /* Rx */
++	ARM_SGI_TYPE_RXDB,   /* Rx doorbell */
++};
++
++struct arm_sgi_mbox_con_priv {
++	uint32_t idx;
++	enum sgi_mbox_type type;
++	struct arm_sgi_mbox *priv;
++};
++
++struct arm_sgi_mbox {
++	struct device *dev;
++	struct arm_sgi_mbox_reg __iomem *base;
++	struct arm_sgi_mbox_con_priv cp[MBOX_CHAN_MAX];
++	struct mbox_chan chan[MBOX_CHAN_MAX];
++	struct mbox_controller controller;
++	uint32_t target_core;
++};
++
++static struct arm_sgi_mbox *mbox_global;
++
++static bool arm_sgi_mbox_last_tx_done(struct mbox_chan *chan)
++{
++	struct arm_sgi_mbox_con_priv *cp = chan->con_priv;
++	struct arm_sgi_mbox *mbox = cp->priv;
++	uint32_t idx = cp->idx;
++
++	if (((mbox->base->status) & (1 << idx)) == 0)
++		return true;
++
++	return false;
++}
++
++static int arm_sgi_mbox_send_data(struct mbox_chan *chan, void *msg)
++{
++	struct arm_sgi_mbox_con_priv *cp = chan->con_priv;
++	struct arm_sgi_mbox *mbox = cp->priv;
++	uint32_t idx = cp->idx;
++	uint32_t *data = msg;
++
++	if (cp->type != ARM_SGI_TYPE_TX)
++		return -EINVAL;
++
++	writel(*data, &mbox->base->tx_ch[idx]);
++	mbox->base->status |= (1 << idx);
++
++	/* sync before trigger IPI */
++	mb();
++
++	sgi_mbox_send_ipi_single(mbox->target_core);
++
++	return 0;
++}
++
++int arm_sgi_mbox_interrupt(uint32_t irq)
++{
++	struct arm_sgi_mbox *mbox = mbox_global;
++	uint32_t status = mbox->base->status;
++	int i;
++
++	status &= SR_RX_MASK | SR_RXDB_MASK;
++	if (!status)
++		return IRQ_NONE;
++
++	for (i = 0; i < MBOX_RX_CHAN && status & 1 << (i + SR_RX_SHIFT); i++)
++		mbox_chan_received_data(&mbox->chan[i + SR_RX_SHIFT],
++					(void *)&mbox->base->rx_ch[i]);
++
++	for (i = 0; i < MBOX_RXDB_CHAN && status & 1 << (i + SR_RXDB_SHIFT);
++	     i++)
++		mbox_chan_received_data(&mbox->chan[i + SR_RXDB_SHIFT], NULL);
++
++	mbox->base->status &= ~status;
++
++	/* sync */
++	mb();
++
++	return IRQ_HANDLED;
++}
++
++static int arm_sgi_mbox_startup(struct mbox_chan *chan)
++{
++	return 0;
++}
++
++static void arm_sgi_mbox_shutdown(struct mbox_chan *chan)
++{
++}
++
++static const struct mbox_chan_ops arm_sgi_mbox_ops = {
++	.send_data    = arm_sgi_mbox_send_data,
++	.startup      = arm_sgi_mbox_startup,
++	.shutdown     = arm_sgi_mbox_shutdown,
++	.last_tx_done = arm_sgi_mbox_last_tx_done,
++};
++
++
++static struct mbox_chan *arm_sgi_mbox_xlate(struct mbox_controller *mbox,
++					    const struct of_phandle_args *sp)
++{
++	uint32_t type, idx, chan;
++
++	if (sp->args_count != 2) {
++		dev_err(mbox->dev, "Invalid argument count %d\n", sp->args_count);
++		return ERR_PTR(-EINVAL);
++	}
++
++	type = sp->args[0];
++	idx = sp->args[1];
++
++	switch (type) {
++	case ARM_SGI_TYPE_TX:
++		chan = idx;
++		break;
++	case ARM_SGI_TYPE_RX:
++		chan = MBOX_TX_CHAN + idx;
++		break;
++	case ARM_SGI_TYPE_RXDB:
++		chan = MBOX_TX_CHAN + MBOX_TX_CHAN + idx;
++		break;
++	default:
++		dev_err(mbox->dev, "Invalid chan type: %d\n", type);
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (chan >= MBOX_CHAN_MAX) {
++		dev_err(mbox->dev, "Not supported channel number: %d. (type: %d, idx: %d)\n",
++			chan, type, idx);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return &mbox->chans[chan];
++}
++
++static const struct of_device_id arm_sgi_mbox_of_match[] = {
++	{ .compatible = "fsl,arm-sgi-mbox", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, arm_sgi_mbox_of_match);
++
++static int arm_sgi_mailbox_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct arm_sgi_mbox *mbox;
++	int err, i;
++
++	mbox = devm_kzalloc(dev, sizeof(*mbox), GFP_KERNEL);
++	if (!mbox)
++		return -ENOMEM;
++	mbox->dev = dev;
++
++	mbox->target_core = CONFIG_ARM_SGI_MAILBOX_TARGET_CORE;
++
++	mbox->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(mbox->base))
++		return PTR_ERR(mbox->base);
++
++	mbox->controller.dev = dev;
++	mbox->controller.chans = mbox->chan;
++	mbox->controller.num_chans = MBOX_CHAN_MAX;
++	mbox->controller.ops = &arm_sgi_mbox_ops;
++	mbox->controller.of_xlate = arm_sgi_mbox_xlate;
++	mbox->controller.txdone_poll = true;
++
++	for (i = 0; i < MBOX_CHAN_MAX; i++) {
++		mbox->chan[i].con_priv = &mbox->cp[i];
++		mbox->cp[i].priv = mbox;
++		mbox->cp[i].idx = i;
++	}
++
++	/*
++	 * TODO: improve
++	 * this hack results in the driver cannot support multiple instances
++	 */
++	mbox_global = mbox;
++
++	err = devm_mbox_controller_register(dev, &mbox->controller);
++	if (err) {
++		dev_err(dev, "Failed to register mailbox %d\n", err);
++		return err;
++	}
++
++	platform_set_drvdata(pdev, mbox);
++
++	return 0;
++}
++
++static struct platform_driver arm_sgi_mbox_driver = {
++	.driver = {
++		.name = "arm-sgi-mailbox",
++		.of_match_table = arm_sgi_mbox_of_match,
++	},
++	.probe = arm_sgi_mailbox_probe,
++};
++
++static int __init arm_sgi_mbox_init(void)
++{
++	return platform_driver_register(&arm_sgi_mbox_driver);
++}
++
++static void __exit arm_sgi_mbox_exit(void)
++{
++	platform_driver_unregister(&arm_sgi_mbox_driver);
++}
++
++module_init(arm_sgi_mbox_init);
++module_exit(arm_sgi_mbox_exit);
++
++MODULE_DESCRIPTION("ARM SGI mailbox driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.34.1
+

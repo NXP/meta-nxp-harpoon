@@ -1,0 +1,471 @@
+From a589cfa0371d638f33a03a0b53cb5ff955d32209 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Tue, 19 Apr 2022 11:58:21 +0800
+Subject: [PATCH 35/58] imx8m{m,n,p}: add audio zephyr cell config
+
+Move common configuration to be imx8m{m,n,p}-audio.h, so that FreeRTOS,
+and Zephyr can share the code.
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ configs/arm64/imx8mm-harpoon-audio.h          | 55 +++++++++++++++++
+ configs/arm64/imx8mm-harpoon-freertos-audio.c | 44 +------------
+ configs/arm64/imx8mm-harpoon-zephyr-audio.c   | 19 ++++++
+ configs/arm64/imx8mn-harpoon-audio.h          | 56 +++++++++++++++++
+ configs/arm64/imx8mn-harpoon-freertos-audio.c | 44 +------------
+ configs/arm64/imx8mn-harpoon-zephyr-audio.c   | 19 ++++++
+ configs/arm64/imx8mp-harpoon-audio.h          | 61 +++++++++++++++++++
+ configs/arm64/imx8mp-harpoon-freertos-audio.c | 49 +--------------
+ configs/arm64/imx8mp-harpoon-zephyr-audio.c   | 19 ++++++
+ 9 files changed, 235 insertions(+), 131 deletions(-)
+ create mode 100644 configs/arm64/imx8mm-harpoon-audio.h
+ create mode 100644 configs/arm64/imx8mm-harpoon-zephyr-audio.c
+ create mode 100644 configs/arm64/imx8mn-harpoon-audio.h
+ create mode 100644 configs/arm64/imx8mn-harpoon-zephyr-audio.c
+ create mode 100644 configs/arm64/imx8mp-harpoon-audio.h
+ create mode 100644 configs/arm64/imx8mp-harpoon-zephyr-audio.c
+
+diff --git a/configs/arm64/imx8mm-harpoon-audio.h b/configs/arm64/imx8mm-harpoon-audio.h
+new file mode 100644
+index 00000000..13b2ac2e
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-audio.h
+@@ -0,0 +1,55 @@
++/*
++ * i.MX8MM target - Audio config
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-harpoon-rtos.h"
++
++#define CONFIG_INMATE_BASE		(0x93c00000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RW( 0x30010000, 0x30010000, KB(64)),   /* SAI1 */   \
++	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
++	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
++	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
++	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64))    /* SAI6 */   \
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
++		IRQnMAP(I2C3_IRQn) | /* I2C3 */            \
++		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
++		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */         \
++		IRQnMAP(I2S1_IRQn),   /* SAI1 */           \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
++		IRQnMAP(I2S2_IRQn))   /* SAI2 */
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mm-harpoon-freertos-audio.c b/configs/arm64/imx8mm-harpoon-freertos-audio.c
+index 864fb4a2..4d49d8a2 100644
+--- a/configs/arm64/imx8mm-harpoon-freertos-audio.c
++++ b/configs/arm64/imx8mm-harpoon-freertos-audio.c
+@@ -11,50 +11,10 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "cell-helper.h"
+-#include "imx8mm-harpoon-rtos.h"
++#include "imx8mm-harpoon-audio.h"
+ 
+-/* Name, cores, entry point */
++/* Name, cores */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
+-	MMIO_REGION_RW( 0x30010000, 0x30010000, KB(64)),   /* SAI1 */   \
+-	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
+-	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
+-	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
+-	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64))    /* SAI6 */   \
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
+-		IRQnMAP(I2C3_IRQn) | /* I2C3 */            \
+-		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
+-		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */         \
+-		IRQnMAP(I2S1_IRQn),   /* SAI1 */           \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
+-		IRQnMAP(I2S2_IRQn))   /* SAI2 */
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-harpoon-zephyr-audio.c b/configs/arm64/imx8mm-harpoon-zephyr-audio.c
+new file mode 100644
+index 00000000..bd859534
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-zephyr-audio.c
+@@ -0,0 +1,19 @@
++/*
++ * i.MX8MM target - Zephyr audio config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "imx8mm-harpoon-audio.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-harpoon-audio.h b/configs/arm64/imx8mn-harpoon-audio.h
+new file mode 100644
+index 00000000..da56b4d5
+--- /dev/null
++++ b/configs/arm64/imx8mn-harpoon-audio.h
+@@ -0,0 +1,56 @@
++/*
++ * i.MX8MN target - Audio config
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mn-harpoon-rtos.h"
++
++/* Entry point */
++#define CONFIG_INMATE_BASE		(0x93c00000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
++	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
++	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
++	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64)),   /* SAI6 */   \
++	MMIO_REGION_RW( 0x300b0000, 0x300b0000, KB(64))    /* SAI7 */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
++		IRQnMAP(I2C3_IRQn) | /* I2C3 */            \
++		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
++		IRQnMAP(I2S56_IRQn),  /* SAI5-6 */         \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
++		IRQnMAP(I2S2_IRQn) |  /* SAI2 */           \
++		IRQnMAP(I2S7_IRQn))   /* SAI7 */
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mn-harpoon-freertos-audio.c b/configs/arm64/imx8mn-harpoon-freertos-audio.c
+index f099471c..533bc7ab 100644
+--- a/configs/arm64/imx8mn-harpoon-freertos-audio.c
++++ b/configs/arm64/imx8mn-harpoon-freertos-audio.c
+@@ -11,50 +11,10 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "cell-helper.h"
+-#include "imx8mn-harpoon-rtos.h"
++#include "imx8mn-harpoon-audio.h"
+ 
+-/* Name, cores, entry point */
++/* Name, cores */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
+-	MMIO_REGION_RW( 0x30020000, 0x30020000, KB(64)),   /* SAI2 */   \
+-	MMIO_REGION_RW( 0x30030000, 0x30030000, KB(64)),   /* SAI3 */   \
+-	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
+-	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64)),   /* SAI6 */   \
+-	MMIO_REGION_RW( 0x300b0000, 0x300b0000, KB(64))    /* SAI7 */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
+-		IRQnMAP(I2C3_IRQn) | /* I2C3 */            \
+-		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
+-		IRQnMAP(I2S56_IRQn),  /* SAI5-6 */         \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
+-		IRQnMAP(I2S2_IRQn) |  /* SAI2 */           \
+-		IRQnMAP(I2S7_IRQn))   /* SAI7 */
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-harpoon-zephyr-audio.c b/configs/arm64/imx8mn-harpoon-zephyr-audio.c
+new file mode 100644
+index 00000000..210c2f2d
+--- /dev/null
++++ b/configs/arm64/imx8mn-harpoon-zephyr-audio.c
+@@ -0,0 +1,19 @@
++/*
++ * i.MX8MN target - Zephyr audio config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "imx8mn-harpoon-audio.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-harpoon-audio.h b/configs/arm64/imx8mp-harpoon-audio.h
+new file mode 100644
+index 00000000..a4bcbee1
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-audio.h
+@@ -0,0 +1,61 @@
++/*
++ * i.MX8MP target - Audio config
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mp-harpoon-rtos.h"
++
++#define CONFIG_INMATE_BASE		(0xc0000000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RW( 0x30240000, 0x30240000, KB(64)),   /* GPIO5 */	\
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),    /* CCM */    \
++	MMIO_REGION_RWS(0x30388000, 0x30388000, KB(16)),   /* CCM */    \
++	MMIO_REGION_RW( 0x303a0000, 0x303a0000, KB(64)),   /* GPC */	\
++	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */	\
++	MMIO_REGION_RW( 0x30c10000, 0x30c10000, KB(64)),   /* SAI1 */	\
++	MMIO_REGION_RW( 0x30c20000, 0x30c20000, KB(64)),   /* SAI2 */	\
++	MMIO_REGION_RW( 0x30c30000, 0x30c30000, KB(64)),   /* SAI3 */	\
++	MMIO_REGION_RW( 0x30c50000, 0x30c50000, KB(64)),   /* SAI5 */	\
++	MMIO_REGION_RW( 0x30c60000, 0x30c60000, KB(64)),   /* SAI6 */	\
++	MMIO_REGION_RW( 0x30c80000, 0x30c80000, KB(64)),   /* SAI7 */	\
++	MMIO_REGION_RWS(0x30e20000, 0x30e20000, KB(64))    /* AUDIOMIX */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
++		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
++		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */         \
++		IRQnMAP(I2S1_IRQn),   /* SAI1 */           \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
++		IRQnMAP(I2S2_IRQn) |  /* SAI2 */           \
++		IRQnMAP(I2S7_IRQn))   /* SAI7 */
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mp-harpoon-freertos-audio.c b/configs/arm64/imx8mp-harpoon-freertos-audio.c
+index 89d06d3b..25f5750f 100644
+--- a/configs/arm64/imx8mp-harpoon-freertos-audio.c
++++ b/configs/arm64/imx8mp-harpoon-freertos-audio.c
+@@ -12,55 +12,10 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "cell-helper.h"
+-#include "imx8mp-harpoon-rtos.h"
++#include "imx8mp-harpoon-audio.h"
+ 
+-/* Name, cores, entry point */
++/* Name, cores */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RW( 0x30240000, 0x30240000, KB(64)),   /* GPIO5 */	\
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),    /* CCM */    \
+-	MMIO_REGION_RWS(0x30388000, 0x30388000, KB(12)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x303a0000, 0x303a0000, KB(64)),   /* GPC */	\
+-	MMIO_REGION_RW( 0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */	\
+-	MMIO_REGION_RW( 0x30c10000, 0x30c10000, KB(64)),   /* SAI1 */	\
+-	MMIO_REGION_RW( 0x30c20000, 0x30c20000, KB(64)),   /* SAI2 */	\
+-	MMIO_REGION_RW( 0x30c30000, 0x30c30000, KB(64)),   /* SAI3 */	\
+-	MMIO_REGION_RW( 0x30c50000, 0x30c50000, KB(64)),   /* SAI5 */	\
+-	MMIO_REGION_RW( 0x30c60000, 0x30c60000, KB(64)),   /* SAI6 */	\
+-	MMIO_REGION_RW( 0x30c80000, 0x30c80000, KB(64)),   /* SAI7 */	\
+-	MMIO_REGION_RWS(0x30e20000, 0x30e20000, KB(64))    /* AUDIOMIX */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
+-		IRQnMAP(I2S3_IRQn),  /* SAI3 */            \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
+-		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */         \
+-		IRQnMAP(I2S1_IRQn),   /* SAI1 */           \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4 |             \
+-		IRQnMAP(I2S2_IRQn) |  /* SAI2 */           \
+-		IRQnMAP(I2S7_IRQn))   /* SAI7 */
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-harpoon-zephyr-audio.c b/configs/arm64/imx8mp-harpoon-zephyr-audio.c
+new file mode 100644
+index 00000000..3cf8b45b
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-zephyr-audio.c
+@@ -0,0 +1,19 @@
++/*
++ * i.MX8MP target - Zephyr audio config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "imx8mp-harpoon-audio.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++
++#include "cell-create.h"
+-- 
+2.34.1
+

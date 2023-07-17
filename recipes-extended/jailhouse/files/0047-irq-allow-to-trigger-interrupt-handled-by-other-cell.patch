@@ -1,0 +1,58 @@
+From 6ea35d95f042943086d48b4280e90f16dbb1bf34 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Thu, 2 Feb 2023 15:48:19 +0800
+Subject: [PATCH 47/58] irq: allow to trigger interrupt handled by other cells
+
+Generic software mailbox use two SPI interrupt for notification,
+so need to allow the driver to acess GIC register which is not
+owned by itself to tigger interrupt which is handled in other
+cell.
+
+This is just a hack, will revert it when formal fix is provided.
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ hypervisor/arch/arm-common/irqchip.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/hypervisor/arch/arm-common/irqchip.c b/hypervisor/arch/arm-common/irqchip.c
+index daae5512..5085d5f2 100644
+--- a/hypervisor/arch/arm-common/irqchip.c
++++ b/hypervisor/arch/arm-common/irqchip.c
+@@ -29,6 +29,8 @@
+ 	     (counter) < (config)->num_irqchips;			\
+ 	     (chip)++, (counter)++)
+ 
++#define ENABLE_SPI_ACCESS_HACK
++
+ spinlock_t dist_lock;
+ 
+ void *gicd_base;
+@@ -69,6 +71,24 @@ restrict_bitmask_access(struct mmio_access *mmio, unsigned int reg_index,
+ 		if (irqchip_irq_in_cell(cell, first_irq + irq))
+ 			access_mask |= irq_bits << (irq * bits_per_irq);
+ 
++#ifdef ENABLE_SPI_ACCESS_HACK
++	{
++		unsigned int root_mbox_irq = 108;
++		unsigned int inmate_mbox_irq = 109;
++
++		/* Hack to allow inmate cell to tigger generic mailbox remote irq in root cell*/
++		if (mmio->address == (GICD_ISPENDR + (root_mbox_irq / 32) * 4)
++				&& cell != &root_cell) {
++			access_mask |= irq_bits << (root_mbox_irq % 32U);
++		}
++		/* Hack to allow root cell to tigger generic mailbox remote irq in inmate cell*/
++		if (mmio->address == (GICD_ISPENDR + (inmate_mbox_irq / 32) * 4)
++				&& cell == &root_cell) {
++			access_mask |= irq_bits << (inmate_mbox_irq % 32U);
++		}
++	}
++#endif
++
+ 	access_mask >>= 8 * (mmio->address & 0x3);
+ 	access_mask &= (1UL << (mmio->size * 8)) - 1;
+ 
+-- 
+2.34.1
+

@@ -1,0 +1,28 @@
+From 2be95d761e5a503e53e08936d70ab48430e4a5b1 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Wed, 28 Sep 2022 15:44:18 +0800
+Subject: [PATCH 38/58] configs: imx8mm: Add memory region for SGI mailbox and
+ RPMSG
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ configs/arm64/imx8mm-harpoon-rtos.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+index 98200cea..64b6b1ab 100644
+--- a/configs/arm64/imx8mm-harpoon-rtos.h
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -32,6 +32,9 @@ typedef enum IRQn {
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
++	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),  /* SGI MBOX */             \
++	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),  /* RPMSG BUF */            \
+ 	MEM_REGION_ROS( 0xbbaf0000, 0xbbaf0000, KB(4)),  /* IVSHMEM */              \
+ 	MEM_REGION_RWS( 0xbbaf1000, 0xbbaf1000, KB(36)), /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xbbafa000, 0xbbafa000, KB(8)),  /* IVSHMEM */              \
+-- 
+2.34.1
+

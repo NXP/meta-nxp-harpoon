@@ -1,0 +1,93 @@
+From fe6fdffa9b0c78d1718606de73a939e0ab335610 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Fri, 28 Jan 2022 11:42:47 +0100
+Subject: [PATCH 05/20] arm64: dts: imx8m{m,n,p}-evk-harpoon: Remove iomux
+ settings
+
+Harpoon's pinmux is now directly managed by Harpoon RTOS application.
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+(cherry picked from commit 5a99305a417bbf301ed8845227286e5362f05372)
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ .../boot/dts/freescale/imx8mm-evk-harpoon.dts      | 13 -------------
+ .../boot/dts/freescale/imx8mn-evk-harpoon.dts      | 13 -------------
+ .../boot/dts/freescale/imx8mp-evk-harpoon.dts      | 14 --------------
+ 3 files changed, 40 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+index 7b6f678e831c..94f28321f48a 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+@@ -9,19 +9,6 @@ &i2c3 {
+ 	status = "disabled";
+ };
+ 
+-&iomuxc {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_i2c3>, <&pinctrl_sai5>;
+-	pinctrl_sai5: sai5grp {
+-		fsl,pins = <
+-			MX8MM_IOMUXC_SAI5_RXD1_SAI5_TX_SYNC	0xd6
+-			MX8MM_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK	0xd6
+-			MX8MM_IOMUXC_SAI5_RXD3_SAI5_TX_DATA0	0xd6
+-			MX8MM_IOMUXC_SAI5_RXD0_SAI5_RX_DATA0	0xd6
+-		>;
+-	};
+-};
+-
+ &sai5 {
+ 	status = "disabled";
+ };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+index e7329766f5f8..55f429879ea3 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+@@ -9,19 +9,6 @@ &i2c3 {
+ 	status = "disabled";
+ };
+ 
+-&iomuxc {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_i2c3>, <&pinctrl_sai5>;
+-	pinctrl_sai5: sai5grp {
+-		fsl,pins = <
+-			MX8MN_IOMUXC_SAI5_RXD1_SAI5_TX_SYNC	0xd6
+-			MX8MN_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK	0xd6
+-			MX8MN_IOMUXC_SAI5_RXD3_SAI5_TX_DATA0	0xd6
+-			MX8MN_IOMUXC_SAI5_RXD0_SAI5_RX_DATA0	0xd6
+-		>;
+-	};
+-};
+-
+ &sai5 {
+ 	status = "disabled";
+ };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+index 1fe8004a84f8..c4d2bce334c9 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+@@ -9,20 +9,6 @@ &i2c3 {
+ 	status = "disabled";
+ };
+ 
+-&iomuxc {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_i2c3>, <&pinctrl_sai3>, <&pinctrl_sai5>;
+-
+-	pinctrl_sai5: sai5grp {
+-		fsl,pins = <
+-			MX8MP_IOMUXC_SAI5_RXD1__AUDIOMIX_SAI5_TX_SYNC	0xd6
+-			MX8MP_IOMUXC_SAI5_RXD2__AUDIOMIX_SAI5_TX_BCLK	0xd6
+-			MX8MP_IOMUXC_SAI5_RXD3__AUDIOMIX_SAI5_TX_DATA00	0xd6
+-			MX8MP_IOMUXC_SAI5_RXD0__AUDIOMIX_SAI5_RX_DATA00	0xd6
+-		>;
+-	};
+-};
+-
+ &sai3 {
+ 	status = "disabled";
+ };
+-- 
+2.34.1
+

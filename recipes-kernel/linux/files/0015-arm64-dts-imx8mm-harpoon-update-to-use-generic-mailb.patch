@@ -1,0 +1,50 @@
+From e3b44ad90c76f901798e45296d10a6f8a1d784f1 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Sun, 5 Feb 2023 00:02:00 +0800
+Subject: [PATCH 15/20] arm64: dts: imx8mm harpoon: update to use generic
+ mailbox
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ .../boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts      | 4 ++--
+ arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts          | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+index e6bd8040bf44..bedfd8da1e70 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+@@ -1,10 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mm-evk-root.dts"
+-#include "imx8mm-rpmsg-ca53.dtsi"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+index 4640b7c52418..70b2fa9b6b31 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+@@ -1,10 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  */
+ 
+ #include "imx8mm-evk-root.dts"
+-#include "imx8mm-rpmsg-ca53.dtsi"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &i2c3 {
+ 	status = "disabled";
+-- 
+2.34.1
+

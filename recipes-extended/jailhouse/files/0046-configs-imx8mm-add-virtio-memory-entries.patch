@@ -1,0 +1,51 @@
+From 5c69d2aa5603e0b341b7437b26cfe32e60f55338 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Thu, 2 Feb 2023 15:48:00 +0800
+Subject: [PATCH 46/58] configs: imx8mm: add virtio memory entries
+
+Reuse industrial cell for virtio network.
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ configs/arm64/cell-helper.h         | 1 +
+ configs/arm64/imx8mm-harpoon-rtos.h | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/configs/arm64/cell-helper.h b/configs/arm64/cell-helper.h
+index 6ad357c8..3e88299f 100644
+--- a/configs/arm64/cell-helper.h
++++ b/configs/arm64/cell-helper.h
+@@ -14,6 +14,7 @@
+ #ifndef KB
+ #define KB(bytes)	(1024 * (bytes))
+ #define MB(bytes)	(1024 * KB(bytes))
++#define GB(bytes)	(1024 * MB(bytes))
+ #endif
+ 
+ #define REGION(phys, virt, bytes) \
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+index b00f2254..4d1e786a 100644
+--- a/configs/arm64/imx8mm-harpoon-rtos.h
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -40,6 +40,8 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xbbafc000, 0xbbafc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xbbafe000, 0xbbafe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xb3c00000, 0xb3c00000, MB(64)), /* Virtio DMA buffer */             \
++	MMIO_REGION_RWS(0xb8400000, 0xb8400000, KB(4)),  /* Virtio MMIO */             \
+ 	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),  /* SW MBOX */              \
+ 	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),  /* RPMSG BUF */            \
+@@ -70,7 +72,8 @@ typedef enum IRQn {
+ 	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+ 
+ #define RTOS_INDUS_MEMORY_REGIONS \
+-	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4)),     /* ENET */ \
++	MEM_REGION_RWS( 0x40000000, 0x40000000, GB(1))     /* data buffer */
+ 
+ /* GIC */
+ #define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
+-- 
+2.34.1
+

@@ -1,0 +1,103 @@
+From 357683562da4394a01e384cc4d61f7a39ae0e6f0 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Thu, 17 Feb 2022 18:37:25 +0800
+Subject: [PATCH 30/58] configs: imx8m{m,n}: freertos: Add resources for ENET
+ to industrial cell
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ configs/arm64/imx8mm-harpoon-freertos-industrial.c | 10 ++++++++--
+ configs/arm64/imx8mm-harpoon-rtos.h                |  4 ++++
+ configs/arm64/imx8mn-harpoon-freertos-industrial.c | 10 ++++++++--
+ configs/arm64/imx8mn-harpoon-rtos.h                |  4 ++++
+ 4 files changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/configs/arm64/imx8mm-harpoon-freertos-industrial.c b/configs/arm64/imx8mm-harpoon-freertos-industrial.c
+index 4efb70fb..dbe7fda1 100644
+--- a/configs/arm64/imx8mm-harpoon-freertos-industrial.c
++++ b/configs/arm64/imx8mm-harpoon-freertos-industrial.c
+@@ -25,7 +25,9 @@
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64))    /* ANA_PLL */
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+@@ -38,7 +40,11 @@
+ 		/* interrupts 96..127 */                   \
+ 		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4),             \
++		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
++		IRQnMAP(ENET_IRQn)                  |      \
++		IRQnMAP(ENET_1588_IRQn)),                  \
+ 	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+ 		/* interrupts 160..191 */                  \
+ 		0,                                         \
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+index 0819d956..ccc8e80e 100644
+--- a/configs/arm64/imx8mm-harpoon-rtos.h
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -23,6 +23,10 @@ typedef enum IRQn {
+   I2S56_IRQn                   = 122,              /**< SAI5/6 Receive / Transmit Interrupt */
+   I2S1_IRQn                    = 127,              /**< SAI1 Receive / Transmit Interrupt */
+   I2S2_IRQn                    = 128,              /**< SAI2 Receive / Transmit Interrupt */
++  ENET_MAC0_Rx_Tx_Done1_IRQn   = 150,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
++  ENET_MAC0_Rx_Tx_Done2_IRQn   = 151,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
++  ENET_IRQn                    = 152,              /**< MAC 0 IRQ */
++  ENET_1588_IRQn               = 153,              /**< MAC 0 1588 Timer Interrupt - synchronous */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+diff --git a/configs/arm64/imx8mn-harpoon-freertos-industrial.c b/configs/arm64/imx8mn-harpoon-freertos-industrial.c
+index 7b179cb9..e514dbd8 100644
+--- a/configs/arm64/imx8mn-harpoon-freertos-industrial.c
++++ b/configs/arm64/imx8mn-harpoon-freertos-industrial.c
+@@ -25,7 +25,9 @@
+ 	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+ 	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+ 	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64))    /* ANA_PLL */
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+ 
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+@@ -38,7 +40,11 @@
+ 		/* interrupts 96..127 */                   \
+ 		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4),             \
++		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
++		IRQnMAP(ENET_IRQn)                  |      \
++		IRQnMAP(ENET_1588_IRQn)),                  \
+ 	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+ 		/* interrupts 160..191 */                  \
+ 		0,                                         \
+diff --git a/configs/arm64/imx8mn-harpoon-rtos.h b/configs/arm64/imx8mn-harpoon-rtos.h
+index 262a5a96..47aeab01 100644
+--- a/configs/arm64/imx8mn-harpoon-rtos.h
++++ b/configs/arm64/imx8mn-harpoon-rtos.h
+@@ -23,6 +23,10 @@ typedef enum IRQn {
+   I2S56_IRQn                   = 122,              /**< SAI5/6 Receive / Transmit Interrupt */
+   I2S2_IRQn                    = 128,              /**< SAI2 Receive / Transmit Interrupt */
+   I2S7_IRQn                    = 143,              /**< SAI7 Receive / Transmit Interrupt */
++  ENET_MAC0_Rx_Tx_Done1_IRQn   = 150,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
++  ENET_MAC0_Rx_Tx_Done2_IRQn   = 151,              /**< MAC 0 Receive / Trasmit Frame / Buffer Done */
++  ENET_IRQn                    = 152,              /**< MAC 0 IRQ */
++  ENET_1588_IRQn               = 153,              /**< MAC 0 1588 Timer Interrupt - synchronous */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+-- 
+2.34.1
+

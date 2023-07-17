@@ -1,0 +1,47 @@
+From 4cadc4593161a4b0e120212dd7c5c08edce7e20b Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Thu, 25 May 2023 17:12:14 +0800
+Subject: [PATCH 52/54] irq: pass through all GICD_ISPENDR write access
+
+Currently in inmate cell, it can trigger SPI interrupt to other cells
+by writing GICD_ISPENDR registers, so let's pass through all
+GICD_ISPENDR write access.
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ hypervisor/arch/arm-common/irqchip.c | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
+
+diff --git a/hypervisor/arch/arm-common/irqchip.c b/hypervisor/arch/arm-common/irqchip.c
+index 5085d5f2..96129de4 100644
+--- a/hypervisor/arch/arm-common/irqchip.c
++++ b/hypervisor/arch/arm-common/irqchip.c
+@@ -72,21 +72,10 @@ restrict_bitmask_access(struct mmio_access *mmio, unsigned int reg_index,
+ 			access_mask |= irq_bits << (irq * bits_per_irq);
+ 
+ #ifdef ENABLE_SPI_ACCESS_HACK
+-	{
+-		unsigned int root_mbox_irq = 108;
+-		unsigned int inmate_mbox_irq = 109;
+-
+-		/* Hack to allow inmate cell to tigger generic mailbox remote irq in root cell*/
+-		if (mmio->address == (GICD_ISPENDR + (root_mbox_irq / 32) * 4)
+-				&& cell != &root_cell) {
+-			access_mask |= irq_bits << (root_mbox_irq % 32U);
+-		}
+-		/* Hack to allow root cell to tigger generic mailbox remote irq in inmate cell*/
+-		if (mmio->address == (GICD_ISPENDR + (inmate_mbox_irq / 32) * 4)
+-				&& cell == &root_cell) {
+-			access_mask |= irq_bits << (inmate_mbox_irq % 32U);
+-		}
+-	}
++	/* Pass through all GICD_ISPENDR write access */
++	if ((mmio->address >= GICD_ISPENDR) && (mmio->address <= (GICD_ISPENDR + 124)))
++		if (mmio->is_write)
++			access_mask = ~0UL;
+ #endif
+ 
+ 	access_mask >>= 8 * (mmio->address & 0x3);
+-- 
+2.34.1
+

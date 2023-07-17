@@ -1,0 +1,26 @@
+From 4ef339cc16b3d2b3a95f88257e439c8774f76f2f Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Tue, 24 Jan 2023 16:56:56 +0100
+Subject: [PATCH 41/54] config: imx8mn: fix typo in name
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/arm64/imx8mn.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/arm64/imx8mn.c b/configs/arm64/imx8mn.c
+index d4bc3928..583d27de 100644
+--- a/configs/arm64/imx8mn.c
++++ b/configs/arm64/imx8mn.c
+@@ -52,7 +52,7 @@ struct {
+ 			},
+ 		},
+ 		.root_cell = {
+-			.name = "imx8mm",
++			.name = "imx8mn",
+ 
+ 			.num_pci_devices = ARRAY_SIZE(config.pci_devices),
+ 			.cpu_set_size = sizeof(config.cpus),
+-- 
+2.34.1
+

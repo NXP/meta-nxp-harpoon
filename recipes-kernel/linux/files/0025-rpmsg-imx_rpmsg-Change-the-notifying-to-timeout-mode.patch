@@ -1,0 +1,35 @@
+From 6afa1e89ab0f70f32aa5fef5383e58ad7943c9c8 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Wed, 28 Jun 2023 19:50:45 +0800
+Subject: [PATCH 25/25] rpmsg: imx_rpmsg: Change the notifying to timeout mode
+
+Currently, after the rpmsg link up it will use mailbox
+channel in blocking mode to send the notifications. So
+it will be stuck in the notification when the remote side
+unable to respond for some reason, such as crashed.
+
+To avoid interlock, this patch changes the notifying to
+timeout mode, and treats the virtqueue as broken when
+the remote side doesn't respond within 1 second.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ drivers/rpmsg/imx_rpmsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rpmsg/imx_rpmsg.c b/drivers/rpmsg/imx_rpmsg.c
+index d0735c8f0fe7..a540c10074d7 100644
+--- a/drivers/rpmsg/imx_rpmsg.c
++++ b/drivers/rpmsg/imx_rpmsg.c
+@@ -135,7 +135,7 @@ static bool imx_rpmsg_notify(struct virtqueue *vq)
+ 		if (ret < 0)
+ 			return false;
+ 	} else {
+-		rpdev->cl.tx_tout = 0;
++		rpdev->cl.tx_tout = 1000;
+ 		ret = mbox_send_message(rpdev->tx_ch, &rpvq->mmsg);
+ 		if (ret < 0)
+ 			return false;
+-- 
+2.34.1
+

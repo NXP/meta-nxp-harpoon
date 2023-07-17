@@ -1,0 +1,26 @@
+From 6ab667955e7d11d68ae4a8426fc2d782ae1fbc8f Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Thu, 25 May 2023 22:42:14 +0800
+Subject: [PATCH 23/25] arm64: dts: imx8mp: update generic mailbox resource
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi
+index 73c3b560dcb8..84ff983093ad 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-generic-mbox.dtsi
+@@ -21,7 +21,7 @@ gen_sw_mbox: generic-software-mailbox@fe000000 {
+ 		reg = <0 0xfe000000 0 0x1000>;
+ 		#mbox-cells = <2>;
+ 		/* Use 2 unused SPI interrupts */
+-		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
++		interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
+ 		interrupt-names = "irq", "remote_irq";
+ 	};
+ };
+-- 
+2.34.1
+

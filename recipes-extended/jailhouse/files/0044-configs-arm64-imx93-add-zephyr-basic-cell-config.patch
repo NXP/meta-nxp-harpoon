@@ -1,0 +1,58 @@
+From 51d42bcd6f72901bb11dad7ab769ec809ec54486 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Mon, 9 Jan 2023 15:16:53 +0800
+Subject: [PATCH 44/54] configs: arm64: imx93: add zephyr basic cell config
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ configs/arm64/imx93-harpoon-zephyr.c | 38 ++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 configs/arm64/imx93-harpoon-zephyr.c
+
+diff --git a/configs/arm64/imx93-harpoon-zephyr.c b/configs/arm64/imx93-harpoon-zephyr.c
+new file mode 100644
+index 00000000..a30282e7
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-zephyr.c
+@@ -0,0 +1,38 @@
++/*
++ * i.MX93 target - Zephyr config
++ *
++ * Copyright 2023 NXP
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10)
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                   \
++	RTOS_COMMON_MEMORY_REGIONS,             \
++	RTOS_MEMRAM_MEMORY_REGIONS
++
++#define CONFIG_INMATE_IRQCHIPS_ADDR	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS 	                \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,   \
++		/* interrupts 32..63 */         \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,   \
++		/* interrupts 64..95 */         \
++		RTOS_COMMON_IRQCHIP0_BITMAP2,   \
++		/* interrupts 96..127 */        \
++		RTOS_COMMON_IRQCHIP0_BITMAP3,   \
++		/* interrupts 128..159 */       \
++		RTOS_COMMON_IRQCHIP0_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
++
++#include "cell-create.h"
+-- 
+2.34.1
+

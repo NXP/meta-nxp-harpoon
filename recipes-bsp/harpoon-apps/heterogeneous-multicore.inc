@@ -8,4 +8,4 @@ VIRTIO_BRANCH="main"
 
 SRC_HETEROGENEOUS_MULTICORE = "git://github.com/nxp-real-time-edge-sw/heterogeneous-multicore.git;protocol=https;branch=${VIRTIO_BRANCH};destsuffix=git/heterogeneous-multicore;name=heterogeneous-multicore"
 
-SRCREV_heterogeneous-multicore = "196d2ad42b109d6e862acd296b3a38e3e80073c2"
+SRCREV_heterogeneous-multicore = "d76985437c8324ed82845498847430e086253705"

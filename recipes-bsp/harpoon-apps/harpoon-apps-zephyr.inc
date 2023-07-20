@@ -19,7 +19,7 @@ SRC_URI = "\
 
 SRCREV_FORMAT = "harpoon-apps_zephyr_hal-nxp"
 
-SRCREV_zephyr = "99167658f4f923374fed2a4c9aebabc2b1691a51"
+SRCREV_zephyr = "d3644304707ef83fc34096454524fbda72f41ccb"
 SRCREV_hal-nxp = "45ac8c57f22cd612a288a0416683efb251afad9e"
 
 INMATES_DIR ?= "${HARPOON_DATADIR}/inmates/zephyr"

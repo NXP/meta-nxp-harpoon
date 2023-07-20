@@ -2,14 +2,12 @@
 
 require mcux-sdk-middleware-multicore-uri.inc
 
-RPMSG_LITE_BRANCH = "feature/heterogeneous_multicore"
-
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = " \
     file://middleware/multicore/rpmsg_lite/LICENSE;md5=8362f2b955bc8da49b21f6a7b81e49cf"
 
 SRC_URI += "\
-    git://github.com/nxp-mcuxpresso/rpmsg-lite.git;protocol=https;branch=${RPMSG_LITE_BRANCH};destsuffix=git/middleware/multicore/rpmsg_lite;name=rpmsg-lite \
+    git://github.com/nxp-mcuxpresso/rpmsg-lite.git;protocol=https;nobranch=1;destsuffix=git/middleware/multicore/rpmsg_lite;name=rpmsg-lite \
 "
 
 SRCREV_FORMAT:append = "_rpmsg-lite"

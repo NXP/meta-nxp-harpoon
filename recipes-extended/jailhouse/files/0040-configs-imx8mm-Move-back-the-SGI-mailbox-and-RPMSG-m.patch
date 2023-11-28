@@ -1,7 +1,7 @@
-From 2a8430e633c251875bb381085c1d44d3eb6f2ffb Mon Sep 17 00:00:00 2001
+From a307fa54968d88bbccf6c9b37e7a394edcfaf20e Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Thu, 3 Nov 2022 16:49:43 +0800
-Subject: [PATCH 40/54] configs: imx8mm: Move back the SGI mailbox and RPMSG
+Subject: [PATCH 40/64] configs: imx8mm: Move back the SGI mailbox and RPMSG
  memory entries definitions
 
 Move back the definitions of SGI mailbox and RPMSG regions, so that keep

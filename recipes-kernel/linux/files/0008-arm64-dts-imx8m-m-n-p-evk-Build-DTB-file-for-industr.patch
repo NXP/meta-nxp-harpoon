@@ -1,7 +1,7 @@
-From bca2f398e77e569c6dc47cac7a13f7f97e2888be Mon Sep 17 00:00:00 2001
+From 58eb21e2bb0fa2052d907b90e70c6b7b8282aca3 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 29 Apr 2022 13:55:47 +0000
-Subject: [PATCH 08/25] arm64: dts: imx8m{m,n,p}-evk: Build DTB file for
+Subject: [PATCH 08/35] arm64: dts: imx8m{m,n,p}-evk: Build DTB file for
  industrial use case
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
@@ -11,7 +11,7 @@ Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 397569b30154..f0928f23d653 100644
+index 615c22c6d37f..3b3611a04972 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
 @@ -94,7 +94,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb

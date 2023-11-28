@@ -1,6 +1,7 @@
 # Copyright 2022-2023 NXP
 
 require mcux-sdk-middleware-multicore-uri.inc
+require heterogeneous-multicore.inc
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = " \
@@ -11,4 +12,4 @@ SRC_URI += "\
 "
 
 SRCREV_FORMAT:append = "_rpmsg-lite"
-SRCREV_rpmsg-lite = "b1e81b1aac8804119d552b6f4f813bea330f90cb"
+SRCREV_rpmsg-lite = "c416810ac097381c2755fb793a8a1567f2bd3d4a"

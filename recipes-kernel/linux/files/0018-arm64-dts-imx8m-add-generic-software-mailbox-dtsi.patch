@@ -1,7 +1,7 @@
-From 67d2558a7b778c55dc37e255b03e68a0a86d3a7b Mon Sep 17 00:00:00 2001
+From 93a969166f598a0628fe29a3c22285a5e87477b0 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Tue, 18 Oct 2022 10:37:17 +0800
-Subject: [PATCH 18/25] arm64: dts: imx8m: add generic software mailbox dtsi
+Subject: [PATCH 18/35] arm64: dts: imx8m: add generic software mailbox dtsi
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>

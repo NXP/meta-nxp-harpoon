@@ -1,7 +1,7 @@
-From 61448f365c99c12cd8691a92d73c27107a0a0d80 Mon Sep 17 00:00:00 2001
+From b81655d71dd50b58ad15a88d41e695d5e5165e2d Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Wed, 23 Mar 2022 11:04:09 +0000
-Subject: [PATCH 07/25] arm64: dts: imx8m{m,n,p}-evk: Create DTS file for
+Subject: [PATCH 07/35] arm64: dts: imx8m{m,n,p}-evk: Create DTS file for
  industrial use case
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>

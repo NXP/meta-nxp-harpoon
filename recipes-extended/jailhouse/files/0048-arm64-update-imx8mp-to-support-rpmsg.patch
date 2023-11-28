@@ -1,7 +1,7 @@
-From 81abe8ac497a9fba4833ab47cb19a0fcfc0b9fa1 Mon Sep 17 00:00:00 2001
+From 7c05ff49b632f4541451dc8ea0245663a088c520 Mon Sep 17 00:00:00 2001
 From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
 Date: Thu, 9 Feb 2023 19:04:12 +0100
-Subject: [PATCH 48/54] arm64: update imx8mp to support rpmsg
+Subject: [PATCH 48/64] arm64: update imx8mp to support rpmsg
 
 Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
 ---

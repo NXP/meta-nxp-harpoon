@@ -1,7 +1,7 @@
-From 775d5fa43562585858fa3cc471e01b9b4272a202 Mon Sep 17 00:00:00 2001
+From 1fac4eed70ec90359f22da0b366517dcd119c015 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Tue, 19 Apr 2022 11:58:21 +0800
-Subject: [PATCH 35/54] imx8m{m,n,p}: add audio zephyr cell config
+Subject: [PATCH 35/64] imx8m{m,n,p}: add audio zephyr cell config
 
 Move common configuration to be imx8m{m,n,p}-audio.h, so that FreeRTOS,
 and Zephyr can share the code.

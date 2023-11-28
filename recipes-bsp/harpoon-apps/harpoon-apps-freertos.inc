@@ -19,7 +19,7 @@ SRC_URI = "\
 
 SRCREV_FORMAT = "harpoon-apps_mcux-sdk_CMSIS_FreeRTOS-Kernel"
 
-SRCREV_mcux-sdk = "e44f3ae816e19743551ea6be28c1efba7d6f1905"
+SRCREV_mcux-sdk = "d2c5fe71520d2933600e988cda6d8af029c516e7"
 SRCREV_CMSIS = "66a180f8b67fb3fdd11271bb31f5abec42fa2f62"
 SRCREV_FreeRTOS-Kernel = "d2ca5ca56c79edac658773aa16cf0fd63e566a04"
 

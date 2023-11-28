@@ -1,7 +1,7 @@
-From 82f38d18505442410520c888fd08d41e2f0d0812 Mon Sep 17 00:00:00 2001
+From eab5d1e09de8da9da4f68b54200e4dd0e4205901 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Wed, 26 Jan 2022 17:26:13 +0000
-Subject: [PATCH 26/54] imx8mp: freertos: Add FlexCAN1 to the industrial cell
+Subject: [PATCH 26/64] imx8mp: freertos: Add FlexCAN1 to the industrial cell
  config
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>

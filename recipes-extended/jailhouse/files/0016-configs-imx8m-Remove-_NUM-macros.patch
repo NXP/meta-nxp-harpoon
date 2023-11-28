@@ -1,7 +1,7 @@
-From ea21715ddf85a4e217c3b7fa24f6c56f516b14f3 Mon Sep 17 00:00:00 2001
+From 167a9006541af5051fad75cbd54ffd6e08fff792 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@oss.nxp.com>
 Date: Mon, 6 Dec 2021 15:40:19 +0100
-Subject: [PATCH 16/54] configs: imx8m*: Remove *_NUM macros
+Subject: [PATCH 16/64] configs: imx8m*: Remove *_NUM macros
 
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 ---

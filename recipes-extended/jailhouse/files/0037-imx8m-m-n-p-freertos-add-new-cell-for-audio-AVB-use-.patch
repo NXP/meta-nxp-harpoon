@@ -1,7 +1,7 @@
-From a3ff43e5cc80ee9ceecef073a7d28e4976c35cfc Mon Sep 17 00:00:00 2001
+From 29ca570b90a3497ef49a2b7295260e3a63dc5c9a Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 30 Sep 2022 16:31:58 +0000
-Subject: [PATCH 37/54] imx8m{m,n,p}: freertos: add new cell for audio AVB use
+Subject: [PATCH 37/64] imx8m{m,n,p}: freertos: add new cell for audio AVB use
  case
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>

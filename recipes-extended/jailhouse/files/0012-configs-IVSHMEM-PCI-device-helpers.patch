@@ -1,7 +1,7 @@
-From 57038afa687f47a08053183ca3c2572487b4f81d Mon Sep 17 00:00:00 2001
+From f9f7e1852f636c922b8c815aba19c4f353840481 Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Fri, 26 Nov 2021 12:15:39 +0100
-Subject: [PATCH 12/54] configs: IVSHMEM PCI device helpers.
+Subject: [PATCH 12/64] configs: IVSHMEM PCI device helpers.
 
 Add helper functions to define IVSHMEM PCI devices.
 Align cell format (no trailing comma or backslash).

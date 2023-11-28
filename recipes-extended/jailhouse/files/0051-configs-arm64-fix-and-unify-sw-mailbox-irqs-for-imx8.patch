@@ -1,7 +1,7 @@
-From 01a18287f2ca1850cb03a908633876959b84d829 Mon Sep 17 00:00:00 2001
+From a6a124ad950206accd2e58ab31b9ab2c0bbd7d9c Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 25 May 2023 17:41:07 +0800
-Subject: [PATCH 51/54] configs: arm64: fix and unify sw mailbox irqs for
+Subject: [PATCH 51/64] configs: arm64: fix and unify sw mailbox irqs for
  imx8mp
 
 SPI irqs currently used conflict with:

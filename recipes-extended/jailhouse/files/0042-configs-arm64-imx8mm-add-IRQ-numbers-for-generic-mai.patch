@@ -1,7 +1,7 @@
-From 04b8d89e710af0c5e0e7ab2108917e652780252b Mon Sep 17 00:00:00 2001
+From badc4b463e433290a9dc6ab5da380112a2784c07 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Sun, 5 Feb 2023 16:58:19 +0800
-Subject: [PATCH 42/54] configs: arm64: imx8mm: add IRQ numbers for generic
+Subject: [PATCH 42/64] configs: arm64: imx8mm: add IRQ numbers for generic
  mailbox
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>

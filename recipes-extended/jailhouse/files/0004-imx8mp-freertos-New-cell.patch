@@ -1,7 +1,7 @@
-From 7fc6537699cc4127ba0290b3021fe437f93dcd02 Mon Sep 17 00:00:00 2001
+From 23da1049c9d95fdb0d356d875b8e7b68fa4376f5 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 26 Apr 2021 15:48:20 +0200
-Subject: [PATCH 04/54] imx8mp-freertos: New cell
+Subject: [PATCH 04/64] imx8mp-freertos: New cell
 
 The -rtos header can be reused for multiple RTOS (such as upcoming Zephyr)
 cell configurations ;

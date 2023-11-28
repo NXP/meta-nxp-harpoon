@@ -1,7 +1,7 @@
-From 740216c05851e0a8d5db42c6bcee9b2521a5acc2 Mon Sep 17 00:00:00 2001
+From 980ad5a84cce55031b7632e2ec9077aba6f3c217 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Tue, 19 Apr 2022 12:21:36 +0800
-Subject: [PATCH 33/54] imx8mp-zephyr: refine cell config
+Subject: [PATCH 33/64] imx8mp-zephyr: refine cell config
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 ---

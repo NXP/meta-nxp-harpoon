@@ -1,7 +1,7 @@
-From 114f72ebcaba2e32f9bfb7f5b991c334e6abd968 Mon Sep 17 00:00:00 2001
+From e436f2a72f8c380a313348b10eef3ac3951e2320 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@oss.nxp.com>
 Date: Mon, 6 Dec 2021 15:39:12 +0100
-Subject: [PATCH 15/54] configs: get rid of *_NUM macros
+Subject: [PATCH 15/64] configs: get rid of *_NUM macros
 
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 ---

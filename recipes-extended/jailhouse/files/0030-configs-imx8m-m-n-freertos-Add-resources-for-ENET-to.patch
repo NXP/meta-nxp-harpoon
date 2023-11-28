@@ -1,7 +1,7 @@
-From 7c12cf48f37e698f04baadb08afb735c3ccedf7b Mon Sep 17 00:00:00 2001
+From 7bfbe94130f2ac023c8c1351b9622cd188c60c35 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Thu, 17 Feb 2022 18:37:25 +0800
-Subject: [PATCH 30/54] configs: imx8m{m,n}: freertos: Add resources for ENET
+Subject: [PATCH 30/64] configs: imx8m{m,n}: freertos: Add resources for ENET
  to industrial cell
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>

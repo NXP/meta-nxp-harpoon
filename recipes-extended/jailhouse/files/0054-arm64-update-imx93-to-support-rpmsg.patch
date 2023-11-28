@@ -1,7 +1,7 @@
-From a201659f03f9cad72abc83e3801f930ce547616d Mon Sep 17 00:00:00 2001
+From c160f7d60094f6eb0ade5ea7f466063c1a273822 Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Fri, 19 May 2023 17:50:43 +0200
-Subject: [PATCH 54/54] arm64: update imx93 to support rpmsg
+Subject: [PATCH 54/64] arm64: update imx93 to support rpmsg
 
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 ---

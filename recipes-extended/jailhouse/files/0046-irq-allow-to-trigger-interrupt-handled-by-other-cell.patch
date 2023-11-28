@@ -1,7 +1,7 @@
-From 1031c992e9a3ce50518b32612266da7874e0ddc9 Mon Sep 17 00:00:00 2001
+From e255c325b83a470ad8e32eb59b7fd7c3610ba29a Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 2 Feb 2023 15:48:19 +0800
-Subject: [PATCH 46/54] irq: allow to trigger interrupt handled by other cells
+Subject: [PATCH 46/64] irq: allow to trigger interrupt handled by other cells
 
 Generic software mailbox use two SPI interrupt for notification,
 so need to allow the driver to acess GIC register which is not

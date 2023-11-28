@@ -1,7 +1,7 @@
-From 6ab667955e7d11d68ae4a8426fc2d782ae1fbc8f Mon Sep 17 00:00:00 2001
+From fa88d3b58f7a32a6ab1fb0dffa402d1bee235d27 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Thu, 25 May 2023 22:42:14 +0800
-Subject: [PATCH 23/25] arm64: dts: imx8mp: update generic mailbox resource
+Subject: [PATCH 23/35] arm64: dts: imx8mp: update generic mailbox resource
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 ---

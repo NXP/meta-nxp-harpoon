@@ -1,7 +1,7 @@
-From 70e7ce37029ab0fa94b1463783a8bf859ea36745 Mon Sep 17 00:00:00 2001
+From a558a18515462c1f04491f64ab1439ee8496a740 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 20 Jan 2022 11:57:10 +0100
-Subject: [PATCH 04/25] arm64: dts: imx8mn-evk-harpoon: Enable SAI audio case
+Subject: [PATCH 04/35] arm64: dts: imx8mn-evk-harpoon: Enable SAI audio case
  in inmate cell
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>

@@ -1,7 +1,7 @@
-From 08db9040e0e9d8a0233ecc26ca68b6ab94b216a2 Mon Sep 17 00:00:00 2001
+From dd3f70e104702a2ce57aed4f009de114e1fe4ed6 Mon Sep 17 00:00:00 2001
 From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
 Date: Thu, 9 Feb 2023 18:33:57 +0100
-Subject: [PATCH 21/25] arm64: dts: add dts files to support rpmsg on imx8mn,
+Subject: [PATCH 21/35] arm64: dts: add dts files to support rpmsg on imx8mn,
  imx8mp and imx8mm fr harpoon
 
 Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>

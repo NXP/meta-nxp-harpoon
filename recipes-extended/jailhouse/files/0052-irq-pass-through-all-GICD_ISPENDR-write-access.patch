@@ -1,7 +1,7 @@
-From 4cadc4593161a4b0e120212dd7c5c08edce7e20b Mon Sep 17 00:00:00 2001
+From ba543d929c94d8b34eb9c4bf67034602af0a6f5b Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 25 May 2023 17:12:14 +0800
-Subject: [PATCH 52/54] irq: pass through all GICD_ISPENDR write access
+Subject: [PATCH 52/64] irq: pass through all GICD_ISPENDR write access
 
 Currently in inmate cell, it can trigger SPI interrupt to other cells
 by writing GICD_ISPENDR registers, so let's pass through all

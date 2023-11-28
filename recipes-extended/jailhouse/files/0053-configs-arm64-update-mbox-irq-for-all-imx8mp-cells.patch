@@ -1,7 +1,7 @@
-From 9e4ffce03e525f99e2418f20c2d788430e279497 Mon Sep 17 00:00:00 2001
+From 9402c2d4450ada9b71618003b0723d88558ac60e Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Fri, 2 Jun 2023 11:30:37 +0800
-Subject: [PATCH 53/54] configs: arm64: update mbox irq for all imx8mp cells
+Subject: [PATCH 53/64] configs: arm64: update mbox irq for all imx8mp cells
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 ---

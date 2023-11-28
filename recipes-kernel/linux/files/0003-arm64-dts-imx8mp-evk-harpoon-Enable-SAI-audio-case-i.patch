@@ -1,7 +1,7 @@
-From 1eb03c97656b538716263b86df91ee89814710ed Mon Sep 17 00:00:00 2001
+From 119a1ecba02a9acd25ee28d74e8178de52e295a4 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Mon, 13 Dec 2021 10:07:53 +0800
-Subject: [PATCH 03/25] arm64: dts: imx8mp-evk-harpoon: Enable SAI audio case
+Subject: [PATCH 03/35] arm64: dts: imx8mp-evk-harpoon: Enable SAI audio case
  in inmate cell
 
 1. Set pinmux in root cell.

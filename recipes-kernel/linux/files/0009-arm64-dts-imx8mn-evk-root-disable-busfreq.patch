@@ -1,7 +1,7 @@
-From 20d39b246d0b258d0a02ca72680580d2d39e46cc Mon Sep 17 00:00:00 2001
+From cf9e18ea4a8e8d9feb40f49a7a8cd3904cf8af34 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 23 Jun 2022 10:44:56 +0200
-Subject: [PATCH 09/25] arm64: dts: imx8mn-evk-root: disable busfreq
+Subject: [PATCH 09/35] arm64: dts: imx8mn-evk-root: disable busfreq
 
 Disable busfreq to prevent Linux from locking up Jailhouse inmate cells.
 

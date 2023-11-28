@@ -1,7 +1,7 @@
-From 65c2a8042ddb046e4eccaf750b1d0734b4df39c6 Mon Sep 17 00:00:00 2001
+From 9f40e93f02186db21613a71184bcddaa5c1b65a5 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 9 Jan 2023 16:28:58 +0800
-Subject: [PATCH 45/54] configs: arm64: imx93: add freertos basic config
+Subject: [PATCH 45/64] configs: arm64: imx93: add freertos basic config
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 ---

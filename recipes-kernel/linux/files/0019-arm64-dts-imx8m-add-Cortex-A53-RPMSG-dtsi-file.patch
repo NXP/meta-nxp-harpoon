@@ -1,7 +1,7 @@
-From a6eb0f633c7201991bd5c1e6889cd44d0692faa9 Mon Sep 17 00:00:00 2001
+From b5c4a9193bee8aeb53081177be265db4082ba53e Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Tue, 18 Oct 2022 10:38:24 +0800
-Subject: [PATCH 19/25] arm64: dts: imx8m: add Cortex-A53 RPMSG dtsi file
+Subject: [PATCH 19/35] arm64: dts: imx8m: add Cortex-A53 RPMSG dtsi file
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>

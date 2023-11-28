@@ -1,7 +1,7 @@
-From c8dc8b9207fd2e0560bc6c542e3538849f764393 Mon Sep 17 00:00:00 2001
+From 22db5abebc01228f1edbb9d800eecb1ccd993cb8 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Tue, 24 Jan 2023 09:09:15 +0000
-Subject: [PATCH 16/25] arm64: dts: imx93: Add Harpoon root cell dts
+Subject: [PATCH 16/35] arm64: dts: imx93: Add Harpoon root cell dts
 
 harpoon.dts embeds the audio use case config: SAI interfaces are moved
 to the inmate cell.

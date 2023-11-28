@@ -1,7 +1,7 @@
-From e21fc7dc84ce801ce126e4fd901baa98018406cb Mon Sep 17 00:00:00 2001
+From e229468e9f73bd0e9f792922b4e5170bd886ce8c Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Wed, 1 Dec 2021 12:07:10 +0800
-Subject: [PATCH 09/54] imx8mp-audio: add new cell for FreeRTOS audio case
+Subject: [PATCH 09/64] imx8mp-audio: add new cell for FreeRTOS audio case
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 (rename configs: add harpoon prefix)

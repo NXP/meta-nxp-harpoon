@@ -1,7 +1,7 @@
-From 32264fd6c885b81a001c53937356d817a5d36c7d Mon Sep 17 00:00:00 2001
+From a169e1912b9105e4760817b32fc88df417643bf2 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 9 Jan 2023 15:43:25 +0800
-Subject: [PATCH 43/58] configs: arm64: imx93: add rtos header file
+Subject: [PATCH 43/68] configs: arm64: imx93: add rtos header file
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 ---

@@ -1,7 +1,7 @@
-From e3b44ad90c76f901798e45296d10a6f8a1d784f1 Mon Sep 17 00:00:00 2001
+From 871adc6d06eb9393763caa4d4a8b0b146853fcc6 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Sun, 5 Feb 2023 00:02:00 +0800
-Subject: [PATCH 15/20] arm64: dts: imx8mm harpoon: update to use generic
+Subject: [PATCH 15/27] arm64: dts: imx8mm harpoon: update to use generic
  mailbox
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>

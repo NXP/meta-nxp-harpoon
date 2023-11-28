@@ -1,7 +1,7 @@
-From 95425e3e1c60230a88312a162139e00cb81f1de4 Mon Sep 17 00:00:00 2001
+From 83b57cc2d129d6cfe7448796862c653d7662ae4b Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 18 Nov 2021 15:02:24 +0100
-Subject: [PATCH 07/58] imx8mm-freertos, imx8mm-freertos-audio: new cells
+Subject: [PATCH 07/68] imx8mm-freertos, imx8mm-freertos-audio: new cells
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 (rename configs: add harpoon prefix)

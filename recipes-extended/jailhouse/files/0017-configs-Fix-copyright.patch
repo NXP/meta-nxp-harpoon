@@ -1,7 +1,7 @@
-From 8859706d2efd0238c7ced0d528dbfb3bba4d6ad0 Mon Sep 17 00:00:00 2001
+From e7d2e44308fa9fce18c5133042ff363bd9f89211 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 3 Jan 2022 11:11:33 +0000
-Subject: [PATCH 17/58] configs: Fix copyright
+Subject: [PATCH 17/68] configs: Fix copyright
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---

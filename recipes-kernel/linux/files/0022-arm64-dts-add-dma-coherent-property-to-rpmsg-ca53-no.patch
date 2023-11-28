@@ -1,0 +1,29 @@
+From 6f314a22f5c01a30626e5bfe2fdd3fa73ec2c1a4 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Wed, 13 Sep 2023 00:18:02 +0800
+Subject: [PATCH 22/27] arm64: dts: add dma-coherent property to rpmsg-ca53
+ node
+
+Add the dma-coherent to the rpmsg-ca53 device to make vring
+memory and rpmsg buffer using cacheable memory.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi b/arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi
+index 499543f34258..a9780af05d71 100644
+--- a/arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi
+@@ -26,6 +26,7 @@ vdevbuffer_ca55: vdevbuffer-ca55@fe200000 {
+ 	rpmsg-ca55 {
+ 		compatible = "fsl,imx8mm-rpmsg";
+ 		reg = <0x0 0xfe100000 0x0 0x10000>; /* 64K for one rpmsg instance */
++		dma-coherent;
+ 		memory-region = <&vdevbuffer_ca55>;
+ 		mbox-names = "tx", "rx", "rxdb";
+ 		mboxes = <&gen_sw_mbox 0 0
+-- 
+2.34.1
+

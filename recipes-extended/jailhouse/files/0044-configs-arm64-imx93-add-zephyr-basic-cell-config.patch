@@ -1,7 +1,7 @@
-From 334bd0b1b994f47530221a23550ca18bd3e04a83 Mon Sep 17 00:00:00 2001
+From 508c121dd3e64cf129413b1adde194cca96dc8cc Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 9 Jan 2023 15:16:53 +0800
-Subject: [PATCH 44/58] configs: arm64: imx93: add zephyr basic cell config
+Subject: [PATCH 44/68] configs: arm64: imx93: add zephyr basic cell config
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 ---

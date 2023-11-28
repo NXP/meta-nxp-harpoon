@@ -1,7 +1,7 @@
-From a1e059ec196b22fc6565256b8c535816234c98c3 Mon Sep 17 00:00:00 2001
+From b8f0bdbf23d847de247cc620d8998547b73e7c32 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Mon, 29 May 2023 14:51:51 +0800
-Subject: [PATCH 20/20] arm64: dts: add harpoon virtio_net dts on imx93
+Subject: [PATCH 20/27] arm64: dts: add harpoon virtio_net dts on imx93
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 ---
@@ -11,10 +11,10 @@ Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
  create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-virtio-net.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index a08e793a35e3..5d1c3065f7b2 100644
+index 63c2f3ee03dc..6f2b746ae421 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -387,6 +387,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
+@@ -394,6 +394,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
  dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb \
  			  imx93-11x11-evk-avb.dtb \
  			  imx93-11x11-evk-harpoon.dtb imx93-11x11-evk-harpoon-industrial.dtb \

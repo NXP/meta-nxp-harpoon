@@ -1,7 +1,7 @@
-From 5c69d2aa5603e0b341b7437b26cfe32e60f55338 Mon Sep 17 00:00:00 2001
+From 8de97ad500b173c80d3516cfa42fdfcf34454549 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 2 Feb 2023 15:48:00 +0800
-Subject: [PATCH 46/58] configs: imx8mm: add virtio memory entries
+Subject: [PATCH 46/68] configs: imx8mm: add virtio memory entries
 
 Reuse industrial cell for virtio network.
 

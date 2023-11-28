@@ -1,0 +1,69 @@
+From 3ca1bb38ca701d239016a28c8f5a22350e2fd70b Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Mon, 11 Sep 2023 15:07:42 +0800
+Subject: [PATCH 65/68] configs: arm64: imx8m/imx93: change rpmsg to normal
+ memory
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ configs/arm64/imx8mm-harpoon-rtos.h | 2 +-
+ configs/arm64/imx8mn-harpoon-rtos.h | 2 +-
+ configs/arm64/imx8mp-harpoon-rtos.h | 2 +-
+ configs/arm64/imx93-harpoon-rtos.h  | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+index facfc04f..a74dcd62 100644
+--- a/configs/arm64/imx8mm-harpoon-rtos.h
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -43,7 +43,7 @@ typedef enum IRQn {
+ 	MMIO_REGION_RWS(0xb3c00000, 0xb3c00000, MB(64)), /* Virtio DMA buffer */             \
+ 	MMIO_REGION_RWS(0xb8400000, 0xb8400000, KB(4)),  /* Virtio MMIO */             \
+ 	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),  /* SW MBOX */              \
+-	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+diff --git a/configs/arm64/imx8mn-harpoon-rtos.h b/configs/arm64/imx8mn-harpoon-rtos.h
+index 990cb7e3..70019471 100644
+--- a/configs/arm64/imx8mn-harpoon-rtos.h
++++ b/configs/arm64/imx8mn-harpoon-rtos.h
+@@ -41,7 +41,7 @@ typedef enum IRQn {
+ 	MEM_REGION_ROS( 0xbbafe000, 0xbbafe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
+ 	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),  /* SW MBOX */              \
+-	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+diff --git a/configs/arm64/imx8mp-harpoon-rtos.h b/configs/arm64/imx8mp-harpoon-rtos.h
+index 1307a2bb..9c9aaaf2 100644
+--- a/configs/arm64/imx8mp-harpoon-rtos.h
++++ b/configs/arm64/imx8mp-harpoon-rtos.h
+@@ -44,7 +44,7 @@ typedef enum IRQn {
+ 	MMIO_REGION_RWS(0xf8700000, 0xf8700000, MB(64)), /* Virtio DMA buffer */             \
+ 	MMIO_REGION_RWS(0xfc700000, 0xfc700000, MB(1)),  /* Virtio MMIO */             \
+ 	MMIO_REGION_RWS(0xfe000000, 0xfe000000, KB(4)),  /* SW MBOX */              \
+-	MMIO_REGION_RWS(0xfe100000, 0xfe100000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xfe100000, 0xfe100000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xfe200000, 0xfe200000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_ROS(0x30270000, 0x30270000, KB(64)), /* ANA_OSC */              \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+diff --git a/configs/arm64/imx93-harpoon-rtos.h b/configs/arm64/imx93-harpoon-rtos.h
+index cd825253..841c2e08 100644
+--- a/configs/arm64/imx93-harpoon-rtos.h
++++ b/configs/arm64/imx93-harpoon-rtos.h
+@@ -35,7 +35,7 @@ typedef enum IRQn {
+ 	MMIO_REGION_RWS(0xf8700000, 0xf8700000, MB(64)), /* Virtio DMA buffer */    \
+ 	MMIO_REGION_RWS(0xfc700000, 0xfc700000, MB(1)),  /* Virtio MMIO */          \
+ 	MMIO_REGION_RWS(0xfe000000, 0xfe000000, KB(4)),  /* SW MBOX */              \
+-	MMIO_REGION_RWS(0xfe100000, 0xfe100000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xfe100000, 0xfe100000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xfe200000, 0xfe200000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_RWS(0x443c0000, 0x443c0000, KB(64)), /* IOMUXC */               \
+ 	MMIO_REGION_RWS(0x44450000, 0x44450000, KB(64)), /* CCM */                  \
+-- 
+2.34.1
+

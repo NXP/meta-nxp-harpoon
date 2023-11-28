@@ -1,7 +1,7 @@
-From 795d6a224c916ed2d4bd748feba9896b09ac48f4 Mon Sep 17 00:00:00 2001
+From b5a8b97a65668c2f1623f2073415c5d1e801720f Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Mon, 21 Feb 2022 16:13:16 +0100
-Subject: [PATCH 06/20] arm64: dts: imx8m{m,n,p}-evk-harpoon: disable all SAIs
+Subject: [PATCH 06/27] arm64: dts: imx8m{m,n,p}-evk-harpoon: disable all SAIs
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>

@@ -1,7 +1,7 @@
-From db87d570f436934d379d825d18c4686fb6ae6ea3 Mon Sep 17 00:00:00 2001
+From 2030bd79298d6766248cbb907eefa1209f0e5953 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Fri, 18 Jun 2021 17:55:54 +0800
-Subject: [PATCH 05/58] imx8mp: zephyr: enable CCM-ANA and GPT
+Subject: [PATCH 05/68] imx8mp: zephyr: enable CCM-ANA and GPT
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 [Add JIRA ticket ID]

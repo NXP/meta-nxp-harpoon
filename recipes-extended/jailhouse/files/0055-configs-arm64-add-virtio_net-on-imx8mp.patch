@@ -1,7 +1,7 @@
-From f0615c70567ab3f04d3464dd55cd05d7b54ca466 Mon Sep 17 00:00:00 2001
+From 9ef32520d29965caac2039eef163f4c0591a4bec Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 25 May 2023 17:51:30 +0800
-Subject: [PATCH 55/58] configs: arm64: add virtio_net on imx8mp
+Subject: [PATCH 55/68] configs: arm64: add virtio_net on imx8mp
 
 Use a standlone cell to avoid to disable both enet ports.
 

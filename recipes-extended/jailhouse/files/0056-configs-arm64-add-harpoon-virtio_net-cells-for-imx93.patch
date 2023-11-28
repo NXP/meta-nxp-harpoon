@@ -1,7 +1,7 @@
-From 88041cad0ac2509578befb45f43f39e9e0b3afdf Mon Sep 17 00:00:00 2001
+From 9845a0601f84796f32cc8d07e120429b69b80896 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Mon, 29 May 2023 18:34:07 +0800
-Subject: [PATCH 56/58] configs: arm64: add harpoon virtio_net cells for imx93
+Subject: [PATCH 56/68] configs: arm64: add harpoon virtio_net cells for imx93
 
 Use a standalone cell in order to avoid to disabling all enet ports.
 

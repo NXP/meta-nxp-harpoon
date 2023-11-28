@@ -1,7 +1,7 @@
-From 8b02f4d51478a4a82c0ea4c705f96fdb3a30de05 Mon Sep 17 00:00:00 2001
+From ba964124cc1e2e76cf12404f8fccbc0046ebca7c Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Fri, 26 Nov 2021 14:11:39 +0100
-Subject: [PATCH 13/58] configs: RTOS<->Linux intercell communication
+Subject: [PATCH 13/68] configs: RTOS<->Linux intercell communication
 
 Add definition of memory regions and PCI devices for intercell
 communication. Definition is aligned with the demo device definition

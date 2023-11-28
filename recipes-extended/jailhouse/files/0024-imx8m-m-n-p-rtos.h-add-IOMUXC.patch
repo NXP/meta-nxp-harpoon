@@ -1,7 +1,7 @@
-From 1a69a9dc32428f1b977b92ffe4e75b84d535b5b8 Mon Sep 17 00:00:00 2001
+From 68ab5c05783454f358b8be38e0cf04a87d3727ad Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Fri, 28 Jan 2022 12:39:32 +0100
-Subject: [PATCH 24/58] imx8m{m,n,p}-rtos.h: add IOMUXC
+Subject: [PATCH 24/68] imx8m{m,n,p}-rtos.h: add IOMUXC
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 ---

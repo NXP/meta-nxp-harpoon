@@ -1,0 +1,133 @@
+From eba62fb76be54e919fc0fae4cdd525e74a9d9b9f Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Tue, 19 Sep 2023 13:03:33 +0800
+Subject: [PATCH 63/68] configs: arm64: add audio cell config for imx93
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ configs/arm64/imx93-harpoon-config-audio.h   | 51 ++++++++++++++++++++
+ configs/arm64/imx93-harpoon-freertos-audio.c | 23 +++++++++
+ configs/arm64/imx93-harpoon-zephyr-audio.c   | 23 +++++++++
+ 3 files changed, 97 insertions(+)
+ create mode 100644 configs/arm64/imx93-harpoon-config-audio.h
+ create mode 100644 configs/arm64/imx93-harpoon-freertos-audio.c
+ create mode 100644 configs/arm64/imx93-harpoon-zephyr-audio.c
+
+diff --git a/configs/arm64/imx93-harpoon-config-audio.h b/configs/arm64/imx93-harpoon-config-audio.h
+new file mode 100644
+index 00000000..b3918bc0
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-config-audio.h
+@@ -0,0 +1,51 @@
++/*
++ * i.MX93 family targets - Audio config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                   \
++	RTOS_COMMON_MEMORY_REGIONS,                               \
++	RTOS_MEMRAM_MEMORY_REGIONS,                               \
++	RTOS_AUDIO_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR             \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS                  \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP1,                             \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP2,                             \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP3,                             \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_AUDIO_IRQCHIP0_BITMAP4),                            \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 160..191 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP1,                            \
++		/* interrupts 192..223 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP2,                            \
++		/* interrupts 224..255 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP3,                            \
++		/* interrupts 256..287 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                    \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx93-harpoon-freertos-audio.c b/configs/arm64/imx93-harpoon-freertos-audio.c
+new file mode 100644
+index 00000000..cdbc566f
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-freertos-audio.c
+@@ -0,0 +1,23 @@
++/*
++ * i.MX93 target - FreeRTOS audio config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx93-harpoon-config-audio.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx93-harpoon-zephyr-audio.c b/configs/arm64/imx93-harpoon-zephyr-audio.c
+new file mode 100644
+index 00000000..47ad8110
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-zephyr-audio.c
+@@ -0,0 +1,23 @@
++/*
++ * i.MX93 target - Zephyr audio config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx93-harpoon-config-audio.h"
++
++#include "cell-create.h"
+-- 
+2.34.1
+

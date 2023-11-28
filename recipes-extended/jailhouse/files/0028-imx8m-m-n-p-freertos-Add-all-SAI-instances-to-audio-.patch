@@ -1,7 +1,7 @@
-From d4b9ab8ebf0939ffc80a21f70260c785e7c6024c Mon Sep 17 00:00:00 2001
+From d03a2201a957df3e93ac0ff9ce665141e0315fb9 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 10 Mar 2022 10:55:49 +0100
-Subject: [PATCH 28/58] imx8m{m,n,p} freertos: Add all SAI instances to audio
+Subject: [PATCH 28/68] imx8m{m,n,p} freertos: Add all SAI instances to audio
  cell config
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>

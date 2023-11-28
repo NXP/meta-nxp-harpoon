@@ -1,7 +1,7 @@
-From 307d4f83c052290cfdfef09608b785e4dfd0da78 Mon Sep 17 00:00:00 2001
+From 5b32f0056f2527c823aaa40f47da20de8082e7b1 Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Tue, 25 Apr 2023 10:54:02 +0200
-Subject: [PATCH 50/58] configs: arm64: add the required architecture
+Subject: [PATCH 50/68] configs: arm64: add the required architecture
  information in cell creation helpers
 
 - Per f2320d2ee4, the architecture field is now required. Otherwise the following error would happen:

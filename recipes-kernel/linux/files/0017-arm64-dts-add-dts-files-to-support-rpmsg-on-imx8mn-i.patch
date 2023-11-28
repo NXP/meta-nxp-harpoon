@@ -1,7 +1,7 @@
-From c34a2f90dc4250ac024d749cfd9c005063a8311d Mon Sep 17 00:00:00 2001
+From ca56d6cde6508e0230ea4a4c6ec9020f80ae4b2d Mon Sep 17 00:00:00 2001
 From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
 Date: Thu, 9 Feb 2023 18:33:57 +0100
-Subject: [PATCH 17/20] arm64: dts: add dts files to support rpmsg on imx8mn,
+Subject: [PATCH 17/27] arm64: dts: add dts files to support rpmsg on imx8mn,
  imx8mp and imx8mm for harpoon
 
 Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
@@ -15,16 +15,14 @@ Patch rework:
 
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 ---
- .../dts/freescale/imx8mm-evk-harpoon-avb.dts  |  3 +-
- .../dts/freescale/imx8mn-evk-harpoon-avb.dts  |  3 +-
- .../imx8mn-evk-harpoon-industrial.dts         |  3 +-
- .../boot/dts/freescale/imx8mn-evk-harpoon.dts |  3 +-
- .../dts/freescale/imx8mp-evk-harpoon-avb.dts  |  3 +-
- .../imx8mp-evk-harpoon-industrial.dts         |  3 +-
- .../boot/dts/freescale/imx8mp-evk-harpoon.dts |  3 +-
- .../boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi | 36 +++++++++++++++++++
- 8 files changed, 50 insertions(+), 7 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi
+ arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts       | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts       | 3 ++-
+ .../arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts           | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts       | 3 ++-
+ .../arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts           | 3 ++-
+ 7 files changed, 14 insertions(+), 7 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts
 index e193a7f73cfb..866a9a8c239b 100644
@@ -138,48 +136,6 @@ index 1267f0d3277e..828d15424e8a 100644
  
  &i2c3 {
  	status = "disabled";
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi
-new file mode 100644
-index 000000000000..dcc4afb47300
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-rpmsg-ca53.dtsi
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2022-2023 NXP
-+ */
-+
-+#include "imx8mp-generic-mbox.dtsi"
-+
-+/ {
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		rpmsg_ca53_reserved: rpmsg-ca53@fe100000 {
-+			reg = <0 0xfe100000 0 0x10000>;
-+			no-map;
-+		};
-+
-+		vdevbuffer_ca53: vdevbuffer-ca53@fe200000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0xfe200000 0 0x100000>;
-+			no-map;
-+		};
-+	};
-+
-+	rpmsg-ca53 {
-+		compatible = "fsl,imx8mm-rpmsg";
-+		reg = <0x0 0xfe100000 0x0 0x10000>; /* 64K for one rpmsg instance */
-+		memory-region = <&vdevbuffer_ca53>;
-+		mbox-names = "tx", "rx", "rxdb";
-+		mboxes = <&gen_sw_mbox 0 0
-+			  &gen_sw_mbox 1 0
-+			  &gen_sw_mbox 2 0>;
-+		vdev-nums = <1>;
-+	};
-+};
 -- 
 2.34.1
 

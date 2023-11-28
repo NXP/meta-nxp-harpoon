@@ -1,7 +1,7 @@
-From 25b6d4852ab2db58b55863d4c77f274c2395de22 Mon Sep 17 00:00:00 2001
+From 42e02f31517a23147825364e7475fe478f004369 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 18 Jun 2021 17:05:43 +0200
-Subject: [PATCH 06/58] imx8mp: zephyr: Use imx-cell helper functions
+Subject: [PATCH 06/68] imx8mp: zephyr: Use imx-cell helper functions
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---

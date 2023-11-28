@@ -1,7 +1,7 @@
-From b4f108e2003c009f330e2acfc8955f9264041ced Mon Sep 17 00:00:00 2001
+From b8a67775559196491826a62899ea06a79fb3aecc Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 3 Nov 2022 14:57:59 +0800
-Subject: [PATCH 39/58] imx8m{m,n}: enable ANA_PLL writable
+Subject: [PATCH 39/68] imx8m{m,n}: enable ANA_PLL writable
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 ---

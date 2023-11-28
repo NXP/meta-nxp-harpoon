@@ -1,0 +1,71 @@
+From 7510c6c9c0a6b68817eb34d14ccbd187b300cd24 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Mon, 6 Nov 2023 11:36:28 +0800
+Subject: [PATCH 25/27] arm64: dts: imx8mm/p,imx93 harpoon virtio update
+ generic software mailbox
+
+Adpat to add new property to enable/disable ACK interrupt.
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mm-virtio-ca53.dtsi       | 6 +++---
+ .../boot/dts/freescale/imx8mp-evk-harpoon-virtio-net.dts    | 4 ++--
+ .../dts/freescale/imx93-11x11-evk-harpoon-virtio-net.dts    | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-virtio-ca53.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-virtio-ca53.dtsi
+index 240f1d0c2659..2202ca7b63f4 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-virtio-ca53.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-virtio-ca53.dtsi
+@@ -28,7 +28,7 @@ virtio_buffer: virtio-buffer@b3c00000 {
+ 	gen_sw_mbox: generic-software-mailbox@b8500000 {
+ 		compatible = "fsl,generic-software-mbox";
+ 		reg = <0 0xb8500000 0 0x1000>;
+-		#mbox-cells = <2>;
++		#mbox-cells = <3>;
+ 		/* Use 2 unused SPI interrupts */
+ 		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+ 		interrupt-names = "irq", "remote_irq";
+@@ -40,7 +40,7 @@ virtio_net@b8400000 {
+ 		hypervisor_less;
+ 		memory-region = <&virtio_buffer>;
+ 		mbox-names = "mmiowr", "mmioirq";
+-		mboxes = <&gen_sw_mbox 0 1
+-			  &gen_sw_mbox 1 1>;
++		mboxes = <&gen_sw_mbox 0 1 1		/* TX channel with ACK */
++			  &gen_sw_mbox 1 1 0>;		/* RX channel without ACK */
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-virtio-net.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-virtio-net.dts
+index 9d337c36980c..a3b3a25477c0 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-virtio-net.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-virtio-net.dts
+@@ -30,8 +30,8 @@ virtio_net@fc700000 {
+ 		hypervisor_less;
+ 		memory-region = <&virtio_buffer>;
+ 		mbox-names = "mmiowr", "mmioirq";
+-		mboxes = <&gen_sw_mbox 0 1
+-			  &gen_sw_mbox 1 1>;
++		mboxes = <&gen_sw_mbox 0 1 1		/* TX channel with ACK */
++			  &gen_sw_mbox 1 1 0>;		/* RX channel without ACK */
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-virtio-net.dts b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-virtio-net.dts
+index 59ab51749c6d..75ff20e30ab6 100644
+--- a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-virtio-net.dts
++++ b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-virtio-net.dts
+@@ -36,8 +36,8 @@ virtio_net@fc700000 {
+ 		hypervisor_less;
+ 		memory-region = <&virtio_buffer>;
+ 		mbox-names = "mmiowr", "mmioirq";
+-		mboxes = <&gen_sw_mbox 0 1
+-			  &gen_sw_mbox 1 1>;
++		mboxes = <&gen_sw_mbox 0 1 1		/* TX channel with ACK */
++			  &gen_sw_mbox 1 1 0>;		/* RX channel without ACK */
+ 	};
+ };
+ 
+-- 
+2.34.1
+

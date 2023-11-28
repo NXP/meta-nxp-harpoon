@@ -1,7 +1,7 @@
-From 80f0a014660f332bfa7398c5393e74a9511f5dd7 Mon Sep 17 00:00:00 2001
+From 2cc820c6ce17c14b49934ab1402d70327311744e Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Fri, 19 May 2023 11:32:22 +0200
-Subject: [PATCH 51/58] arm64: imx93-harpoon-rtos: add tpm timer devices
+Subject: [PATCH 51/68] arm64: imx93-harpoon-rtos: add tpm timer devices
 
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 ---

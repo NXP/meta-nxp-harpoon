@@ -1,0 +1,172 @@
+From 6725cd31596e8bd0b4028fbebd15d609de0bf22f Mon Sep 17 00:00:00 2001
+From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+Date: Fri, 3 Nov 2023 18:12:05 +0100
+Subject: [PATCH 67/68] configs: arm64: imx93: add avb freertos and zephyr
+ cells
+
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ configs/arm64/imx93-harpoon-avb-audio.c    | 24 ++++++++++
+ configs/arm64/imx93-harpoon-config-avb.h   | 55 ++++++++++++++++++++++
+ configs/arm64/imx93-harpoon-freertos-avb.c | 24 ++++++++++
+ configs/arm64/imx93-harpoon-zephyr-avb.c   | 24 ++++++++++
+ 4 files changed, 127 insertions(+)
+ create mode 100644 configs/arm64/imx93-harpoon-avb-audio.c
+ create mode 100644 configs/arm64/imx93-harpoon-config-avb.h
+ create mode 100644 configs/arm64/imx93-harpoon-freertos-avb.c
+ create mode 100644 configs/arm64/imx93-harpoon-zephyr-avb.c
+
+diff --git a/configs/arm64/imx93-harpoon-avb-audio.c b/configs/arm64/imx93-harpoon-avb-audio.c
+new file mode 100644
+index 00000000..09f22ec4
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-avb-audio.c
+@@ -0,0 +1,24 @@
++/*
++ * i.MX93 target - Zephyr audio config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
++ *  Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx93-harpoon-config-avb.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx93-harpoon-config-avb.h b/configs/arm64/imx93-harpoon-config-avb.h
+new file mode 100644
+index 00000000..f7fe7cbd
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-config-avb.h
+@@ -0,0 +1,55 @@
++/*
++ * i.MX93 family targets - AVB config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *  Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                   \
++	RTOS_COMMON_MEMORY_REGIONS,                               \
++	RTOS_MEMRAM_MEMORY_REGIONS,                               \
++	RTOS_AVB_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR             \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS                  \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP1,                               \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP2,                               \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP3,                               \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP4),                              \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 160..191 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP1 |                           \
++		RTOS_AVB_IRQCHIP1_BITMAP1,                               \
++		/* interrupts 192..223 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP2 |                           \
++		RTOS_AVB_IRQCHIP1_BITMAP2,                             \
++		/* interrupts 224..255 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP3,                            \
++		/* interrupts 256..287 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                    \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx93-harpoon-freertos-avb.c b/configs/arm64/imx93-harpoon-freertos-avb.c
+new file mode 100644
+index 00000000..ffcc4a3f
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-freertos-avb.c
+@@ -0,0 +1,24 @@
++/*
++ * i.MX93 target - FreeRTOS audio AVB config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
++ *  Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx93-harpoon-config-avb.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx93-harpoon-zephyr-avb.c b/configs/arm64/imx93-harpoon-zephyr-avb.c
+new file mode 100644
+index 00000000..09f22ec4
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-zephyr-avb.c
+@@ -0,0 +1,24 @@
++/*
++ * i.MX93 target - Zephyr audio config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
++ *  Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx93-harpoon-config-avb.h"
++
++#include "cell-create.h"
+-- 
+2.34.1
+

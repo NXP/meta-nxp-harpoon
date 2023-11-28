@@ -1,7 +1,7 @@
-From dc305a141b6be697bf9e14285ef23b661920e45c Mon Sep 17 00:00:00 2001
+From 400aa297438d53dfad512f636d0d7d805e01b622 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 20 Jan 2022 09:46:03 +0100
-Subject: [PATCH 23/58] imx8mn-freertos-audio.c: use SAI5
+Subject: [PATCH 23/68] imx8mn-freertos-audio.c: use SAI5
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 ---

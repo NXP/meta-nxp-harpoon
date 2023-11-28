@@ -1,0 +1,56 @@
+From f3900ec5855e239f596bdf1d34576187166fe98f Mon Sep 17 00:00:00 2001
+From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+Date: Mon, 2 Oct 2023 16:00:29 +0200
+Subject: [PATCH 61/68] configs: arm64: imx93: add enet_qos IRQ and memory
+ regions to industrial and avb inmate cells
+
+Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+---
+ configs/arm64/imx93-harpoon-rtos.h | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/configs/arm64/imx93-harpoon-rtos.h b/configs/arm64/imx93-harpoon-rtos.h
+index a167280c..f1082683 100644
+--- a/configs/arm64/imx93-harpoon-rtos.h
++++ b/configs/arm64/imx93-harpoon-rtos.h
+@@ -20,6 +20,8 @@ typedef enum IRQn {
+   SW_MB_L_IRQn                 = 200,              /**< Unused SPI 168, to be used by generic software mailbox in Linux */
+   SW_MB_R_IRQn                 = 201,              /**< Unused SPI 169, to be used by generic software mailbox in RTOS */
+   ENET_IRQn                    = 213,               /**< ENET1 MAC Interrupt */
++  ENET_QOS_PMT_IRQn            = 215,              /**< ENET QOS TSN Interrupt from PMT */
++  ENET_QOS_IRQn                = 216,              /**< ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+@@ -45,8 +47,13 @@ typedef enum IRQn {
+ 	MEM_REGION_RWXL(0xd0000000, 0xd0000000, MB(16)), /* RAM */    \
+ 	MEM_REGION_RWX( 0x20480000, 0x20480000, KB(640)) /* OCRAM */
+ 
++#define RTOS_AVB_MEMORY_REGIONS \
++	RTOS_AUDIO_MEMORY_REGIONS,                                      \
++	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)) /* ENET_Q*/
++
+ #define RTOS_INDUS_MEMORY_REGIONS \
+-	MMIO_REGION_RW( 0x425b0000, 0x425b0000, KB(64)) /* FLEXCAN2*/
++	MMIO_REGION_RW( 0x425b0000, 0x425b0000, KB(64)), /* FLEXCAN2*/  \
++	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)) /* ENET_Q*/
+ 
+ #define RTOS_VIRTIO_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x42890000, 0x42890000, KB(64)),   /* ENET */               \
+@@ -124,9 +131,11 @@ typedef enum IRQn {
+ 	0
+ #define RTOS_AVB_IRQCHIP1_BITMAP2 \
+ 	RTOS_AUDIO_IRQCHIP1_BITMAP2 | \
+-	0
++	IRQnMAP(ENET_QOS_PMT_IRQn) | \
++	IRQnMAP(ENET_QOS_IRQn)
+ #define RTOS_INDUS_IRQCHIP1_BITMAP2 \
+-	0
++	IRQnMAP(ENET_QOS_PMT_IRQn) | \
++	IRQnMAP(ENET_QOS_IRQn)
+ #define RTOS_VIRTIO_IRQCHIP1_BITMAP2 \
+ 	IRQnMAP(ENET_IRQn)
+ 
+-- 
+2.34.1
+

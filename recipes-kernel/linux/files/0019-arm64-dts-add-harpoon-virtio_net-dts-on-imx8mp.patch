@@ -1,7 +1,7 @@
-From 53bba991db79953c5b2b2d62bb14b25cbfd5c97d Mon Sep 17 00:00:00 2001
+From c1007c3921f0f2a6d781083b6e9cd365f3e27ed6 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 25 May 2023 17:03:41 +0800
-Subject: [PATCH 19/20] arm64: dts: add harpoon virtio_net dts on imx8mp
+Subject: [PATCH 19/27] arm64: dts: add harpoon virtio_net dts on imx8mp
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 ---
@@ -11,10 +11,10 @@ Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-virtio-net.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index ed8cd7443b30..a08e793a35e3 100644
+index 108f5223203f..63c2f3ee03dc 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -139,6 +139,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it626
+@@ -143,6 +143,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it626
  			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
  			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
  			  imx8mp-evk-root.dtb imx8mp-evk-harpoon.dtb  imx8mp-evk-harpoon-industrial.dtb imx8mp-evk-inmate.dtb \

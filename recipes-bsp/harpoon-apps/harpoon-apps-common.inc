@@ -11,7 +11,7 @@ HARPOON_DATADIR ?= "${datadir}/harpoon"
 ARM_TC = "gcc-arm-aa64-elf"
 ARM_PV = "10.3"
 DEPENDS += "${ARM_TC}-native (= ${ARM_PV})"
-RDEPENDS:${PN}:real-time-edge += "jailhouse"
+RDEPENDS:${PN} += "jailhouse-imx"
 
 COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk)"
 FILES:${PN} += "${HARPOON_DATADIR}"

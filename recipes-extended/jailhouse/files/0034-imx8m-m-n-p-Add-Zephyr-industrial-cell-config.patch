@@ -1,7 +1,7 @@
-From 5b6728112d50798b9ac02fd744daff586928c3a2 Mon Sep 17 00:00:00 2001
+From 2e9a4e28aa60608540065379aa6012a9d7c5c12f Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 2 May 2022 13:11:00 +0000
-Subject: [PATCH 34/58] imx8m{m,n,p}: Add Zephyr industrial cell config
+Subject: [PATCH 34/68] imx8m{m,n,p}: Add Zephyr industrial cell config
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 ---

@@ -1,7 +1,7 @@
-From ec911cf1bc3eb53d5e8ccfa7cab0bd22d01056c1 Mon Sep 17 00:00:00 2001
+From ddd42e68a91fca1e79c84b2d7a090ec72c61d26f Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 30 Sep 2022 14:55:01 +0000
-Subject: [PATCH 36/58] configs: imx8m*: Rework imx8m cell construction
+Subject: [PATCH 36/68] configs: imx8m*: Rework imx8m cell construction
 
 Let's define all interfaces in a single device header file and create
 cell config helpers based on the use case, which is OS-agnostic.

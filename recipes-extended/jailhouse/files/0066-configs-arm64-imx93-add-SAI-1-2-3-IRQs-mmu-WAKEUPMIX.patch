@@ -1,0 +1,95 @@
+From 1c2b23b468586ae9efbaec4d6bc46d59b05deb15 Mon Sep 17 00:00:00 2001
+From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+Date: Tue, 24 Oct 2023 14:58:30 +0200
+Subject: [PATCH 66/68] configs: arm64: imx93: add SAI{1,2,3} IRQs/mmu,
+ WAKEUPMIX1 mmu and ANA_PLL to the audio application
+
+Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+---
+ configs/arm64/imx93-harpoon-config-audio.h |  3 ++-
+ configs/arm64/imx93-harpoon-rtos.h         | 23 +++++++++++++++-------
+ 2 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/configs/arm64/imx93-harpoon-config-audio.h b/configs/arm64/imx93-harpoon-config-audio.h
+index b3918bc0..ea7f2a8d 100644
+--- a/configs/arm64/imx93-harpoon-config-audio.h
++++ b/configs/arm64/imx93-harpoon-config-audio.h
+@@ -39,7 +39,8 @@
+ 		/* interrupts 160..191 */                                \
+ 		RTOS_COMMON_IRQCHIP1_BITMAP1,                            \
+ 		/* interrupts 192..223 */                                \
+-		RTOS_COMMON_IRQCHIP1_BITMAP2,                            \
++		RTOS_COMMON_IRQCHIP1_BITMAP2 |                           \
++		RTOS_AUDIO_IRQCHIP1_BITMAP2,                             \
+ 		/* interrupts 224..255 */                                \
+ 		RTOS_COMMON_IRQCHIP1_BITMAP3,                            \
+ 		/* interrupts 256..287 */                                \
+diff --git a/configs/arm64/imx93-harpoon-rtos.h b/configs/arm64/imx93-harpoon-rtos.h
+index 841c2e08..88ef5561 100644
+--- a/configs/arm64/imx93-harpoon-rtos.h
++++ b/configs/arm64/imx93-harpoon-rtos.h
+@@ -15,12 +15,15 @@ typedef enum IRQn {
+   LPI2C1_IRQn                  = 45,               /**< Low Power Inter-Integrated Circuit module 1 */
+   LPUART2_IRQn                 = 52,               /**< Low Power UART 2 */
+   TPM2_IRQn                    = 69,               /**< Timer PWM Module (TPM) 2 */
++  SAI1_IRQn                    = 77,              /**< SAI1 45 Receive / Transmit Interrupt */
+   CAN_FD2_IRQn                 = 83,               /**< CAN2 interrupt */
+   CAN_FD2_ERROR_IRQn           = 84,               /**< CAN2 error interrupt */
+   TPM4_IRQn                    = 108,               /**< Timer PWM Module (TPM) 4 */
+   SW_MB_L_IRQn                 = 200,              /**< Unused SPI 168, to be used by generic software mailbox in Linux */
+   SW_MB_R_IRQn                 = 201,              /**< Unused SPI 169, to be used by generic software mailbox in RTOS */
+   ENET_IRQn                    = 213,               /**< ENET1 MAC Interrupt */
++  SAI2_IRQn                    = 202,              /**< SAI2 170 Receive / Transmit Interrupt */
++  SAI3_IRQn                    = 203,              /**< SAI3 171 Receive / Transmit Interrupt */
+   ENET_QOS_PMT_IRQn            = 215,              /**< ENET QOS TSN Interrupt from PMT */
+   ENET_QOS_IRQn                = 216,              /**< ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
+ } IRQn_Type;
+@@ -50,16 +53,21 @@ typedef enum IRQn {
+ 
+ #define RTOS_AVB_MEMORY_REGIONS \
+ 	RTOS_AUDIO_MEMORY_REGIONS,                                     \
+-	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)) /* ENET_Q*/    \
+-	MMIO_REGION_RWS( 0x42420000, 0x42420000, KB(64)) /* WAKEUPIMX1*/
++	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)) /* ENET_Q*/
+ 
+ #define RTOS_INDUS_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x425b0000, 0x425b0000, KB(64)), /* FLEXCAN2*/  \
+-	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)), /* ENET_Q*/    \
+-	MMIO_REGION_RWS( 0x42420000, 0x42420000, KB(64)) /* WAKEUPIMX1*/
++	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)), /* ENET_Q*/   \
++	MMIO_REGION_RWS(0x42420000, 0x42420000, KB(64)), /* WAKEUPMIX1*/\
++	MMIO_REGION_RWS(0x44480000, 0x44480000, KB(8))   /* ANA_PLL */
+ 
+ #define RTOS_AUDIO_MEMORY_REGIONS \
+-	MMIO_REGION_RW( 0x44340000, 0x44340000, KB(64))  /* LPI2C1 */
++	MMIO_REGION_RWS(0x42420000, 0x42420000, KB(64)),  /* WAKEUPMIX1*/\
++	MMIO_REGION_RW( 0x42650000, 0x42650000, KB(64)),  /* SAI2 */   \
++	MMIO_REGION_RW( 0x42660000, 0x42660000, KB(64)),  /* SAI3 */   \
++	MMIO_REGION_RW( 0x44340000, 0x44340000, KB(64)),  /* LPI2C1 */ \
++	MMIO_REGION_RW( 0x443b0000, 0x443b0000, KB(64)),  /* SAI1 */   \
++	MMIO_REGION_RWS(0x44480000, 0x44480000, KB(8))    /* ANA_PLL */
+ 
+ #define RTOS_VIRTIO_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x42890000, 0x42890000, KB(64)),   /* ENET */               \
+@@ -84,7 +92,7 @@ typedef enum IRQn {
+ #define RTOS_COMMON_IRQCHIP0_BITMAP2 \
+ 	IRQnMAP(TPM2_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP2 \
+-	0
++	IRQnMAP(SAI1_IRQn)
+ #define RTOS_AVB_IRQCHIP0_BITMAP2 \
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+@@ -134,7 +142,8 @@ typedef enum IRQn {
+ #define RTOS_COMMON_IRQCHIP1_BITMAP2 \
+ 	IRQnMAP(SW_MB_R_IRQn)
+ #define RTOS_AUDIO_IRQCHIP1_BITMAP2 \
+-	0
++	IRQnMAP(SAI2_IRQn) | \
++	IRQnMAP(SAI3_IRQn)
+ #define RTOS_AVB_IRQCHIP1_BITMAP2 \
+ 	RTOS_AUDIO_IRQCHIP1_BITMAP2 | \
+ 	IRQnMAP(ENET_QOS_PMT_IRQn) | \
+-- 
+2.34.1
+

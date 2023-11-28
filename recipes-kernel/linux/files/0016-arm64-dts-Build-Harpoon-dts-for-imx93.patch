@@ -1,7 +1,7 @@
-From 7b2e5e6f4332601c814203e3a90f8b9b94eac708 Mon Sep 17 00:00:00 2001
+From d30980ebf14b7b8c796639dfa719e6007b3ce2f0 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 20 Feb 2023 13:46:42 +0000
-Subject: [PATCH 16/20] arm64: dts: Build Harpoon dts for imx93
+Subject: [PATCH 16/27] arm64: dts: Build Harpoon dts for imx93
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
@@ -10,11 +10,11 @@ Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index b43e722f1ee6..ed8cd7443b30 100644
+index 89154de798d3..108f5223203f 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -385,6 +385,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
- 			  imx93-14x14-evk-lvds-it6263.dtb
+@@ -392,6 +392,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
+ 			  imx93-14x14-evk-flexspi-m2.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb \
  			  imx93-11x11-evk-avb.dtb \
 +			  imx93-11x11-evk-harpoon.dtb imx93-11x11-evk-harpoon-industrial.dtb \

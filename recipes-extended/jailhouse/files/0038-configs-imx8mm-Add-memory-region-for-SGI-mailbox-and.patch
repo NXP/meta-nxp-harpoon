@@ -1,7 +1,7 @@
-From 2be95d761e5a503e53e08936d70ab48430e4a5b1 Mon Sep 17 00:00:00 2001
+From 36587bf97a6cc4163d54becd164b09ac71263500 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Wed, 28 Sep 2022 15:44:18 +0800
-Subject: [PATCH 38/58] configs: imx8mm: Add memory region for SGI mailbox and
+Subject: [PATCH 38/68] configs: imx8mm: Add memory region for SGI mailbox and
  RPMSG
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>

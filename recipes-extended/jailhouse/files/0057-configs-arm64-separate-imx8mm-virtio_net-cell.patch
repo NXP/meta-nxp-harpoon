@@ -1,7 +1,7 @@
-From f467f2acf80bca25dbf3cee288e70c2fe3d98e18 Mon Sep 17 00:00:00 2001
+From 05559aa439d8ffdfa9b8ccddecaa448ecc33dc0d Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 1 Jun 2023 14:08:29 +0800
-Subject: [PATCH 57/58] configs: arm64: separate imx8mm virtio_net cell
+Subject: [PATCH 57/68] configs: arm64: separate imx8mm virtio_net cell
 
 Separate virtio_net cell to be a standalone cell in order to sync
 with other i.mx platforms.

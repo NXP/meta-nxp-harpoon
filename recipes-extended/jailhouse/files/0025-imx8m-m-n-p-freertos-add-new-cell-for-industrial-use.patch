@@ -1,7 +1,7 @@
-From 04606209ef9689c3351be03b48522dde6ef99c5d Mon Sep 17 00:00:00 2001
+From b8e874880c005f07b01cae5a213abad9fbfe832d Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Wed, 26 Jan 2022 16:31:27 +0000
-Subject: [PATCH 25/58] imx8m{m,n,p}: freertos: add new cell for industrial use
+Subject: [PATCH 25/68] imx8m{m,n,p}: freertos: add new cell for industrial use
  case
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>

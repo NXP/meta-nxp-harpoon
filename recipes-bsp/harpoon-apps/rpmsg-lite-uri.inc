@@ -12,4 +12,4 @@ SRC_URI += "\
 "
 
 SRCREV_FORMAT:append = "_rpmsg-lite"
-SRCREV_rpmsg-lite = "c416810ac097381c2755fb793a8a1567f2bd3d4a"
+SRCREV_rpmsg-lite = "436596cd4443d5cedd043291f45ac21504e70a4a"

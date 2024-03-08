@@ -1,0 +1,475 @@
+From 84af34546739a4e46d0e393ecff3ea24216cf804 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Thu, 2 Feb 2023 15:48:00 +0800
+Subject: [PATCH 21/28] configs: arm64: imx{8mm,8mp,93}: add freertos virtio
+ support
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+(move sw mb irqs for mx93 to cell definitions with rpmsg)
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ configs/arm64/cell-helper.h                   |  1 +
+ configs/arm64/imx8m-harpoon-config-virtio.h   | 52 ++++++++++++++++++
+ .../arm64/imx8mm-harpoon-freertos-virtio.c    | 22 ++++++++
+ configs/arm64/imx8mm-harpoon-rtos.h           | 16 ++++++
+ .../arm64/imx8mp-harpoon-freertos-virtio.c    | 22 ++++++++
+ configs/arm64/imx8mp-harpoon-rtos.h           | 18 +++++++
+ configs/arm64/imx9-harpoon-config-virtio.h    | 53 +++++++++++++++++++
+ configs/arm64/imx93-harpoon-freertos-virtio.c | 22 ++++++++
+ configs/arm64/imx93-harpoon-rtos.h            | 19 +++++++
+ 9 files changed, 225 insertions(+)
+ create mode 100644 configs/arm64/imx8m-harpoon-config-virtio.h
+ create mode 100644 configs/arm64/imx8mm-harpoon-freertos-virtio.c
+ create mode 100644 configs/arm64/imx8mp-harpoon-freertos-virtio.c
+ create mode 100644 configs/arm64/imx9-harpoon-config-virtio.h
+ create mode 100644 configs/arm64/imx93-harpoon-freertos-virtio.c
+
+diff --git a/configs/arm64/cell-helper.h b/configs/arm64/cell-helper.h
+index 6ad357c8..3e88299f 100644
+--- a/configs/arm64/cell-helper.h
++++ b/configs/arm64/cell-helper.h
+@@ -14,6 +14,7 @@
+ #ifndef KB
+ #define KB(bytes)	(1024 * (bytes))
+ #define MB(bytes)	(1024 * KB(bytes))
++#define GB(bytes)	(1024 * MB(bytes))
+ #endif
+ 
+ #define REGION(phys, virt, bytes) \
+diff --git a/configs/arm64/imx8m-harpoon-config-virtio.h b/configs/arm64/imx8m-harpoon-config-virtio.h
+new file mode 100644
+index 00000000..d64d0aa2
+--- /dev/null
++++ b/configs/arm64/imx8m-harpoon-config-virtio.h
+@@ -0,0 +1,52 @@
++/*
++ * i.MX8M family targets - Virtio config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <jiafei.pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                                            \
++	RTOS_COMMON_MEMORY_REGIONS,                                      \
++	RTOS_MEMRAM_MEMORY_REGIONS,                                      \
++	RTOS_VIRTIO_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR                                      \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS 	                                         \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                            \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP1,                            \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP2,                            \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP3,                            \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP4),                           \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                            \
++		/* interrupts 160..191 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP1 |                           \
++		RTOS_VIRTIO_IRQCHIP1_BITMAP1,                            \
++		/* interrupts 192..223 */                                \
++		0,                                                       \
++		/* interrupts 224..255 */                                \
++		0,                                                       \
++		/* interrupts 256..287 */                                \
++		0)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                                        \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx8mm-harpoon-freertos-virtio.c b/configs/arm64/imx8mm-harpoon-freertos-virtio.c
+new file mode 100644
+index 00000000..38febd3d
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-freertos-virtio.c
+@@ -0,0 +1,22 @@
++/*
++ * i.MX8MM target - FreeRTOS virtio_net config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-virtio.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+index 486f048d..facfc04f 100644
+--- a/configs/arm64/imx8mm-harpoon-rtos.h
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -40,6 +40,8 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xbbafc000, 0xbbafc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xbbafe000, 0xbbafe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xb3c00000, 0xb3c00000, MB(64)), /* Virtio DMA buffer */             \
++	MMIO_REGION_RWS(0xb8400000, 0xb8400000, KB(4)),  /* Virtio MMIO */             \
+ 	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),  /* SW MBOX */              \
+ 	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),  /* RPMSG BUF */            \
+@@ -72,6 +74,10 @@ typedef enum IRQn {
+ #define RTOS_INDUS_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+ 
++#define RTOS_VIRTIO_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4)),     /* ENET */ \
++	MEM_REGION_RWS( 0x40000000, 0x40000000, GB(1))     /* data buffer */
++
+ /* GIC */
+ #define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
+ 
+@@ -84,6 +90,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP1
+ #define RTOS_INDUS_IRQCHIP0_BITMAP1 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP1 \
++	0
+ 
+ /* interrupts 64..95 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP2 \
+@@ -96,6 +104,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP2 \
++	0
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+@@ -107,6 +117,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP3
+ #define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP3 \
++	0
+ 
+ /* interrupts 128..159 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP4 \
+@@ -124,6 +136,8 @@ typedef enum IRQn {
+ 		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) | \
+ 		IRQnMAP(ENET_IRQn)                  | \
+ 		IRQnMAP(ENET_1588_IRQn)
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP4 \
++		IRQnMAP(ENET_IRQn)
+ 
+ /* interrupts 160..191 */
+ #define RTOS_COMMON_IRQCHIP1_BITMAP1 \
+@@ -135,6 +149,8 @@ typedef enum IRQn {
+ 	0
+ #define RTOS_INDUS_IRQCHIP1_BITMAP1 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP1_BITMAP1 \
++	0
+ 
+ /* IVSHMEM PCI */
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+diff --git a/configs/arm64/imx8mp-harpoon-freertos-virtio.c b/configs/arm64/imx8mp-harpoon-freertos-virtio.c
+new file mode 100644
+index 00000000..c649d4a9
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-freertos-virtio.c
+@@ -0,0 +1,22 @@
++/*
++ * i.MX8MP target - FreeRTOS virtio_net config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <jiafei.pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mp-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-virtio.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-harpoon-rtos.h b/configs/arm64/imx8mp-harpoon-rtos.h
+index e373cdf5..1307a2bb 100644
+--- a/configs/arm64/imx8mp-harpoon-rtos.h
++++ b/configs/arm64/imx8mp-harpoon-rtos.h
+@@ -25,6 +25,7 @@ typedef enum IRQn {
+   I2S1_IRQn                    = 127,              /**< SAI1 Receive / Transmit Interrupt */
+   I2S2_IRQn                    = 128,              /**< SAI2 Receive / Transmit Interrupt */
+   I2S7_IRQn                    = 143,              /**< SAI7 Receive / Transmit Interrupt */
++  ENET_IRQn                    = 152,              /**< ENET MAC Interrupt */
+   ENET_QOS_PMT_IRQn            = 166,              /**< ENET QOS TSN Interrupt from PMT */
+   ENET_QOS_IRQn                = 167,              /**< ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
+   CAN_FD1_IRQn                 = 174,              /**< CAN-FD1 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
+@@ -40,6 +41,8 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xfd9fc000, 0xfd9fc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xfd9fe000, 0xfd9fe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xf8700000, 0xf8700000, MB(64)), /* Virtio DMA buffer */             \
++	MMIO_REGION_RWS(0xfc700000, 0xfc700000, MB(1)),  /* Virtio MMIO */             \
+ 	MMIO_REGION_RWS(0xfe000000, 0xfe000000, KB(4)),  /* SW MBOX */              \
+ 	MMIO_REGION_RWS(0xfe100000, 0xfe100000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xfe200000, 0xfe200000, MB(1)),  /* RPMSG BUF */            \
+@@ -88,6 +91,11 @@ typedef enum IRQn {
+ 	MMIO_REGION_RW( 0x308c0000, 0x308c0000, KB(64)),   /* FLEXCAN1*/\
+ 	MMIO_REGION_RW( 0x30bf0000, 0x30bf0000, KB(64))    /* ENET_Q */
+ 
++#define RTOS_VIRTIO_MEMORY_REGIONS \
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(64)),   /* ENET */   \
++	MEM_REGION_RWS( 0x40000000, 0x40000000, GB(1))     /* data buffer */
++
+ /* GIC */
+ #define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
+ 
+@@ -100,6 +108,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP1
+ #define RTOS_INDUS_IRQCHIP0_BITMAP1 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP1 \
++	0
+ 
+ /* interrupts 64..95 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP2 \
+@@ -111,6 +121,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP2 \
++	0
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+@@ -122,6 +134,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP3
+ #define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP3 \
++	0
+ 
+ /* interrupts 128..159 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP4 \
+@@ -133,6 +147,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP4
+ #define RTOS_INDUS_IRQCHIP0_BITMAP4 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP4 \
++		IRQnMAP(ENET_IRQn)
+ 
+ /* interrupts 160..191 */
+ #define RTOS_COMMON_IRQCHIP1_BITMAP1 \
+@@ -148,6 +164,8 @@ typedef enum IRQn {
+ 		IRQnMAP(ENET_QOS_IRQn) | \
+ 		IRQnMAP(CAN_FD1_IRQn) | /* FLEXCAN1 */ \
+ 		IRQnMAP(CAN_FD1_ERROR_IRQn)
++#define RTOS_VIRTIO_IRQCHIP1_BITMAP1 \
++	0
+ 
+ /* IVSHMEM PCI */
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+diff --git a/configs/arm64/imx9-harpoon-config-virtio.h b/configs/arm64/imx9-harpoon-config-virtio.h
+new file mode 100644
+index 00000000..a4d58c24
+--- /dev/null
++++ b/configs/arm64/imx9-harpoon-config-virtio.h
+@@ -0,0 +1,53 @@
++/*
++ * i.MX93 family targets - Virtio_net config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                   \
++	RTOS_COMMON_MEMORY_REGIONS,                               \
++	RTOS_MEMRAM_MEMORY_REGIONS,                               \
++	RTOS_VIRTIO_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR                   \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS 	                                         \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                            \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP1,                             \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP2,                             \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP3,                             \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_VIRTIO_IRQCHIP0_BITMAP4),                            \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                            \
++		/* interrupts 160..191 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP1 |                           \
++		RTOS_VIRTIO_IRQCHIP1_BITMAP1,                             \
++		/* interrupts 192..223 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP2 |                           \
++		RTOS_VIRTIO_IRQCHIP1_BITMAP2,                            \
++		/* interrupts 224..255 */                                \
++		0,                                                       \
++		/* interrupts 256..287 */                                \
++		0)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                    \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx93-harpoon-freertos-virtio.c b/configs/arm64/imx93-harpoon-freertos-virtio.c
+new file mode 100644
+index 00000000..97e9de8a
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-freertos-virtio.c
+@@ -0,0 +1,22 @@
++/*
++ * i.MX93 target - FreeRTOS virtio_net config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Jiafei Pan <jiafei.pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx9-harpoon-config-virtio.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx93-harpoon-rtos.h b/configs/arm64/imx93-harpoon-rtos.h
+index c7150dd4..2bf3b0a5 100644
+--- a/configs/arm64/imx93-harpoon-rtos.h
++++ b/configs/arm64/imx93-harpoon-rtos.h
+@@ -17,6 +17,7 @@ typedef enum IRQn {
+   TPM4_IRQn                    = 108,              /**< Timer PWM Module (TPM) 4 */
+   SW_MB_L_IRQn                 = 200,              /**< Unused SPI 168, to be used by generic software mailbox in Linux */
+   SW_MB_R_IRQn                 = 201,              /**< Unused SPI 169, to be used by generic software mailbox in RTOS */
++  ENET_IRQn                    = 213,              /**< ENET1 MAC Interrupt */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+@@ -26,6 +27,8 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xfd9fc000, 0xfd9fc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xfd9fe000, 0xfd9fe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xf8700000, 0xf8700000, MB(64)), /* Virtio DMA buffer */    \
++	MMIO_REGION_RWS(0xfc700000, 0xfc700000, MB(1)),  /* Virtio MMIO */          \
+ 	MMIO_REGION_RWS(0xfe000000, 0xfe000000, KB(4)),  /* SW MBOX */              \
+ 	MMIO_REGION_RWS(0xfe100000, 0xfe100000, KB(64)), /* RPMSG */                \
+ 	MEM_REGION_RWS( 0xfe200000, 0xfe200000, MB(1)),  /* RPMSG BUF */            \
+@@ -40,6 +43,10 @@ typedef enum IRQn {
+ 	MEM_REGION_RWXL(0xd0000000, 0xd0000000, MB(16)), /* RAM */    \
+ 	MEM_REGION_RWX( 0x20480000, 0x20480000, KB(640)) /* OCRAM */
+ 
++#define RTOS_VIRTIO_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x42890000, 0x42890000, KB(64)),   /* ENET */               \
++	MEM_REGION_RWS( 0x80000000, 0x80000000, GB(1))   /* data buffer */
++
+ /* GIC */
+ #define CONFIG_RTOS_IRQCHIPS_ADDR	(0x48000000)
+ 
+@@ -52,6 +59,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP1
+ #define RTOS_INDUS_IRQCHIP0_BITMAP1 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP1 \
++	0
+ 
+ /* interrupts 64..95 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP2 \
+@@ -62,6 +71,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP2 \
++	0
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+@@ -72,6 +83,8 @@ typedef enum IRQn {
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP3
+ #define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP3 \
++	0
+ 
+ /* interrupts 128..159 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP4 \
+@@ -82,6 +95,8 @@ typedef enum IRQn {
+ 		RTOS_AUDIO_IRQCHIP0_BITMAP4
+ #define RTOS_INDUS_IRQCHIP0_BITMAP4 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP0_BITMAP4 \
++	0
+ 
+ /* interrupts 160..191 */
+ #define RTOS_COMMON_IRQCHIP1_BITMAP1 \
+@@ -93,6 +108,8 @@ typedef enum IRQn {
+ 	0
+ #define RTOS_INDUS_IRQCHIP1_BITMAP1 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP1_BITMAP1 \
++	0
+ 
+ /* interrupts 192..223 */
+ #define RTOS_COMMON_IRQCHIP1_BITMAP2 \
+@@ -104,6 +121,8 @@ typedef enum IRQn {
+ 	0
+ #define RTOS_INDUS_IRQCHIP1_BITMAP2 \
+ 	0
++#define RTOS_VIRTIO_IRQCHIP1_BITMAP2 \
++	IRQnMAP(ENET_IRQn)
+ 
+ /* interrupts 224..255 */
+ #define RTOS_COMMON_IRQCHIP1_BITMAP3 \
+-- 
+2.34.1
+

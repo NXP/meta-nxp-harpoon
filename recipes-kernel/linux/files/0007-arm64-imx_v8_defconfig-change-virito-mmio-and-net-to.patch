@@ -1,0 +1,36 @@
+From 3956c40c13760685ed26cb173bc635841eec438b Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Wed, 8 Feb 2023 10:41:58 +0800
+Subject: [PATCH 07/10] arm64: imx_v8_defconfig: change virito mmio and net to
+ be module
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ arch/arm64/configs/imx_v8_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/configs/imx_v8_defconfig b/arch/arm64/configs/imx_v8_defconfig
+index 2937c1bc49c5..1a48595e1650 100644
+--- a/arch/arm64/configs/imx_v8_defconfig
++++ b/arch/arm64/configs/imx_v8_defconfig
+@@ -294,7 +294,7 @@ CONFIG_MACVLAN=m
+ CONFIG_MACVTAP=m
+ CONFIG_TUN=y
+ CONFIG_VETH=m
+-CONFIG_VIRTIO_NET=y
++CONFIG_VIRTIO_NET=m
+ CONFIG_NET_DSA_MSCC_FELIX=m
+ CONFIG_NET_DSA_NETC=m
+ CONFIG_NET_DSA_SJA1105=m
+@@ -894,7 +894,7 @@ CONFIG_VFIO_PCI=y
+ CONFIG_VFIO_FSL_MC=y
+ CONFIG_VIRTIO_PCI=y
+ CONFIG_VIRTIO_BALLOON=y
+-CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO=m
+ CONFIG_VIRTIO_IVSHMEM=y
+ CONFIG_XEN_GNTDEV=y
+ CONFIG_XEN_GRANT_DEV_ALLOC=y
+-- 
+2.34.1
+

@@ -1,0 +1,260 @@
+From 246d560222d4f610009f62a2a83ac55c4c6d1b98 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Wed, 28 Sep 2022 15:44:18 +0800
+Subject: [PATCH 18/28] configs: imx8m{m,n,p}: add irqs and memory regions for
+ sw mailbox and rpmsg
+
+Put the definitions of SW mailbox and RPMSG regions after the IVSHMEM regions
+that needs to stay on top.
+
+For 8MP, use spi irqs 150 and 151 for sw mailbox (76 and 77 are i2c interrupts)
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+(configs: arm64: imx8mm: add IRQ numbers for generic mailbox)
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+(arm64: update imx8mp and imx8mn to support rpmsg)
+Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+(configs: arm64: fix and unify sw mailbox irqs for imx8mp)
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ configs/arm64/imx8m-harpoon-config-audio.h      |  2 +-
+ configs/arm64/imx8m-harpoon-config-avb.h        |  1 +
+ configs/arm64/imx8m-harpoon-config-industrial.h |  7 ++++---
+ configs/arm64/imx8mm-harpoon-rtos.h             |  9 ++++++++-
+ configs/arm64/imx8mn-harpoon-rtos.h             | 11 +++++++++--
+ configs/arm64/imx8mp-harpoon-freertos.c         | 11 ++++++++++-
+ configs/arm64/imx8mp-harpoon-rtos.h             |  9 ++++++++-
+ configs/arm64/imx8mp-harpoon-zephyr.c           | 11 ++++++++++-
+ 8 files changed, 51 insertions(+), 10 deletions(-)
+
+diff --git a/configs/arm64/imx8m-harpoon-config-audio.h b/configs/arm64/imx8m-harpoon-config-audio.h
+index b633990e..522edd82 100644
+--- a/configs/arm64/imx8m-harpoon-config-audio.h
++++ b/configs/arm64/imx8m-harpoon-config-audio.h
+@@ -38,7 +38,7 @@
+ 		RTOS_AUDIO_IRQCHIP0_BITMAP4),                            \
+ 	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
+ 		/* interrupts 160..191 */                                \
+-		0,                                                       \
++		RTOS_COMMON_IRQCHIP1_BITMAP1,                            \
+ 		/* interrupts 192..223 */                                \
+ 		0,                                                       \
+ 		/* interrupts 224..255 */                                \
+diff --git a/configs/arm64/imx8m-harpoon-config-avb.h b/configs/arm64/imx8m-harpoon-config-avb.h
+index 40f0bb67..0a5e1940 100644
+--- a/configs/arm64/imx8m-harpoon-config-avb.h
++++ b/configs/arm64/imx8m-harpoon-config-avb.h
+@@ -38,6 +38,7 @@
+ 		RTOS_AVB_IRQCHIP0_BITMAP4),                              \
+ 	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
+ 		/* interrupts 160..191 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP1 |                           \
+ 		RTOS_AVB_IRQCHIP1_BITMAP1,                               \
+ 		/* interrupts 192..223 */                                \
+ 		0,                                                       \
+diff --git a/configs/arm64/imx8m-harpoon-config-industrial.h b/configs/arm64/imx8m-harpoon-config-industrial.h
+index e5e9dfd1..91180b59 100644
+--- a/configs/arm64/imx8m-harpoon-config-industrial.h
++++ b/configs/arm64/imx8m-harpoon-config-industrial.h
+@@ -21,8 +21,8 @@
+ /* GIC */
+ #define CONFIG_INMATE_IRQCHIPS_ADDR                   \
+ 	CONFIG_RTOS_IRQCHIPS_ADDR
+-#define CONFIG_INMATE_IRQCHIPS 	                      \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++#define CONFIG_INMATE_IRQCHIPS 	                                         \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                            \
+ 		/* interrupts 32..63 */                                  \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
+ 		RTOS_INDUS_IRQCHIP0_BITMAP1,                             \
+@@ -35,8 +35,9 @@
+ 		/* interrupts 128..159 */                                \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
+ 		RTOS_INDUS_IRQCHIP0_BITMAP4),                            \
+-	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                            \
+ 		/* interrupts 160..191 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP1 |                           \
+ 		RTOS_INDUS_IRQCHIP1_BITMAP1,                             \
+ 		/* interrupts 192..223 */                                \
+ 		0,                                                       \
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+index ad138e87..486f048d 100644
+--- a/configs/arm64/imx8mm-harpoon-rtos.h
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -22,6 +22,8 @@ typedef enum IRQn {
+   I2S3_IRQn                    = 82,               /**< SAI3 Receive / Transmit Interrupt */
+   GPT2_IRQn                    = 86,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
+   GPT1_IRQn                    = 87,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
++  SW_MB_L_IRQn                 = 108,              /**< Unused SPI 76, to be used by generic software mailbox in Linux */
++  SW_MB_R_IRQn                 = 109,              /**< Unused SPI 77, to be used by generic software mailbox in RTOS */
+   I2S56_IRQn                   = 122,              /**< SAI5/6 Receive / Transmit Interrupt */
+   I2S1_IRQn                    = 127,              /**< SAI1 Receive / Transmit Interrupt */
+   I2S2_IRQn                    = 128,              /**< SAI2 Receive / Transmit Interrupt */
+@@ -38,6 +40,9 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xbbafc000, 0xbbafc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xbbafe000, 0xbbafe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),  /* SW MBOX */              \
++	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+ 	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
+@@ -94,7 +99,7 @@ typedef enum IRQn {
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+-	0
++		IRQnMAP(SW_MB_R_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
+ 		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */ \
+ 		IRQnMAP(I2S1_IRQn)    /* SAI1 */
+@@ -121,6 +126,8 @@ typedef enum IRQn {
+ 		IRQnMAP(ENET_1588_IRQn)
+ 
+ /* interrupts 160..191 */
++#define RTOS_COMMON_IRQCHIP1_BITMAP1 \
++	0
+ #define RTOS_AUDIO_IRQCHIP1_BITMAP1 \
+ 	0
+ #define RTOS_AVB_IRQCHIP1_BITMAP1 \
+diff --git a/configs/arm64/imx8mn-harpoon-rtos.h b/configs/arm64/imx8mn-harpoon-rtos.h
+index 68db53e2..990cb7e3 100644
+--- a/configs/arm64/imx8mn-harpoon-rtos.h
++++ b/configs/arm64/imx8mn-harpoon-rtos.h
+@@ -1,7 +1,7 @@
+ /*
+  * i.MX8MN target - common RTOS config
+  *
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  *
+  * Authors:
+  *  Stephane Viau <stephane.viau@nxp.com>
+@@ -22,6 +22,8 @@ typedef enum IRQn {
+   I2S3_IRQn                    = 82,               /**< SAI3 Receive / Transmit Interrupt */
+   GPT2_IRQn                    = 86,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
+   GPT1_IRQn                    = 87,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
++  SW_MB_L_IRQn                 = 108,              /**< Unused SPI 76, to be used by generic software mailbox in Linux */
++  SW_MB_R_IRQn                 = 109,              /**< Unused SPI 77, to be used by generic software mailbox in RTOS */
+   I2S56_IRQn                   = 122,              /**< SAI5/6 Receive / Transmit Interrupt */
+   I2S2_IRQn                    = 128,              /**< SAI2 Receive / Transmit Interrupt */
+   I2S7_IRQn                    = 143,              /**< SAI7 Receive / Transmit Interrupt */
+@@ -38,6 +40,9 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xbbafc000, 0xbbafc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xbbafe000, 0xbbafe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xb8500000, 0xb8500000, KB(4)),  /* SW MBOX */              \
++	MMIO_REGION_RWS(0xb8600000, 0xb8600000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xb8700000, 0xb8700000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+ 	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
+@@ -94,7 +99,7 @@ typedef enum IRQn {
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+-	0
++		IRQnMAP(SW_MB_R_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
+ 		IRQnMAP(I2S56_IRQn)  /* SAI5-6 */
+ #define RTOS_AVB_IRQCHIP0_BITMAP3 \
+@@ -121,6 +126,8 @@ typedef enum IRQn {
+ 		IRQnMAP(ENET_1588_IRQn)
+ 
+ /* interrupts 160..191 */
++#define RTOS_COMMON_IRQCHIP1_BITMAP1 \
++	0
+ #define RTOS_AUDIO_IRQCHIP1_BITMAP1 \
+ 	0
+ #define RTOS_AVB_IRQCHIP1_BITMAP1 \
+diff --git a/configs/arm64/imx8mp-harpoon-freertos.c b/configs/arm64/imx8mp-harpoon-freertos.c
+index 699585d6..3cda7740 100644
+--- a/configs/arm64/imx8mp-harpoon-freertos.c
++++ b/configs/arm64/imx8mp-harpoon-freertos.c
+@@ -38,7 +38,16 @@
+ 		/* interrupts 96..127 */                   \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIP0_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4),             \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 160..191 */                  \
++		RTOS_COMMON_IRQCHIP1_BITMAP1,              \
++		/* interrupts 192..223 */                  \
++		0,                                         \
++		/* interrupts 224..255 */                  \
++		0,                                         \
++		/* interrupts 256..287 */                  \
++		0)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx8mp-harpoon-rtos.h b/configs/arm64/imx8mp-harpoon-rtos.h
+index 2daa8aaa..e373cdf5 100644
+--- a/configs/arm64/imx8mp-harpoon-rtos.h
++++ b/configs/arm64/imx8mp-harpoon-rtos.h
+@@ -1,7 +1,7 @@
+ /*
+  * i.MX8MP target - common RTOS config
+  *
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  *
+  * Authors:
+  *  Stephane Viau <stephane.viau@nxp.com>
+@@ -29,6 +29,8 @@ typedef enum IRQn {
+   ENET_QOS_IRQn                = 167,              /**< ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
+   CAN_FD1_IRQn                 = 174,              /**< CAN-FD1 Interrupt from bus off/line error/RX warning/TX warning/wakeup/match in PN/timeout in PN/busoff done/FD error */
+   CAN_FD1_ERROR_IRQn           = 175,              /**< CAN-FD1 Interrupt from correctable error/non correctable error int host/ non correctable error int internal */
++  SW_MB_L_IRQn                 = 182,              /**< Unused SPI 150, to be used by generic software mailbox in Linux */
++  SW_MB_R_IRQn                 = 183,              /**< Unused SPI 151, to be used by generic software mailbox in RTOS */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+@@ -38,6 +40,9 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xfd9fc000, 0xfd9fc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xfd9fe000, 0xfd9fe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xfe000000, 0xfe000000, KB(4)),  /* SW MBOX */              \
++	MMIO_REGION_RWS(0xfe100000, 0xfe100000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xfe200000, 0xfe200000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_ROS(0x30270000, 0x30270000, KB(64)), /* ANA_OSC */              \
+ 	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
+ 	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
+@@ -130,6 +135,8 @@ typedef enum IRQn {
+ 	0
+ 
+ /* interrupts 160..191 */
++#define RTOS_COMMON_IRQCHIP1_BITMAP1 \
++		IRQnMAP(SW_MB_R_IRQn)
+ #define RTOS_AUDIO_IRQCHIP1_BITMAP1 \
+ 	0
+ #define RTOS_AVB_IRQCHIP1_BITMAP1 \
+diff --git a/configs/arm64/imx8mp-harpoon-zephyr.c b/configs/arm64/imx8mp-harpoon-zephyr.c
+index 1e67ebad..0269d8d6 100644
+--- a/configs/arm64/imx8mp-harpoon-zephyr.c
++++ b/configs/arm64/imx8mp-harpoon-zephyr.c
+@@ -38,7 +38,16 @@
+ 		/* interrupts 96..127 */                   \
+ 		RTOS_COMMON_IRQCHIP0_BITMAP3,              \
+ 		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIP0_BITMAP4)
++		RTOS_COMMON_IRQCHIP0_BITMAP4),             \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 160..191 */                  \
++		RTOS_COMMON_IRQCHIP1_BITMAP1,              \
++		/* interrupts 192..223 */                  \
++		0,                                         \
++		/* interrupts 224..255 */                  \
++		0,                                         \
++		/* interrupts 256..287 */                  \
++		0)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+-- 
+2.34.1
+

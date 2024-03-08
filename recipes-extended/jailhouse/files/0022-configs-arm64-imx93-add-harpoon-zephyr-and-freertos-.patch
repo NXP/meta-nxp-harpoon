@@ -1,0 +1,195 @@
+From 755b276772235c8d6dbab3b8092c3a0b0ad75ff5 Mon Sep 17 00:00:00 2001
+From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+Date: Wed, 16 Aug 2023 15:45:38 +0200
+Subject: [PATCH 22/28] configs: arm64: imx93: add harpoon zephyr and freertos
+ industrial inmate cells
+
+Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+---
+ .../arm64/imx93-harpoon-config-industrial.h   | 53 +++++++++++++++++++
+ .../arm64/imx93-harpoon-freertos-industrial.c | 22 ++++++++
+ configs/arm64/imx93-harpoon-rtos.h            | 23 ++++++--
+ .../arm64/imx93-harpoon-zephyr-industrial.c   | 22 ++++++++
+ 4 files changed, 117 insertions(+), 3 deletions(-)
+ create mode 100644 configs/arm64/imx93-harpoon-config-industrial.h
+ create mode 100644 configs/arm64/imx93-harpoon-freertos-industrial.c
+ create mode 100644 configs/arm64/imx93-harpoon-zephyr-industrial.c
+
+diff --git a/configs/arm64/imx93-harpoon-config-industrial.h b/configs/arm64/imx93-harpoon-config-industrial.h
+new file mode 100644
+index 00000000..95baa7f4
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-config-industrial.h
+@@ -0,0 +1,53 @@
++/*
++ * i.MX93 target - Industrial config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Zineb EL AZZOUZI <zineb.elazzouzi@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                                    \
++	RTOS_COMMON_MEMORY_REGIONS,                                  \
++	RTOS_MEMRAM_MEMORY_REGIONS,                                  \
++	RTOS_INDUS_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR                              \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS 	                                 \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                        \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP1,                             \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP2,                             \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP3,                             \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_INDUS_IRQCHIP0_BITMAP4),                            \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                        \
++		/* interrupts 160..191 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP1 |                           \
++		RTOS_INDUS_IRQCHIP1_BITMAP1,                             \
++		/* interrupts 192..223 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP2 |                           \
++		RTOS_INDUS_IRQCHIP1_BITMAP2,                             \
++		/* interrupts 224..255 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP3,                            \
++		/* interrupts 256..287 */                                \
++		RTOS_COMMON_IRQCHIP1_BITMAP4),                           \
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                                \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx93-harpoon-freertos-industrial.c b/configs/arm64/imx93-harpoon-freertos-industrial.c
+new file mode 100644
+index 00000000..fed411fd
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-freertos-industrial.c
+@@ -0,0 +1,22 @@
++/*
++ * i.MX93 target - FreeRTOS industrial config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Zineb EL AZZOUZI <zineb.elazzouzi@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10) /* inmate uses core 1 */
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx93-harpoon-config-industrial.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx93-harpoon-rtos.h b/configs/arm64/imx93-harpoon-rtos.h
+index 2bf3b0a5..ddece671 100644
+--- a/configs/arm64/imx93-harpoon-rtos.h
++++ b/configs/arm64/imx93-harpoon-rtos.h
+@@ -14,10 +14,14 @@ typedef enum IRQn {
+   /* Device specific interrupts */
+   LPUART2_IRQn                 = 52,               /**< Low Power UART 2 */
+   TPM2_IRQn                    = 69,               /**< Timer PWM Module (TPM) 2 */
++  CAN_FD2_IRQn                 = 83,               /**< CAN2 interrupt */
++  CAN_FD2_ERROR_IRQn           = 84,               /**< CAN2 error interrupt */
+   TPM4_IRQn                    = 108,              /**< Timer PWM Module (TPM) 4 */
+   SW_MB_L_IRQn                 = 200,              /**< Unused SPI 168, to be used by generic software mailbox in Linux */
+   SW_MB_R_IRQn                 = 201,              /**< Unused SPI 169, to be used by generic software mailbox in RTOS */
+   ENET_IRQn                    = 213,              /**< ENET1 MAC Interrupt */
++  ENET_QOS_PMT_IRQn            = 215,              /**< ENET QOS TSN Interrupt from PMT */
++  ENET_QOS_IRQn                = 216,              /**< ENET QOS TSN LPI RX exit/Host System/RX/TX Channels[4:0] Interrupt */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+@@ -43,6 +47,16 @@ typedef enum IRQn {
+ 	MEM_REGION_RWXL(0xd0000000, 0xd0000000, MB(16)), /* RAM */    \
+ 	MEM_REGION_RWX( 0x20480000, 0x20480000, KB(640)) /* OCRAM */
+ 
++#define RTOS_AVB_MEMORY_REGIONS \
++	RTOS_AUDIO_MEMORY_REGIONS,                                     \
++	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)) /* ENET_Q*/    \
++	MMIO_REGION_RWS( 0x42420000, 0x42420000, KB(64)) /* WAKEUPIMX1*/
++
++#define RTOS_INDUS_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x425b0000, 0x425b0000, KB(64)), /* FLEXCAN2*/  \
++	MMIO_REGION_RW( 0x428a0000, 0x428a0000, KB(64)), /* ENET_Q*/    \
++	MMIO_REGION_RWS( 0x42420000, 0x42420000, KB(64)) /* WAKEUPIMX1*/
++
+ #define RTOS_VIRTIO_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x42890000, 0x42890000, KB(64)),   /* ENET */               \
+ 	MEM_REGION_RWS( 0x80000000, 0x80000000, GB(1))   /* data buffer */
+@@ -70,7 +84,8 @@ typedef enum IRQn {
+ #define RTOS_AVB_IRQCHIP0_BITMAP2 \
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+-	0
++	IRQnMAP(CAN_FD2_IRQn) | \
++	IRQnMAP(CAN_FD2_ERROR_IRQn)
+ #define RTOS_VIRTIO_IRQCHIP0_BITMAP2 \
+ 	0
+ 
+@@ -118,9 +133,11 @@ typedef enum IRQn {
+ 	0
+ #define RTOS_AVB_IRQCHIP1_BITMAP2 \
+ 	RTOS_AUDIO_IRQCHIP1_BITMAP2 | \
+-	0
++	IRQnMAP(ENET_QOS_PMT_IRQn) | \
++	IRQnMAP(ENET_QOS_IRQn)
+ #define RTOS_INDUS_IRQCHIP1_BITMAP2 \
+-	0
++	IRQnMAP(ENET_QOS_PMT_IRQn) | \
++	IRQnMAP(ENET_QOS_IRQn)
+ #define RTOS_VIRTIO_IRQCHIP1_BITMAP2 \
+ 	IRQnMAP(ENET_IRQn)
+ 
+diff --git a/configs/arm64/imx93-harpoon-zephyr-industrial.c b/configs/arm64/imx93-harpoon-zephyr-industrial.c
+new file mode 100644
+index 00000000..715c2158
+--- /dev/null
++++ b/configs/arm64/imx93-harpoon-zephyr-industrial.c
+@@ -0,0 +1,22 @@
++/*
++ * i.MX93 target - Zephyr industrial config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Zineb EL AZZOUZI <zineb.elazzouzi@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx93-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b10) /* inmate uses core 1 */
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx93-harpoon-config-industrial.h"
++
++#include "cell-create.h"
+-- 
+2.34.1
+

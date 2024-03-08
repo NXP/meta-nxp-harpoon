@@ -8,7 +8,7 @@ inherit python3native
 LICENSE = "BSD-3-Clause & Apache-2.0 & Proprietary"
 LIC_FILES_CHKSUM = " \
     file://zephyr/LICENSE;md5=fa818a259cbed7ce8bc2a22d35a464fc \
-    file://modules/hal/nxp/mcux/mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=21f2673de635a71594c76fc62f0b9759 \
+    file://modules/hal/nxp/mcux/mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=05d4eaca7b4661792db56269cb11938d \
     file://harpoon-apps/LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd385e900f"
 
 SRC_URI = "\
@@ -19,8 +19,8 @@ SRC_URI = "\
 
 SRCREV_FORMAT = "harpoon-apps_zephyr_hal-nxp"
 
-SRCREV_zephyr = "8aa0e8c125ef1b2e99316dd483e6a51bbac12a2f"
-SRCREV_hal-nxp = "48e48e3018ea94499007f730cb7704cf09a068dc"
+SRCREV_zephyr = "e0d0f16c74ca97d9e4c25b256c5c91f29233b76f"
+SRCREV_hal-nxp = "996f5fd03b140cd5eef2a3685127c2984f06d403"
 
 INMATES_DIR ?= "${HARPOON_DATADIR}/inmates/zephyr"
 

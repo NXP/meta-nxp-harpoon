@@ -1,0 +1,49 @@
+From 727f238f33cc18c4c7dc4261562b6808f93fd1d6 Mon Sep 17 00:00:00 2001
+From: Jiafei Pan <Jiafei.Pan@nxp.com>
+Date: Thu, 2 Feb 2023 15:48:19 +0800
+Subject: [PATCH 20/28] arm-commun: irqchip: allow to trigger interrupt handled
+ by other cells
+
+Generic software mailbox use two SPI interrupt for notification,
+so need to allow the driver to acess GIC register which is not
+owned by itself to tigger interrupt which is handled in other
+cell.
+So let's pass through all GICD_ISPENDR write access.
+
+This is just a hack, will revert it when formal fix is provided.
+
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ hypervisor/arch/arm-common/irqchip.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/hypervisor/arch/arm-common/irqchip.c b/hypervisor/arch/arm-common/irqchip.c
+index daae5512..96129de4 100644
+--- a/hypervisor/arch/arm-common/irqchip.c
++++ b/hypervisor/arch/arm-common/irqchip.c
+@@ -29,6 +29,8 @@
+ 	     (counter) < (config)->num_irqchips;			\
+ 	     (chip)++, (counter)++)
+ 
++#define ENABLE_SPI_ACCESS_HACK
++
+ spinlock_t dist_lock;
+ 
+ void *gicd_base;
+@@ -69,6 +71,13 @@ restrict_bitmask_access(struct mmio_access *mmio, unsigned int reg_index,
+ 		if (irqchip_irq_in_cell(cell, first_irq + irq))
+ 			access_mask |= irq_bits << (irq * bits_per_irq);
+ 
++#ifdef ENABLE_SPI_ACCESS_HACK
++	/* Pass through all GICD_ISPENDR write access */
++	if ((mmio->address >= GICD_ISPENDR) && (mmio->address <= (GICD_ISPENDR + 124)))
++		if (mmio->is_write)
++			access_mask = ~0UL;
++#endif
++
+ 	access_mask >>= 8 * (mmio->address & 0x3);
+ 	access_mask &= (1UL << (mmio->size * 8)) - 1;
+ 
+-- 
+2.34.1
+

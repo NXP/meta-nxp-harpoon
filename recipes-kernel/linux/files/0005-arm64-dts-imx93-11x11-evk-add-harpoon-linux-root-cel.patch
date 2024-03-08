@@ -1,0 +1,100 @@
+From 03806953f08b1bb72cce632959c0d757d67fcd13 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Tue, 24 Jan 2023 09:09:15 +0000
+Subject: [PATCH 05/10] arm64: dts: imx93-11x11-evk: add harpoon linux root
+ cell for audio and industrial use cases
+
+harpoon.dts embeds the audio use case config: SAI interfaces are moved
+to the inmate cell.
+
+harpoon-industrial.dts is used for the industrial use cases, ethernet
+QoS and flexcan are used by the inmate cell.
+
+This patch forbids the Linux root cell to use the interfaces mentioned
+above.
+
+For the industrial node, disabling reg_can2_stby to free the GPIO and make
+it possible to control it from Linux scripts for harpoon usecases through
+gpioset commands.
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+(disable sai and i2c instances for rtos audio use and disable the reg_can2_stby)
+Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+(squash and reword)
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  1 +
+ .../imx93-11x11-evk-harpoon-industrial.dts    | 18 +++++++++++++++
+ .../dts/freescale/imx93-11x11-evk-harpoon.dts | 22 +++++++++++++++++++
+ 3 files changed, 41 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 9618a27f9fed..342b2b27d336 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -404,6 +404,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
+ 			  imx93-14x14-evk-flexspi-m2.dtb imx93-14x14-evk-dsi-serdes.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb \
+ 			  imx93-11x11-evk-avb.dtb \
++			  imx93-11x11-evk-harpoon.dtb imx93-11x11-evk-harpoon-industrial.dtb \
+ 			  imx93-11x11-evk-inmate.dtb imx93-11x11-evk-root.dtb imx93-11x11-evk-flexio-i2c.dtb \
+ 			  imx93-11x11-evk-lpspi.dtb imx93-11x11-evk-lpspi-slave.dtb \
+ 			  imx93-11x11-evk-i3c.dtb imx93-11x11-evk-lpuart.dtb \
+diff --git a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts
+new file mode 100644
+index 000000000000..8f49f2d69c9b
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "imx93-11x11-evk-root.dts"
++
++&eqos {
++	status = "disabled";
++};
++
++&flexcan2 {
++	status = "disabled";
++};
++
++&reg_can2_stby {
++	status = "disabled";
++};
+\ No newline at end of file
+diff --git a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
+new file mode 100644
+index 000000000000..58c5552af1ed
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "imx93-11x11-evk-root.dts"
++
++&lpi2c1 {
++	status = "disabled";
++};
++
++&sai1 {
++	status = "disabled";
++};
++
++&sai2 {
++	status = "disabled";
++};
++
++&sai3 {
++	status = "disabled";
++};
+-- 
+2.34.1
+

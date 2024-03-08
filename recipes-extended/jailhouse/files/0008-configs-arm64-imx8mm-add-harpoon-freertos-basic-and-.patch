@@ -1,0 +1,196 @@
+From bf6f7b09a88d76fcf7360ca6e8a89ab7d24a4b37 Mon Sep 17 00:00:00 2001
+From: Fabrice Goucem <fabrice.goucem@nxp.com>
+Date: Thu, 18 Nov 2021 15:02:24 +0100
+Subject: [PATCH 08/28] configs: arm64: imx8mm: add harpoon freertos basic and
+ audio cells
+
+Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
+(rename configs: add harpoon prefix)
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ configs/arm64/imx8mm-harpoon-freertos-audio.c | 53 +++++++++++++++++
+ configs/arm64/imx8mm-harpoon-freertos.c       | 47 +++++++++++++++
+ configs/arm64/imx8mm-harpoon-rtos.h           | 57 +++++++++++++++++++
+ 3 files changed, 157 insertions(+)
+ create mode 100644 configs/arm64/imx8mm-harpoon-freertos-audio.c
+ create mode 100644 configs/arm64/imx8mm-harpoon-freertos.c
+ create mode 100644 configs/arm64/imx8mm-harpoon-rtos.h
+
+diff --git a/configs/arm64/imx8mm-harpoon-freertos-audio.c b/configs/arm64/imx8mm-harpoon-freertos-audio.c
+new file mode 100644
+index 00000000..dff87033
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-freertos-audio.c
+@@ -0,0 +1,53 @@
++/*
++ * i.MX8MM target - FreeRTOS audio config
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-harpoon-rtos.h"
++
++/* Name, cores, entry point */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++#define CONFIG_INMATE_BASE		(0xc0000000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RWS(0x30a40000, 0x30a40000, KB(64)),   /* I2C3 */   \
++	MMIO_REGION_RWS(0x30050000, 0x30050000, KB(64))    /* SAI5 */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2 |             \
++		IRQnMAP(I2C3_IRQn),  /* I2C3 */            \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3 |             \
++		IRQnMAP(I2S56_IRQn), /* SAI5 */            \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-harpoon-freertos.c b/configs/arm64/imx8mm-harpoon-freertos.c
+new file mode 100644
+index 00000000..688155d1
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-freertos.c
+@@ -0,0 +1,47 @@
++/*
++ * i.MX8MM target - FreeRTOS
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-harpoon-rtos.h"
++
++/* Name, cores, entry point */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++#define CONFIG_INMATE_BASE		(0xc0000000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                    \
++	MEM_REGION_RWXL(0x93c00000, 0xc0000000, MB(16)),   /* RAM */   \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */ \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */  \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128))   /* ITCM */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+new file mode 100644
+index 00000000..5bb54cf0
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -0,0 +1,57 @@
++/*
++ * i.MX8MM target - common RTOS config
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ *
++ */
++
++typedef enum IRQn {
++
++  /* Device specific interrupts */
++  UART4_IRQn                   = 61,               /**< UART-4 ORed interrupt */
++  I2C3_IRQn                    = 69,               /**< I2C-3 Interrupt */
++  GPT2_IRQn                    = 86,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
++  GPT1_IRQn                    = 87,               /**< OR of GPT Rollover interrupt line, Input Capture 1 and 2 lines, Output Compare 1, 2, and 3 Interrupt lines */
++  I2S56_IRQn                   = 122,              /**< SAI5/6 Receive / Transmit Interrupt */
++} IRQn_Type;
++
++#define RTOS_COMMON_MEMORY_REGIONS \
++	MEM_REGION_ROS( 0xbbaf0000, 0xbbaf0000, KB(4)),  /* IVSHMEM */              \
++	MEM_REGION_RWS( 0xbbaf1000, 0xbbaf1000, KB(36)), /* IVSHMEM */              \
++	MEM_REGION_ROS( 0xbbafa000, 0xbbafa000, KB(8)),  /* IVSHMEM */              \
++	MEM_REGION_RWS( 0xbbafc000, 0xbbafc000, KB(8)),  /* IVSHMEM */              \
++	MEM_REGION_ROS( 0xbbafe000, 0xbbafe000, KB(8)),  /* IVSHMEM */              \
++	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RW( 0x302d0000, 0x302d0000, KB(64)), /* GPT1 */                 \
++	MMIO_REGION_RW( 0x302e0000, 0x302e0000, KB(64)), /* GPT2 */                 \
++	MMIO_REGION_RWS(0x30330000, 0x30330000, KB(64)), /* IOMUXC */               \
++	MMIO_REGION_ROS(0x30360000, 0x30360000, KB(64)), /* ANA_PLL */              \
++	MMIO_REGION_ROS(0x30380000, 0x30380000, KB(64)), /* CCM */                  \
++	MMIO_REGION_RW( 0x30a60000, 0x30a60000, KB(64))  /* UART4 */                \
++
++/* interrupts 32..63 */
++#define RTOS_COMMON_IRQCHIP0_BITMAP1 \
++	IRQnMAP(UART4_IRQn)
++
++/* interrupts 64..95 */
++#define RTOS_COMMON_IRQCHIPS_BITMAP2 \
++	IRQnMAP(GPT2_IRQn) | \
++	IRQnMAP(GPT1_IRQn)
++
++/* interrupts 96..127 */
++#define RTOS_COMMON_IRQCHIPS_BITMAP3 \
++	0
++
++/* interrupts 128..159 */
++#define RTOS_COMMON_IRQCHIPS_BITMAP4 \
++	0
++
++#define	RTOS_COMMON_PCI_IVSHMEM \
++	PCI_IVSHMEM_UNDEFINED(1, 0, 0, 1, 3)
+-- 
+2.34.1
+

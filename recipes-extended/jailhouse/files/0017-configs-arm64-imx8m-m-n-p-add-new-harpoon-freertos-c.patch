@@ -1,0 +1,380 @@
+From 0b417266cf73639ea875ef8086817b80134c2e91 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Fri, 30 Sep 2022 16:31:58 +0000
+Subject: [PATCH 17/28] configs: arm64: imx8m{m,n,p}: add new harpoon freertos
+ cell for audio avb use case
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/imx8m-harpoon-config-avb.h    | 52 +++++++++++++++++++++
+ configs/arm64/imx8mm-harpoon-freertos-avb.c | 23 +++++++++
+ configs/arm64/imx8mm-harpoon-rtos.h         | 26 ++++++++++-
+ configs/arm64/imx8mn-harpoon-freertos-avb.c | 23 +++++++++
+ configs/arm64/imx8mn-harpoon-rtos.h         | 26 +++++++++++
+ configs/arm64/imx8mp-harpoon-freertos-avb.c | 23 +++++++++
+ configs/arm64/imx8mp-harpoon-rtos.h         | 22 +++++++++
+ 7 files changed, 193 insertions(+), 2 deletions(-)
+ create mode 100644 configs/arm64/imx8m-harpoon-config-avb.h
+ create mode 100644 configs/arm64/imx8mm-harpoon-freertos-avb.c
+ create mode 100644 configs/arm64/imx8mn-harpoon-freertos-avb.c
+ create mode 100644 configs/arm64/imx8mp-harpoon-freertos-avb.c
+
+diff --git a/configs/arm64/imx8m-harpoon-config-avb.h b/configs/arm64/imx8m-harpoon-config-avb.h
+new file mode 100644
+index 00000000..40f0bb67
+--- /dev/null
++++ b/configs/arm64/imx8m-harpoon-config-avb.h
+@@ -0,0 +1,52 @@
++/*
++ * i.MX8M family targets - Audio AVB config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *  Fabrice Goucem <fabrice.goucem@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                              \
++	RTOS_COMMON_MEMORY_REGIONS,                               \
++	RTOS_MEMRAM_MEMORY_REGIONS,                               \
++	RTOS_AVB_MEMORY_REGIONS
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR                   \
++	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS 	                      \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 32..63 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP1,                               \
++		/* interrupts 64..95 */                                  \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP2,                               \
++		/* interrupts 96..127 */                                 \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP3,                               \
++		/* interrupts 128..159 */                                \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |                           \
++		RTOS_AVB_IRQCHIP0_BITMAP4),                              \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,                     \
++		/* interrupts 160..191 */                                \
++		RTOS_AVB_IRQCHIP1_BITMAP1,                               \
++		/* interrupts 192..223 */                                \
++		0,                                                       \
++		/* interrupts 224..255 */                                \
++		0,                                                       \
++		/* interrupts 256..287 */                                \
++		0)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES                    \
++	RTOS_COMMON_PCI_IVSHMEM
++
+diff --git a/configs/arm64/imx8mm-harpoon-freertos-avb.c b/configs/arm64/imx8mm-harpoon-freertos-avb.c
+new file mode 100644
+index 00000000..29a23dce
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-freertos-avb.c
+@@ -0,0 +1,23 @@
++/*
++ * i.MX8MM target - FreeRTOS audio AVB config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-avb.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-harpoon-rtos.h b/configs/arm64/imx8mm-harpoon-rtos.h
+index db5c16e3..ad138e87 100644
+--- a/configs/arm64/imx8mm-harpoon-rtos.h
++++ b/configs/arm64/imx8mm-harpoon-rtos.h
+@@ -60,6 +60,10 @@ typedef enum IRQn {
+ 	MMIO_REGION_RW( 0x30050000, 0x30050000, KB(64)),   /* SAI5 */   \
+ 	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64))    /* SAI6 */
+ 
++#define RTOS_AVB_MEMORY_REGIONS \
++	RTOS_AUDIO_MEMORY_REGIONS,                                      \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
++
+ #define RTOS_INDUS_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+ 
+@@ -71,6 +75,8 @@ typedef enum IRQn {
+ 	IRQnMAP(UART4_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP1 \
+ 	0
++#define RTOS_AVB_IRQCHIP0_BITMAP1 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP1
+ #define RTOS_INDUS_IRQCHIP0_BITMAP1 \
+ 	0
+ 
+@@ -81,6 +87,8 @@ typedef enum IRQn {
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP2 \
+ 		IRQnMAP(I2C3_IRQn) | /* I2C3 */ \
+ 		IRQnMAP(I2S3_IRQn)   /* SAI3 */
++#define RTOS_AVB_IRQCHIP0_BITMAP2 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+ 	0
+ 
+@@ -90,6 +98,8 @@ typedef enum IRQn {
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
+ 		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */ \
+ 		IRQnMAP(I2S1_IRQn)    /* SAI1 */
++#define RTOS_AVB_IRQCHIP0_BITMAP3 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP3
+ #define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
+ 
+@@ -98,14 +108,26 @@ typedef enum IRQn {
+ 	0
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP4 \
+ 		IRQnMAP(I2S2_IRQn)    /* SAI2 */
++#define RTOS_AVB_IRQCHIP0_BITMAP4 \
++		RTOS_AUDIO_IRQCHIP0_BITMAP4         | \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) | \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) | \
++		IRQnMAP(ENET_IRQn)                  | \
++		IRQnMAP(ENET_1588_IRQn)
+ #define RTOS_INDUS_IRQCHIP0_BITMAP4 \
+ 		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) | \
+ 		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) | \
+ 		IRQnMAP(ENET_IRQn)                  | \
+ 		IRQnMAP(ENET_1588_IRQn)
+ 
+-/* GIC */
+-#define CONFIG_RTOS_IRQCHIPS_ADDR	(0x38800000)
++/* interrupts 160..191 */
++#define RTOS_AUDIO_IRQCHIP1_BITMAP1 \
++	0
++#define RTOS_AVB_IRQCHIP1_BITMAP1 \
++	RTOS_AUDIO_IRQCHIP1_BITMAP1 | \
++	0
++#define RTOS_INDUS_IRQCHIP1_BITMAP1 \
++	0
+ 
+ /* IVSHMEM PCI */
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+diff --git a/configs/arm64/imx8mn-harpoon-freertos-avb.c b/configs/arm64/imx8mn-harpoon-freertos-avb.c
+new file mode 100644
+index 00000000..19c7d993
+--- /dev/null
++++ b/configs/arm64/imx8mn-harpoon-freertos-avb.c
+@@ -0,0 +1,23 @@
++/*
++ * i.MX8MN target - FreeRTOS audio AVB config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mn-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-avb.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-harpoon-rtos.h b/configs/arm64/imx8mn-harpoon-rtos.h
+index 354bf2ae..68db53e2 100644
+--- a/configs/arm64/imx8mn-harpoon-rtos.h
++++ b/configs/arm64/imx8mn-harpoon-rtos.h
+@@ -60,6 +60,10 @@ typedef enum IRQn {
+ 	MMIO_REGION_RW( 0x30060000, 0x30060000, KB(64)),   /* SAI6 */   \
+ 	MMIO_REGION_RW( 0x300b0000, 0x300b0000, KB(64))    /* SAI7 */
+ 
++#define RTOS_AVB_MEMORY_REGIONS \
++	RTOS_AUDIO_MEMORY_REGIONS,                                      \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
++
+ #define RTOS_INDUS_MEMORY_REGIONS \
+ 	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+ 
+@@ -71,6 +75,8 @@ typedef enum IRQn {
+ 	IRQnMAP(UART4_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP1 \
+ 	0
++#define RTOS_AVB_IRQCHIP0_BITMAP1 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP1
+ #define RTOS_INDUS_IRQCHIP0_BITMAP1 \
+ 	0
+ 
+@@ -81,6 +87,8 @@ typedef enum IRQn {
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP2 \
+ 		IRQnMAP(I2C3_IRQn) | /* I2C3 */ \
+ 		IRQnMAP(I2S3_IRQn)   /* SAI3 */
++#define RTOS_AVB_IRQCHIP0_BITMAP2 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+ 	0
+ 
+@@ -89,6 +97,8 @@ typedef enum IRQn {
+ 	0
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
+ 		IRQnMAP(I2S56_IRQn)  /* SAI5-6 */
++#define RTOS_AVB_IRQCHIP0_BITMAP3 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP3
+ #define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
+ 
+@@ -98,11 +108,27 @@ typedef enum IRQn {
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP4 \
+ 		IRQnMAP(I2S2_IRQn) |  /* SAI2 */ \
+ 		IRQnMAP(I2S7_IRQn)    /* SAI7 */
++#define RTOS_AVB_IRQCHIP0_BITMAP4 \
++		RTOS_AUDIO_IRQCHIP0_BITMAP4         | \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) | \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) | \
++		IRQnMAP(ENET_IRQn)                  | \
++		IRQnMAP(ENET_1588_IRQn)
+ #define RTOS_INDUS_IRQCHIP0_BITMAP4 \
+ 		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) | \
+ 		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) | \
+ 		IRQnMAP(ENET_IRQn)                  | \
+ 		IRQnMAP(ENET_1588_IRQn)
+ 
++/* interrupts 160..191 */
++#define RTOS_AUDIO_IRQCHIP1_BITMAP1 \
++	0
++#define RTOS_AVB_IRQCHIP1_BITMAP1 \
++	RTOS_AUDIO_IRQCHIP1_BITMAP1 | \
++	0
++#define RTOS_INDUS_IRQCHIP1_BITMAP1 \
++	0
++
++/* IVSHMEM PCI */
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+ 	PCI_IVSHMEM_UNDEFINED(0, 0, 0, 1, 3)
+diff --git a/configs/arm64/imx8mp-harpoon-freertos-avb.c b/configs/arm64/imx8mp-harpoon-freertos-avb.c
+new file mode 100644
+index 00000000..28873f8d
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-freertos-avb.c
+@@ -0,0 +1,23 @@
++/*
++ * i.MX8MP target - FreeRTOS audio AVB config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mp-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-avb.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-harpoon-rtos.h b/configs/arm64/imx8mp-harpoon-rtos.h
+index 9531914e..2daa8aaa 100644
+--- a/configs/arm64/imx8mp-harpoon-rtos.h
++++ b/configs/arm64/imx8mp-harpoon-rtos.h
+@@ -67,6 +67,13 @@ typedef enum IRQn {
+ 	MMIO_REGION_RW( 0x30c80000, 0x30c80000, KB(64)),   /* SAI7 */   \
+ 	MMIO_REGION_RWS(0x30e20000, 0x30e20000, KB(64))    /* AUDIOMIX */
+ 
++#define RTOS_AVB_MEMORY_REGIONS \
++	RTOS_AUDIO_MEMORY_REGIONS,                                      \
++	MMIO_REGION_RWS(0x30230000, 0x30230000, KB(64)),   /* GPIO4 */  \
++	MMIO_REGION_RWS(0x30340000, 0x30340000, KB(64)),   /* GPR */    \
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30bf0000, 0x30bf0000, KB(64))    /* ENET_Q */
++
+ #define RTOS_INDUS_MEMORY_REGIONS \
+ 	MMIO_REGION_RWS(0x30230000, 0x30230000, KB(64)),   /* GPIO4 */  \
+ 	MMIO_REGION_RWS(0x30240000, 0x30240000, KB(64)),   /* GPIO5 */  \
+@@ -84,6 +91,8 @@ typedef enum IRQn {
+ 	IRQnMAP(UART4_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP1 \
+ 	0
++#define RTOS_AVB_IRQCHIP0_BITMAP1 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP1
+ #define RTOS_INDUS_IRQCHIP0_BITMAP1 \
+ 	0
+ 
+@@ -93,6 +102,8 @@ typedef enum IRQn {
+ 	IRQnMAP(GPT1_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP2 \
+ 		IRQnMAP(I2S3_IRQn)   /* SAI3 */
++#define RTOS_AVB_IRQCHIP0_BITMAP2 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+ 	0
+ 
+@@ -102,6 +113,8 @@ typedef enum IRQn {
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
+ 		IRQnMAP(I2S56_IRQn) | /* SAI5-6 */ \
+ 		IRQnMAP(I2S1_IRQn)    /* SAI1 */
++#define RTOS_AVB_IRQCHIP0_BITMAP3 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP3
+ #define RTOS_INDUS_IRQCHIP0_BITMAP3 \
+ 	0
+ 
+@@ -111,15 +124,24 @@ typedef enum IRQn {
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP4 \
+ 		IRQnMAP(I2S2_IRQn) |  /* SAI2 */ \
+ 		IRQnMAP(I2S7_IRQn)    /* SAI7 */
++#define RTOS_AVB_IRQCHIP0_BITMAP4 \
++	RTOS_AUDIO_IRQCHIP0_BITMAP4
+ #define RTOS_INDUS_IRQCHIP0_BITMAP4 \
+ 	0
+ 
+ /* interrupts 160..191 */
++#define RTOS_AUDIO_IRQCHIP1_BITMAP1 \
++	0
++#define RTOS_AVB_IRQCHIP1_BITMAP1 \
++		RTOS_AUDIO_IRQCHIP1_BITMAP1 | \
++		IRQnMAP(ENET_QOS_PMT_IRQn) | \
++		IRQnMAP(ENET_QOS_IRQn)
+ #define RTOS_INDUS_IRQCHIP1_BITMAP1 \
+ 		IRQnMAP(ENET_QOS_PMT_IRQn) | \
+ 		IRQnMAP(ENET_QOS_IRQn) | \
+ 		IRQnMAP(CAN_FD1_IRQn) | /* FLEXCAN1 */ \
+ 		IRQnMAP(CAN_FD1_ERROR_IRQn)
+ 
++/* IVSHMEM PCI */
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+ 	PCI_IVSHMEM_UNDEFINED(2, 0, 0, 1, 3)
+-- 
+2.34.1
+

@@ -5,7 +5,7 @@ require harpoon-apps-uri.inc
 
 LICENSE = "BSD-3-Clause & Apache-2.0 & MIT & Proprietary"
 LIC_FILES_CHKSUM = " \
-    file://mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=71d85499ae575285003624d1069c714b \
+    file://mcux-sdk/LA_OPT_NXP_Software_License.txt;md5=05d4eaca7b4661792db56269cb11938d \
     file://mcux-sdk/CMSIS/LICENSE.txt;md5=e3fc50a88d0a364313df4b21ef20c29e \
     file://FreeRTOS-Kernel/LICENSE.md;md5=7ae2be7fb1637141840314b51970a9f7 \
     file://harpoon-apps/LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd385e900f"
@@ -19,8 +19,8 @@ SRC_URI = "\
 
 SRCREV_FORMAT = "harpoon-apps_mcux-sdk_CMSIS_FreeRTOS-Kernel"
 
-SRCREV_mcux-sdk = "d2c5fe71520d2933600e988cda6d8af029c516e7"
-SRCREV_CMSIS = "66a180f8b67fb3fdd11271bb31f5abec42fa2f62"
+SRCREV_mcux-sdk = "9004c905dbb87c44adaeaefc45dde61390ffddb8"
+SRCREV_CMSIS = "b5916939a8384aac3398e3f4ea97917fa9b030fd"
 SRCREV_FreeRTOS-Kernel = "d2ca5ca56c79edac658773aa16cf0fd63e566a04"
 
 BOARD:imx8mp-lpddr4-evk = "evkmimx8mp"

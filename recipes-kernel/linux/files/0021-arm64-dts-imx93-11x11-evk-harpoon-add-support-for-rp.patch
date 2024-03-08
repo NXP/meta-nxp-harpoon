@@ -1,0 +1,88 @@
+From 157275896907494302bf3e84b3ddc9ccd23d1636 Mon Sep 17 00:00:00 2001
+From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+Date: Fri, 19 May 2023 17:31:37 +0200
+Subject: [PATCH 21/23] arm64: dts: imx93-11x11-evk: harpoon: add support for
+ rpmsg
+
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+(add dma-coherent property to rpmsg-ca53 node)
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+(Adpat to add new property to enable/disable ACK interrupt)
+Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
+---
+ .../imx93-11x11-evk-harpoon-industrial.dts    |  1 +
+ .../dts/freescale/imx93-11x11-evk-harpoon.dts |  1 +
+ .../boot/dts/freescale/imx93-rpmsg-ca55.dtsi  | 37 +++++++++++++++++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi
+
+diff --git a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts
+index 8f49f2d69c9b..d0a18a1dd6dd 100644
+--- a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-industrial.dts
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include "imx93-11x11-evk-root.dts"
++#include "imx93-rpmsg-ca55.dtsi"
+ 
+ &eqos {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
+index 58c5552af1ed..70b87bdb5dfb 100644
+--- a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include "imx93-11x11-evk-root.dts"
++#include "imx93-rpmsg-ca55.dtsi"
+ 
+ &lpi2c1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi b/arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi
+new file mode 100644
+index 000000000000..5db78b628c44
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx93-rpmsg-ca55.dtsi
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++#include "imx93-generic-mbox.dtsi"
++
++/ {
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		rpmsg_ca55_reserved: rpmsg-ca55@fe100000 {
++			reg = <0 0xfe100000 0 0x10000>;
++			no-map;
++		};
++
++		vdevbuffer_ca55: vdevbuffer-ca55@fe200000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0xfe200000 0 0x100000>;
++			no-map;
++		};
++	};
++
++	rpmsg-ca55 {
++		compatible = "fsl,imx8mm-rpmsg";
++		reg = <0x0 0xfe100000 0x0 0x10000>; /* 64K for one rpmsg instance */
++		dma-coherent;
++		memory-region = <&vdevbuffer_ca55>;
++		mbox-names = "tx", "rx", "rxdb";
++		mboxes = <&gen_sw_mbox 0 0 1	/* Tx channel with ACK */
++			  &gen_sw_mbox 1 0 0	/* Rx channel without ACK */
++			  &gen_sw_mbox 2 0 1>;	/* RXDB channel with ACK */
++		vdev-nums = <1>;
++	};
++};
+-- 
+2.34.1
+

@@ -1,0 +1,109 @@
+From f3e9c82662cf51cc02234d76c332889b9d6bfed2 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Fri, 18 Aug 2023 15:00:19 +0200
+Subject: [PATCH 22/27] configs: arm64: imx8m{m,n,p}: add new harpoon zephyr
+ cells for audio avb use case
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/arm64/imx8mm-harpoon-zephyr-avb.c | 24 +++++++++++++++++++++++
+ configs/arm64/imx8mn-harpoon-zephyr-avb.c | 24 +++++++++++++++++++++++
+ configs/arm64/imx8mp-harpoon-zephyr-avb.c | 24 +++++++++++++++++++++++
+ 3 files changed, 72 insertions(+)
+ create mode 100644 configs/arm64/imx8mm-harpoon-zephyr-avb.c
+ create mode 100644 configs/arm64/imx8mn-harpoon-zephyr-avb.c
+ create mode 100644 configs/arm64/imx8mp-harpoon-zephyr-avb.c
+
+diff --git a/configs/arm64/imx8mm-harpoon-zephyr-avb.c b/configs/arm64/imx8mm-harpoon-zephyr-avb.c
+new file mode 100644
+index 00000000..55c3fecc
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-zephyr-avb.c
+@@ -0,0 +1,24 @@
++/*
++ * i.MX8MM target - Zephyr audio AVB config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Aziz Sellami <aziz.sellami@nxp.com>
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b0100)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-avb.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-harpoon-zephyr-avb.c b/configs/arm64/imx8mn-harpoon-zephyr-avb.c
+new file mode 100644
+index 00000000..f8c89cfa
+--- /dev/null
++++ b/configs/arm64/imx8mn-harpoon-zephyr-avb.c
+@@ -0,0 +1,24 @@
++/*
++ * i.MX8MN target - Zephyr audio AVB config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Aziz Sellami <aziz.sellami@nxp.com>
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mn-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b0100)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-avb.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-harpoon-zephyr-avb.c b/configs/arm64/imx8mp-harpoon-zephyr-avb.c
+new file mode 100644
+index 00000000..65d8b74c
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-zephyr-avb.c
+@@ -0,0 +1,24 @@
++/*
++ * i.MX8MP target - Zephyr audio AVB config
++ *
++ * Copyright 2023 NXP
++ *
++ * Authors:
++ *  Aziz Sellami <aziz.sellami@nxp.com>
++ *  Jiafei Pan <Jiafei.Pan@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mp-harpoon-rtos.h"
++
++/* Name, cores */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b0100)
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx8m-harpoon-config-avb.h"
++
++#include "cell-create.h"
+-- 
+2.34.1
+

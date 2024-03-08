@@ -5,4 +5,4 @@ SRC_URI += "\
 "
 
 SRCREV_FORMAT:append = "_mcux-sdk-middleware-multicore"
-SRCREV_mcux-sdk-middleware-multicore = "2d89233a3be1f9533bd948f33dd6d0275d72cedd"
+SRCREV_mcux-sdk-middleware-multicore = "7ae65fe481b70093d71c4ffd7e2f9f1427717035"

@@ -1,0 +1,47 @@
+From 86c0391196ece3c952299adcd0701adfd455c86e Mon Sep 17 00:00:00 2001
+From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+Date: Thu, 18 Jan 2024 17:48:23 +0100
+Subject: [PATCH 15/23] arm64: dts: imx93: add generic mbox dtsi
+
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ .../dts/freescale/imx93-generic-mbox.dtsi     | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-generic-mbox.dtsi
+
+diff --git a/arch/arm64/boot/dts/freescale/imx93-generic-mbox.dtsi b/arch/arm64/boot/dts/freescale/imx93-generic-mbox.dtsi
+new file mode 100644
+index 000000000000..5e6e1723a05d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx93-generic-mbox.dtsi
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 NXP
++ */
++
++/ {
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		gen_sw_mbox_reserved: gen-sw-mbox@fe000000 {
++			reg = <0 0xfe000000 0 0x1000>;
++			no-map;
++		};
++
++	};
++
++	gen_sw_mbox: generic-software-mailbox@fe000000 {
++		compatible = "fsl,generic-software-mbox";
++		reg = <0 0xfe000000 0 0x1000>;
++		#mbox-cells = <3>;
++		/* Use 2 unused SPI interrupts */
++		interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "irq", "remote_irq";
++	};
++};
+-- 
+2.34.1
+

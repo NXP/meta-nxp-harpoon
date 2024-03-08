@@ -1,0 +1,74 @@
+From 4305a9b8c79fd7532208db68c531c697885aaf44 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Mon, 19 Apr 2021 17:09:48 +0800
+Subject: [PATCH 07/27] configs: arm64: imx8mp: add harpoon zephyr basic cell
+
+This config file assigns core2 and core3 to Zephyr cell,
+and the UART4 is used as Zephyr console.
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+(rename config: add harpoon prefix to avoid name conflicts)
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+(use imx-cell helper)
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ configs/arm64/imx8mp-harpoon-zephyr.c | 47 +++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 configs/arm64/imx8mp-harpoon-zephyr.c
+
+diff --git a/configs/arm64/imx8mp-harpoon-zephyr.c b/configs/arm64/imx8mp-harpoon-zephyr.c
+new file mode 100644
+index 00000000..dc50ed74
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-zephyr.c
+@@ -0,0 +1,47 @@
++/*
++ * i.MX8MP target - Zephyr
++ *
++ * Copyright 2021-2022 NXP
++ *
++ * Authors:
++ *  Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mp-harpoon-rtos.h"
++
++/* Name, cores, entry point */
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++#define CONFIG_INMATE_BASE		(0xc0000000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS							\
++	RTOS_COMMON_MEMORY_REGIONS,                                     	\
++	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(1)),    /* RAM */    	\
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  	\
++	MMIO_REGION_RWS(0x30384000, 0x30384000, KB(4)),    /* CCM clock gating */ \
++	MMIO_REGION_RWS(0x3038b000, 0x3038b000, KB(4))     /* CCM TARGET_ROOT */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
++
++#include "cell-create.h"
+-- 
+2.34.1
+

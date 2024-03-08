@@ -1,0 +1,55 @@
+From 0c9d7075431791d7f9db7f2b13fc80b0151dde0d Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Mon, 11 Dec 2023 17:22:33 +0100
+Subject: [PATCH 27/27] configs: arm64: imx8m{m,n,p}: zephyr: add a core for
+ audio AVB SMP support
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/arm64/imx8mm-harpoon-zephyr-avb.c | 2 +-
+ configs/arm64/imx8mn-harpoon-zephyr-avb.c | 2 +-
+ configs/arm64/imx8mp-harpoon-zephyr-avb.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/configs/arm64/imx8mm-harpoon-zephyr-avb.c b/configs/arm64/imx8mm-harpoon-zephyr-avb.c
+index 55c3fecc..f10276be 100644
+--- a/configs/arm64/imx8mm-harpoon-zephyr-avb.c
++++ b/configs/arm64/imx8mm-harpoon-zephyr-avb.c
+@@ -16,7 +16,7 @@
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"zephyr"
+-#define CONFIG_INMATE_CORE_BITMAP	(0b0100)
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
+ /* Base, memory & peripherals, GIC, IVSHMEM PCI */
+ #include "imx8m-harpoon-config-avb.h"
+diff --git a/configs/arm64/imx8mn-harpoon-zephyr-avb.c b/configs/arm64/imx8mn-harpoon-zephyr-avb.c
+index f8c89cfa..2ea5cf89 100644
+--- a/configs/arm64/imx8mn-harpoon-zephyr-avb.c
++++ b/configs/arm64/imx8mn-harpoon-zephyr-avb.c
+@@ -16,7 +16,7 @@
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"zephyr"
+-#define CONFIG_INMATE_CORE_BITMAP	(0b0100)
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
+ /* Base, memory & peripherals, GIC, IVSHMEM PCI */
+ #include "imx8m-harpoon-config-avb.h"
+diff --git a/configs/arm64/imx8mp-harpoon-zephyr-avb.c b/configs/arm64/imx8mp-harpoon-zephyr-avb.c
+index 65d8b74c..8bb4f179 100644
+--- a/configs/arm64/imx8mp-harpoon-zephyr-avb.c
++++ b/configs/arm64/imx8mp-harpoon-zephyr-avb.c
+@@ -16,7 +16,7 @@
+ 
+ /* Name, cores */
+ #define CONFIG_INMATE_NAME		"zephyr"
+-#define CONFIG_INMATE_CORE_BITMAP	(0b0100)
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
+ 
+ /* Base, memory & peripherals, GIC, IVSHMEM PCI */
+ #include "imx8m-harpoon-config-avb.h"
+-- 
+2.34.1
+

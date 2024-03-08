@@ -1,0 +1,454 @@
+From 3e5eac9f81283146e0c5893d3c5876f928e7c0c7 Mon Sep 17 00:00:00 2001
+From: Stephane Viau <stephane.viau@nxp.com>
+Date: Mon, 2 May 2022 13:11:00 +0000
+Subject: [PATCH 14/27] configs: arm64: imx8m{m,n,p}: add harpoon zephyr
+ industrial cell config
+
+Signed-off-by: Stephane Viau <stephane.viau@nxp.com>
+---
+ .../imx8mm-harpoon-freertos-industrial.c      | 46 +-------------
+ configs/arm64/imx8mm-harpoon-industrial.h     | 48 +++++++++++++++
+ .../arm64/imx8mm-harpoon-zephyr-industrial.c  | 18 ++++++
+ .../imx8mn-harpoon-freertos-industrial.c      | 46 +-------------
+ configs/arm64/imx8mn-harpoon-industrial.h     | 48 +++++++++++++++
+ .../arm64/imx8mn-harpoon-zephyr-industrial.c  | 18 ++++++
+ .../imx8mp-harpoon-freertos-industrial.c      | 49 +--------------
+ configs/arm64/imx8mp-harpoon-industrial.h     | 60 +++++++++++++++++++
+ .../arm64/imx8mp-harpoon-zephyr-industrial.c  | 18 ++++++
+ 9 files changed, 213 insertions(+), 138 deletions(-)
+ create mode 100644 configs/arm64/imx8mm-harpoon-industrial.h
+ create mode 100644 configs/arm64/imx8mm-harpoon-zephyr-industrial.c
+ create mode 100644 configs/arm64/imx8mn-harpoon-industrial.h
+ create mode 100644 configs/arm64/imx8mn-harpoon-zephyr-industrial.c
+ create mode 100644 configs/arm64/imx8mp-harpoon-industrial.h
+ create mode 100644 configs/arm64/imx8mp-harpoon-zephyr-industrial.c
+
+diff --git a/configs/arm64/imx8mm-harpoon-freertos-industrial.c b/configs/arm64/imx8mm-harpoon-freertos-industrial.c
+index cda28541..aaca86c1 100644
+--- a/configs/arm64/imx8mm-harpoon-freertos-industrial.c
++++ b/configs/arm64/imx8mm-harpoon-freertos-industrial.c
+@@ -10,53 +10,9 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "cell-helper.h"
+-#include "imx8mm-harpoon-rtos.h"
++#include "imx8mm-harpoon-industrial.h"
+ 
+-/* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
+-		IRQnMAP(ENET_IRQn)                  |      \
+-		IRQnMAP(ENET_1588_IRQn)),                  \
+-	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 160..191 */                  \
+-		0,                                         \
+-		/* interrupts 192..223 */                  \
+-		0,                                         \
+-		/* interrupts 224..255 */                  \
+-		0,                                         \
+-		/* interrupts 256..287 */                  \
+-		0)
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mm-harpoon-industrial.h b/configs/arm64/imx8mm-harpoon-industrial.h
+new file mode 100644
+index 00000000..4344ceb9
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-industrial.h
+@@ -0,0 +1,48 @@
++/*
++ * i.MX8MM target - Industrial config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mm-harpoon-rtos.h"
++
++#define CONFIG_INMATE_BASE		(0x93c00000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
++		IRQnMAP(ENET_IRQn)                  |      \
++		IRQnMAP(ENET_1588_IRQn))
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mm-harpoon-zephyr-industrial.c b/configs/arm64/imx8mm-harpoon-zephyr-industrial.c
+new file mode 100644
+index 00000000..2fbb381d
+--- /dev/null
++++ b/configs/arm64/imx8mm-harpoon-zephyr-industrial.c
+@@ -0,0 +1,18 @@
++/*
++ * i.MX8MM target - Zephyr industrial config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "imx8mm-harpoon-industrial.h"
++
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-harpoon-freertos-industrial.c b/configs/arm64/imx8mn-harpoon-freertos-industrial.c
+index 39dfc4e8..cdbd46f3 100644
+--- a/configs/arm64/imx8mn-harpoon-freertos-industrial.c
++++ b/configs/arm64/imx8mn-harpoon-freertos-industrial.c
+@@ -10,53 +10,9 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "cell-helper.h"
+-#include "imx8mn-harpoon-rtos.h"
++#include "imx8mn-harpoon-industrial.h"
+ 
+-/* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0x93c00000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
+-		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
+-		IRQnMAP(ENET_IRQn)                  |      \
+-		IRQnMAP(ENET_1588_IRQn)),                  \
+-	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 160..191 */                  \
+-		0,                                         \
+-		/* interrupts 192..223 */                  \
+-		0,                                         \
+-		/* interrupts 224..255 */                  \
+-		0,                                         \
+-		/* interrupts 256..287 */                  \
+-		0)
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mn-harpoon-industrial.h b/configs/arm64/imx8mn-harpoon-industrial.h
+new file mode 100644
+index 00000000..ceadcca7
+--- /dev/null
++++ b/configs/arm64/imx8mn-harpoon-industrial.h
+@@ -0,0 +1,48 @@
++/*
++ * i.MX8MN target - Industrial config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mn-harpoon-rtos.h"
++
++#define CONFIG_INMATE_BASE		(0x93c00000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0x93c00000, 0x93c00000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(64)),   /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x30be0000, 0x30be0000, KB(4))     /* ENET */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4        |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done1_IRQn) |      \
++		IRQnMAP(ENET_MAC0_Rx_Tx_Done2_IRQn) |      \
++		IRQnMAP(ENET_IRQn)                  |      \
++		IRQnMAP(ENET_1588_IRQn))
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mn-harpoon-zephyr-industrial.c b/configs/arm64/imx8mn-harpoon-zephyr-industrial.c
+new file mode 100644
+index 00000000..8c30ac57
+--- /dev/null
++++ b/configs/arm64/imx8mn-harpoon-zephyr-industrial.c
+@@ -0,0 +1,18 @@
++/*
++ * i.MX8MN target - Zephyr industrial config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "imx8mn-harpoon-industrial.h"
++
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-harpoon-freertos-industrial.c b/configs/arm64/imx8mp-harpoon-freertos-industrial.c
+index fc94acbe..bf3fb1c5 100644
+--- a/configs/arm64/imx8mp-harpoon-freertos-industrial.c
++++ b/configs/arm64/imx8mp-harpoon-freertos-industrial.c
+@@ -10,56 +10,9 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
+-#include "cell-helper.h"
+-#include "imx8mp-harpoon-rtos.h"
++#include "imx8mp-harpoon-industrial.h"
+ 
+-/* Name, cores, entry point */
+ #define CONFIG_INMATE_NAME		"freertos"
+ #define CONFIG_INMATE_CORE_BITMAP	(0b1000)
+-#define CONFIG_INMATE_BASE		(0xc0000000)
+-
+-/* Memory & peripherals */
+-#define CONFIG_INMATE_REGIONS		\
+-	RTOS_COMMON_MEMORY_REGIONS,                                     \
+-	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
+-	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
+-	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
+-	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
+-	MMIO_REGION_RWS(0x30230000, 0x30230000, KB(64)),   /* GPIO4 */  \
+-	MMIO_REGION_RWS(0x30240000, 0x30240000, KB(64)),   /* GPIO5 */  \
+-	MMIO_REGION_RWS(0x30340000, 0x30340000, KB(64)),   /* GPR */    \
+-	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
+-	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
+-	MMIO_REGION_RW( 0x308c0000, 0x308c0000, KB(64)),   /* FLEXCAN1*/\
+-	MMIO_REGION_RW( 0x30bf0000, 0x30bf0000, KB(64))    /* ENET_Q */
+-
+-/* GIC */
+-#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
+-#define CONFIG_INMATE_IRQCHIPS \
+-	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 32..63 */                    \
+-		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
+-		/* interrupts 64..95 */                    \
+-		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
+-		/* interrupts 96..127 */                   \
+-		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
+-		/* interrupts 128..159 */                  \
+-		RTOS_COMMON_IRQCHIPS_BITMAP4),             \
+-	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
+-		/* interrupts 160..191 */                  \
+-		IRQnMAP(ENET_QOS_PMT_IRQn) |               \
+-		IRQnMAP(ENET_QOS_IRQn) |                   \
+-		IRQnMAP(CAN_FD1_IRQn) | /* FLEXCAN1 */     \
+-		IRQnMAP(CAN_FD1_ERROR_IRQn),               \
+-		/* interrupts 192..223 */                  \
+-		0,                                         \
+-		/* interrupts 224..255 */                  \
+-		0,                                         \
+-		/* interrupts 256..287 */                  \
+-		0)
+-
+-/* IVSHMEM PCI */
+-#define CONFIG_INMATE_PCI_DEVICES \
+-	RTOS_COMMON_PCI_IVSHMEM
+ 
+ #include "cell-create.h"
+diff --git a/configs/arm64/imx8mp-harpoon-industrial.h b/configs/arm64/imx8mp-harpoon-industrial.h
+new file mode 100644
+index 00000000..25b79915
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-industrial.h
+@@ -0,0 +1,60 @@
++/*
++ * i.MX8MP target - Industrial config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx8mp-harpoon-rtos.h"
++
++#define CONFIG_INMATE_BASE		(0xc0000000)
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS		\
++	RTOS_COMMON_MEMORY_REGIONS,                                     \
++	MEM_REGION_RWXL(0xc0000000, 0xc0000000, MB(16)),   /* RAM */    \
++	MEM_REGION_RWX( 0x00900000, 0x00900000, KB(384)),  /* OCRAM */  \
++	MEM_REGION_RW(  0x00800000, 0x00800000, KB(128)),  /* DTCM */   \
++	MEM_REGION_RWX( 0x007e0000, 0x007e0000, KB(128)),  /* ITCM */   \
++	MMIO_REGION_RWS(0x30230000, 0x30230000, KB(64)),   /* GPIO4 */  \
++	MMIO_REGION_RWS(0x30240000, 0x30240000, KB(64)),   /* GPIO5 */  \
++	MMIO_REGION_RWS(0x30340000, 0x30340000, KB(64)),   /* GPR */    \
++	MMIO_REGION_RWS(0x30360000, 0x30360000, KB(4)),    /* ANA_PLL */\
++	MMIO_REGION_RWS(0x30380000, 0x30380000, KB(64)),   /* CCM */    \
++	MMIO_REGION_RW( 0x308c0000, 0x308c0000, KB(64)),   /* FLEXCAN1*/\
++	MMIO_REGION_RW( 0x30bf0000, 0x30bf0000, KB(64))    /* ENET_Q */
++
++/* GIC */
++#define CONFIG_INMATE_IRQCHIPS_ADDR	(0x38800000)
++#define CONFIG_INMATE_IRQCHIPS \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 32..63 */                    \
++		RTOS_COMMON_IRQCHIP0_BITMAP1,              \
++		/* interrupts 64..95 */                    \
++		RTOS_COMMON_IRQCHIPS_BITMAP2,              \
++		/* interrupts 96..127 */                   \
++		RTOS_COMMON_IRQCHIPS_BITMAP3,              \
++		/* interrupts 128..159 */                  \
++		RTOS_COMMON_IRQCHIPS_BITMAP4),             \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,              \
++		/* interrupts 160..191 */                  \
++		IRQnMAP(ENET_QOS_PMT_IRQn) |               \
++		IRQnMAP(ENET_QOS_IRQn) |                   \
++		IRQnMAP(CAN_FD1_IRQn) | /* FLEXCAN1 */     \
++		IRQnMAP(CAN_FD1_ERROR_IRQn),               \
++		/* interrupts 192..223 */                  \
++		0,                                         \
++		/* interrupts 224..255 */                  \
++		0,                                         \
++		/* interrupts 256..287 */                  \
++		0)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx8mp-harpoon-zephyr-industrial.c b/configs/arm64/imx8mp-harpoon-zephyr-industrial.c
+new file mode 100644
+index 00000000..4efb34de
+--- /dev/null
++++ b/configs/arm64/imx8mp-harpoon-zephyr-industrial.c
+@@ -0,0 +1,18 @@
++/*
++ * i.MX8MP target - Zephyr industrial config
++ *
++ * Copyright 2022 NXP
++ *
++ * Authors:
++ *  Stephane Viau <stephane.viau@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "imx8mp-harpoon-industrial.h"
++
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b1100)
++
++#include "cell-create.h"
+-- 
+2.34.1
+

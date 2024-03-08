@@ -1,0 +1,170 @@
+From 86d7769de3c5b8998b71aefa077f78d570162123 Mon Sep 17 00:00:00 2001
+From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+Date: Thu, 9 Feb 2023 18:33:57 +0100
+Subject: [PATCH 19/23] arm64: dts: imx8m{m,n,p}-evk: add rpmsg support for all
+ harpoon use cases
+
+Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
+(add rpmsg support for 8mm audio and industrial)
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+(squash and reword)
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts       | 3 ++-
+ .../arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts           | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts       | 3 ++-
+ .../arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts           | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts       | 3 ++-
+ .../arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts | 3 ++-
+ arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts           | 3 ++-
+ 9 files changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts
+index e193a7f73cfb..866a9a8c239b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-avb.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mm-evk-harpoon.dts"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+index 28c12283ed39..bedfd8da1e70 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon-industrial.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mm-evk-root.dts"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+index 6ef98b400a06..70b2fa9b6b31 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  */
+ 
+ #include "imx8mm-evk-root.dts"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &i2c3 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts
+index f1a78ad9648d..faadcdf51e32 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-avb.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mn-evk-harpoon.dts"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
+index c227e414b094..6dcc58818563 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon-industrial.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2023 NXP
+  */
+ 
+ #include "imx8mn-evk-root.dts"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &fec1 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+index 7d6b3ed96b1e..1581ea6e9ddc 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  */
+ 
+ #include "imx8mn-evk-root.dts"
++#include "imx8m-rpmsg-ca53.dtsi"
+ 
+ &i2c3 {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts
+index 5625112e8236..4604d7e98644 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-avb.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mp-evk-harpoon.dts"
++#include "imx8mp-rpmsg-ca53.dtsi"
+ 
+ &eqos {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
+index 470d01190af1..1bc31b6d52f7 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon-industrial.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 NXP
++ * Copyright 2022-2023 NXP
+  */
+ 
+ #include "imx8mp-evk-root.dts"
++#include "imx8mp-rpmsg-ca53.dtsi"
+ 
+ &eqos {
+ 	status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+index 1267f0d3277e..828d15424e8a 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021-2022 NXP
++ * Copyright 2021-2023 NXP
+  */
+ 
+ #include "imx8mp-evk-root.dts"
++#include "imx8mp-rpmsg-ca53.dtsi"
+ 
+ &i2c3 {
+ 	status = "disabled";
+-- 
+2.34.1
+

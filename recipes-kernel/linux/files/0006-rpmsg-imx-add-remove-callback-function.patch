@@ -1,0 +1,91 @@
+From c802fb1e14d7b5c6774490bce5e78b9b3e4f34c5 Mon Sep 17 00:00:00 2001
+From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Date: Fri, 3 Feb 2023 23:17:49 +0800
+Subject: [PATCH 06/23] rpmsg: imx: add remove() callback function
+
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+---
+ drivers/rpmsg/imx_rpmsg.c | 46 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/drivers/rpmsg/imx_rpmsg.c b/drivers/rpmsg/imx_rpmsg.c
+index 51ecfb78be04..eca71e76e2a9 100644
+--- a/drivers/rpmsg/imx_rpmsg.c
++++ b/drivers/rpmsg/imx_rpmsg.c
+@@ -471,6 +471,13 @@ static int imx_rpmsg_rxdb_channel_init(struct imx_rpmsg_vproc *rpdev)
+ 	return ret;
+ }
+ 
++static int imx_rpmsg_rxdb_channel_deinit(struct imx_rpmsg_vproc *rpdev)
++{
++	mbox_free_channel(rpdev->rxdb_ch);
++
++	return 0;
++}
++
+ static void imx_rpmsg_rx_callback(struct mbox_client *c, void *msg)
+ {
+ 	int buf_space;
+@@ -536,6 +543,14 @@ static int imx_rpmsg_xtr_channel_init(struct imx_rpmsg_vproc *rpdev)
+ 	return ret;
+ }
+ 
++static int imx_rpmsg_xtr_channel_deinit(struct imx_rpmsg_vproc *rpdev)
++{
++	mbox_free_channel(rpdev->tx_ch);
++	mbox_free_channel(rpdev->rx_ch);
++
++	return 0;
++}
++
+ static int imx_rpmsg_probe(struct platform_device *pdev)
+ {
+ 	int j, ret = 0;
+@@ -658,6 +673,36 @@ static int imx_rpmsg_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static int imx_rpmsg_remove(struct platform_device *pdev)
++{
++	struct imx_rpmsg_vproc *rpdev = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
++	int i;
++
++#ifdef CONFIG_IMX_SCU
++	if (rpdev->variant == IMX8QXP || rpdev->variant == IMX8QM) {
++		imx_scu_irq_unregister_notifier(&rpdev->proc_nb);
++		imx_scu_irq_group_enable(IMX_SC_IRQ_GROUP_REBOOTED,
++					BIT(rpdev->mub_partition), false);
++	}
++#endif
++	imx_rpmsg_rxdb_channel_deinit(rpdev);
++
++	for (i = 0; i < rpdev->vdev_nums; i++) {
++		unregister_virtio_device(&rpdev->ivdev[i]->vdev);
++		kfree(rpdev->ivdev[i]);
++	}
++
++	if (rpdev->flags & SPECIFIC_DMA_POOL)
++		of_reserved_mem_device_release(dev);
++
++	imx_rpmsg_xtr_channel_deinit(rpdev);
++
++	cancel_delayed_work_sync(&rpdev->rpmsg_work);
++
++	return 0;
++}
++
+ static struct platform_driver imx_rpmsg_driver = {
+ 	.driver = {
+ 		   .owner = THIS_MODULE,
+@@ -665,6 +710,7 @@ static struct platform_driver imx_rpmsg_driver = {
+ 		   .of_match_table = imx_rpmsg_dt_ids,
+ 		   },
+ 	.probe = imx_rpmsg_probe,
++	.remove = imx_rpmsg_remove,
+ };
+ 
+ static int __init imx_rpmsg_init(void)
+-- 
+2.34.1
+

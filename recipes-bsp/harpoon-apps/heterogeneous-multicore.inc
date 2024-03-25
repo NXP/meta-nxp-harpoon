@@ -11,4 +11,4 @@ SRC_HETEROGENEOUS_MULTICORE = "git://github.com/nxp-real-time-edge-sw/heterogene
 SRC_URI += "${SRC_HETEROGENEOUS_MULTICORE}"
 SRCREV_FORMAT:append = "_heterogeneous-multicore"
 
-SRCREV_heterogeneous-multicore = "76bce565d40cb8115f5a6fae186fb499ce2b76b5"
+SRCREV_heterogeneous-multicore = "6518f065ef01ddc6a5752e5885c40607f518ad40"

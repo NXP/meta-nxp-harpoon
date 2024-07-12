@@ -1,0 +1,12 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
+SRC_URI += "file://0001-arm64-dts-imx8m-m-n-p-evk-add-harpoon-device-tree-fo.patch"
+SRC_URI += "file://0002-arm64-dts-imx8m-m-n-p-evk-add-device-tree-for-harpoo.patch"
+SRC_URI += "file://0003-arm64-dts-imx8m-m-n-p-evk-add-harpoon-dts-for-avb-us.patch"
+SRC_URI += "file://0004-arm64-dts-imx8m-m-n-p-evk-add-rpmsg-support-for-all-.patch"
+SRC_URI += "file://0005-arm64-dts-imx93-11x11-evk-add-harpoon-linux-root-cel.patch"
+SRC_URI += "file://0006-arm64-dts-imx93-11x11-evk-harpoon-add-support-for-rp.patch"
+SRC_URI += "file://0007-arm64-imx_v8_defconfig-change-virito-mmio-and-net-to.patch"
+SRC_URI += "file://0008-arm64-dts-imx-8mm-8mp-93-evk-add-harpoon-virtio-dts.patch"
+SRC_URI += "file://0009-arm64-dts-add-imx93-avb-device-tree.patch"
+SRC_URI += "file://0010-arm64-harpoon-imx93-disable-flexcan2-and-lpi2c4-for-.patch"

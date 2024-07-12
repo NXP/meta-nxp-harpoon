@@ -1,0 +1,22 @@
+# Copyright 2021-2022 NXP
+
+SECTION = "bsp"
+
+inherit cmake
+
+S = "${WORKDIR}/git"
+
+HARPOON_DATADIR ?= "${datadir}/harpoon"
+
+ARM_TC = "gcc-arm-aa64-elf"
+ARM_PV = "10.3"
+
+# OE assumes it's GCC 13 and passes this by default. This can be removed when bumping to an ARM GCC version > 13.
+DEBUG_PREFIX_MAP:remove = "-fcanon-prefix-map"
+
+DEPENDS += "${ARM_TC}-native (= ${ARM_PV})"
+RDEPENDS:${PN} += "jailhouse-imx"
+
+COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk)"
+FILES:${PN} += "${HARPOON_DATADIR}"
+PACKAGE_ARCH = "${MACHINE_ARCH}"

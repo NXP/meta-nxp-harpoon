@@ -1,0 +1,47 @@
+From ebc3f03e05e9096d2ca22cd58ca99ad76e8b2e18 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Mon, 19 Aug 2024 13:55:18 +0200
+Subject: [PATCH 31/31] configs: arm64: imx95: add RPMsg
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/arm64/imx95-harpoon-rtos.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/configs/arm64/imx95-harpoon-rtos.h b/configs/arm64/imx95-harpoon-rtos.h
+index c8880229..5ab9cd9e 100644
+--- a/configs/arm64/imx95-harpoon-rtos.h
++++ b/configs/arm64/imx95-harpoon-rtos.h
+@@ -14,7 +14,9 @@ typedef enum IRQn {
+   /* Device specific interrupts */
+   TPM2_IRQn                    = 62,               /**< Timer PWM Module (TPM) 2 */
+   LPUART3_IRQn                 = 96,               /**< Low Power UART 3 */
++  SW_MB_L_IRQn                 = 102,              /**< Unused SPI 70, to be used by generic software mailbox in Linux */
+   TPM4_IRQn                    = 106,              /**< Timer PWM Module (TPM) 4 */
++  SW_MB_R_IRQn                 = 126,              /**< Unused SPI 94, to be used by generic software mailbox in RTOS */
+   MU3_A_IRQn                   = 260,              /**< Message Unit 3 */
+ } IRQn_Type;
+ 
+@@ -25,6 +27,9 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xff9fc000, 0xff9fc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xff9fe000, 0xff9fe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RWS(0xc0000000, 0xc0000000, KB(4)),  /* SW MBOX */              \
++	MEM_REGION_RWS( 0xc0100000, 0xc0100000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xc0200000, 0xc0200000, MB(1)),  /* RPMSG BUF */            \
+ 	MMIO_REGION_RW( 0x424f0000, 0x424f0000, KB(64)), /* TPM4 */                 \
+ 	MMIO_REGION_RW( 0x42570000, 0x42570000, KB(64)), /* LPUART3 */              \
+ 	MMIO_REGION_RW( 0x44320000, 0x44320000, KB(64)), /* TPM2 */                 \
+@@ -59,7 +64,8 @@ typedef enum IRQn {
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+ 	IRQnMAP(LPUART3_IRQn) |\
+-	IRQnMAP(TPM4_IRQn)
++	IRQnMAP(TPM4_IRQn)|\
++	IRQnMAP(SW_MB_R_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
+ 	0
+ #define RTOS_AVB_IRQCHIP0_BITMAP3 \
+-- 
+2.34.1
+

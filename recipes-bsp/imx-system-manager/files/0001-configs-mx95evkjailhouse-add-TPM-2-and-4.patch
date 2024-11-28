@@ -1,0 +1,36 @@
+From 0578561c9b002b74644ad94b0aa5b4158767cb43 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Thu, 8 Aug 2024 12:15:35 +0200
+Subject: [PATCH 1/2] configs: mx95evkjailhouse: add TPM 2 and 4
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/other/mx95evkjailhouse.cfg | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/other/mx95evkjailhouse.cfg b/configs/other/mx95evkjailhouse.cfg
+index 74640b0..1fb7ed2 100755
+--- a/configs/other/mx95evkjailhouse.cfg
++++ b/configs/other/mx95evkjailhouse.cfg
+@@ -717,9 +717,7 @@ LPSPI5              OWNER
+ LPSPI6              OWNER
+ LPSPI7              OWNER
+ LPSPI8              OWNER
+-LPTPM2              OWNER
+ LPTPM3              OWNER
+-LPTPM4              OWNER
+ LPTPM5              OWNER
+ LPTPM6              OWNER
+ LPUART1             OWNER
+@@ -985,6 +983,8 @@ CLK_LPUART3         CONTROL
+ # Resources
+ 
+ LPUART3             OWNER
++LPTPM2              OWNER
++LPTPM4              OWNER
+ MU3_A               CONTROL
+ USDHC1              CONTROL
+ 
+-- 
+2.47.0
+

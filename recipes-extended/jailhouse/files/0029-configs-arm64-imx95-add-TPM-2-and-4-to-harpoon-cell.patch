@@ -1,0 +1,56 @@
+From 654e6a2f647bfa1c0bceca5601314d78f6d7b1d1 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Fri, 16 Aug 2024 11:21:27 +0200
+Subject: [PATCH 29/30] configs: arm64: imx95: add TPM 2 and 4 to harpoon cell
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/arm64/imx95-harpoon-rtos.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/configs/arm64/imx95-harpoon-rtos.h b/configs/arm64/imx95-harpoon-rtos.h
+index c42cf816..c8880229 100644
+--- a/configs/arm64/imx95-harpoon-rtos.h
++++ b/configs/arm64/imx95-harpoon-rtos.h
+@@ -12,7 +12,9 @@
+ 
+ typedef enum IRQn {
+   /* Device specific interrupts */
++  TPM2_IRQn                    = 62,               /**< Timer PWM Module (TPM) 2 */
+   LPUART3_IRQn                 = 96,               /**< Low Power UART 3 */
++  TPM4_IRQn                    = 106,              /**< Timer PWM Module (TPM) 4 */
+   MU3_A_IRQn                   = 260,              /**< Message Unit 3 */
+ } IRQn_Type;
+ 
+@@ -23,7 +25,9 @@ typedef enum IRQn {
+ 	MEM_REGION_RWS( 0xff9fc000, 0xff9fc000, KB(8)),  /* IVSHMEM */              \
+ 	MEM_REGION_ROS( 0xff9fe000, 0xff9fe000, KB(8)),  /* IVSHMEM */              \
+ 	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
++	MMIO_REGION_RW( 0x424f0000, 0x424f0000, KB(64)), /* TPM4 */                 \
+ 	MMIO_REGION_RW( 0x42570000, 0x42570000, KB(64)), /* LPUART3 */              \
++	MMIO_REGION_RW( 0x44320000, 0x44320000, KB(64)), /* TPM2 */                 \
+ 	MMIO_REGION_RW( 0x445d0000, 0x445d0000, KB(4)),  /* MU3 */                  \
+ 	MEM_REGION_RWS( 0x445d1000, 0x445d1000, KB(4))   /* MU3 SRAM */
+ 
+@@ -36,7 +40,7 @@ typedef enum IRQn {
+ 
+ /* interrupts 32..63 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP1 \
+-	0
++	IRQnMAP(TPM2_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP1 \
+ 	0
+ #define RTOS_AVB_IRQCHIP0_BITMAP1 \
+@@ -54,7 +58,8 @@ typedef enum IRQn {
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+-	IRQnMAP(LPUART3_IRQn)
++	IRQnMAP(LPUART3_IRQn) |\
++	IRQnMAP(TPM4_IRQn)
+ #define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
+ 	0
+ #define RTOS_AVB_IRQCHIP0_BITMAP3 \
+-- 
+2.34.1
+

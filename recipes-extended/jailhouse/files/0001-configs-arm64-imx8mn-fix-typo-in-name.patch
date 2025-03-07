@@ -1,7 +1,7 @@
-From b102bbb455a0f8abc14aa8597e8381312f0b8b7a Mon Sep 17 00:00:00 2001
+From d6002ceac8f8aefc4719285299cd4513dace7033 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Tue, 24 Jan 2023 16:56:56 +0100
-Subject: [PATCH 01/31] configs: arm64: imx8mn: fix typo in name
+Subject: [PATCH 01/32] configs: arm64: imx8mn: fix typo in name
 
 Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
 ---

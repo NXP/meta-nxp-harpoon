@@ -1,13 +1,12 @@
-#
-# This file was derived from the 'Hello World!' example recipe in the
-# Yocto Project Development Manual.
-#
+# Copyright 2021-2022, 2024-2025 NXP
 
 SUMMARY = "ARM toolchain"
 SECTION = "devel"
-LICENSE = "CLOSED"
+LICENSE = "GPL-3.0-with-GCC-exception & GPL-3.0-only"
 
 TC_NAME = "arm-gnu-toolchain-${PV}-x86_64-aarch64-none-elf"
+
+LIC_FILES_CHKSUM = "file://${WORKDIR}/arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64-none-elf/license.txt;md5=3a4c8f624bd77882c8dc3beb13171154"
 
 SRC_URI = "https://developer.arm.com/-/media/Files/downloads/gnu/${PV}/binrel/${TC_NAME}.tar.xz"
 

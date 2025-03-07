@@ -1,7 +1,7 @@
-From 01438616df6f4263703103be172b20a5bbd98c34 Mon Sep 17 00:00:00 2001
+From f37d8e175b237593eae2738bdd63c6692299e8cc Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Tue, 19 Sep 2023 13:03:33 +0800
-Subject: [PATCH 24/31] configs: arm64: add audio cell config for imx93
+Subject: [PATCH 24/32] configs: arm64: add audio cell config for imx93
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 (configs: arm64: imx93: add SAI{1,2,3} IRQs/mmu, WAKEUPMIX1 mmu and ANA_PLL to the audio application)

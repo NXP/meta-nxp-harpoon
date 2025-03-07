@@ -1,7 +1,7 @@
-From e914be96bc74605ce05308f08c42340350cf0966 Mon Sep 17 00:00:00 2001
+From 551e81017bbe6b47230bc326dac53a6d2123d3b9 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 2 Feb 2023 15:48:00 +0800
-Subject: [PATCH 21/31] configs: arm64: imx{8mm,8mp,93}: add freertos virtio
+Subject: [PATCH 21/32] configs: arm64: imx{8mm,8mp,93}: add freertos virtio
  support
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>

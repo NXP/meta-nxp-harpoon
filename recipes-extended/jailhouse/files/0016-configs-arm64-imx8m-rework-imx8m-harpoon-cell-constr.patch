@@ -1,7 +1,7 @@
-From 7096870d14cb2c363d8416f2d2b8c8c7eedf1d95 Mon Sep 17 00:00:00 2001
+From 9e9422022e00b89a60b03853351148bdf7188201 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 30 Sep 2022 14:55:01 +0000
-Subject: [PATCH 16/31] configs: arm64: imx8m: rework imx8m harpoon cell
+Subject: [PATCH 16/32] configs: arm64: imx8m: rework imx8m harpoon cell
  construction
 
 Let's define all interfaces in a single device header file and create

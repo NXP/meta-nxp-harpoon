@@ -21,12 +21,12 @@ Please refer to detailed README under the release branch.
 
 ### Examples
 
-To download the Real-time Edge 3.0.0 release
+To download the Real-time Edge 3.1.0 release
 
 ```
 $ mkdir yocto-real-time-edge
 $ cd yocto-real-time-edge
-$ repo init -u https://github.com/nxp-real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-scarthgap -m real-time-edge-3.0.0.xml
+$ repo init -u https://github.com/nxp-real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-scarthgap -m real-time-edge-3.1.0.xml
 $ repo sync
 ```
 
@@ -40,6 +40,7 @@ Machine:
 - imx8mm-lpddr4-evk
 - imx8mp-lpddr4-evk
 - imx93evk
+- imx95evk-15x15-lpddr4x-evk
 - imx95evk-19x19-lpddr5-evk
 
 Distro:

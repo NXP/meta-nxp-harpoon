@@ -1,7 +1,7 @@
-From f4ecefc23714784cd51031aa0acdcb0aa1a0789d Mon Sep 17 00:00:00 2001
+From 2bcc5667d89e5066e23e6ad330493363bd32341f Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 19 Apr 2021 17:09:48 +0800
-Subject: [PATCH 07/31] configs: arm64: imx8mp: add harpoon zephyr basic cell
+Subject: [PATCH 07/32] configs: arm64: imx8mp: add harpoon zephyr basic cell
 
 This config file assigns core2 and core3 to Zephyr cell,
 and the UART4 is used as Zephyr console.

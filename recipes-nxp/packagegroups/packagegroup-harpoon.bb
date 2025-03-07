@@ -1,4 +1,4 @@
-# Copyright 2022-2023 NXP
+# Copyright 2022-2025 NXP
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 SUMMARY = "NXP Harpoon package group"
@@ -16,7 +16,8 @@ harpoon-pkgs:imx8mm-lpddr4-evk = "harpoon-apps-ctrl harpoon-apps-freertos-audio 
 harpoon-pkgs:imx8mn-lpddr4-evk = "harpoon-apps-ctrl harpoon-apps-freertos-audio harpoon-apps-freertos-hello-world harpoon-apps-freertos-industrial harpoon-apps-freertos-rt-latency harpoon-apps-zephyr-audio harpoon-apps-zephyr-audio-smp harpoon-apps-zephyr-hello-world harpoon-apps-zephyr-industrial harpoon-apps-zephyr-rt-latency"
 harpoon-pkgs:imx8mp-lpddr4-evk = "harpoon-apps-ctrl harpoon-apps-freertos-audio harpoon-apps-freertos-hello-world harpoon-apps-freertos-industrial harpoon-apps-freertos-rt-latency harpoon-apps-freertos-virtio-net harpoon-apps-zephyr-audio harpoon-apps-zephyr-audio-smp harpoon-apps-zephyr-hello-world harpoon-apps-zephyr-industrial harpoon-apps-zephyr-rt-latency"
 harpoon-pkgs:imx93evk = "harpoon-apps-ctrl harpoon-apps-freertos-audio harpoon-apps-freertos-hello-world harpoon-apps-freertos-virtio-net harpoon-apps-zephyr-hello-world harpoon-apps-freertos-industrial harpoon-apps-freertos-rt-latency harpoon-apps-zephyr-audio harpoon-apps-zephyr-industrial harpoon-apps-zephyr-rt-latency"
-harpoon-pkgs:imx95-19x19-lpddr5-evk = "harpoon-apps-ctrl harpoon-apps-freertos-hello-world harpoon-apps-zephyr-hello-world harpoon-apps-freertos-rt-latency harpoon-apps-zephyr-rt-latency"
+harpoon-pkgs:imx95-15x15-lpddr4x-evk = "harpoon-apps-ctrl harpoon-apps-freertos-hello-world harpoon-apps-freertos-rt-latency harpoon-apps-freertos-industrial harpoon-apps-zephyr-hello-world harpoon-apps-zephyr-rt-latency harpoon-apps-zephyr-industrial"
+harpoon-pkgs:imx95-19x19-lpddr5-evk = "harpoon-apps-ctrl harpoon-apps-freertos-hello-world harpoon-apps-freertos-rt-latency harpoon-apps-freertos-industrial harpoon-apps-zephyr-hello-world harpoon-apps-zephyr-rt-latency harpoon-apps-zephyr-industrial"
 
 RDEPENDS:${PN} = " \
     ${harpoon-pkgs} \

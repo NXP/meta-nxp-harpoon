@@ -1,7 +1,7 @@
-From e302d9b6ffa28863a20b759ed224e19dcbc5b3fe Mon Sep 17 00:00:00 2001
+From 467bcd084d954824d0e9e534994fdc68adc9b30b Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 18 Nov 2021 15:45:24 +0100
-Subject: [PATCH 09/31] configs: arm64: imx8mn: add harpoon basic and audio
+Subject: [PATCH 09/32] configs: arm64: imx8mn: add harpoon basic and audio
  cells
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>

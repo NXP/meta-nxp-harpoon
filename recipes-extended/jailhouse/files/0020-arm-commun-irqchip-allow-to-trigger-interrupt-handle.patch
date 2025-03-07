@@ -1,7 +1,7 @@
-From b7362bd84532d3fe0901c502472e4c55ee8f67a5 Mon Sep 17 00:00:00 2001
+From 8bebd4eca093db812d1830118389f419f2dbcd78 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 2 Feb 2023 15:48:19 +0800
-Subject: [PATCH 20/31] arm-commun: irqchip: allow to trigger interrupt handled
+Subject: [PATCH 20/32] arm-commun: irqchip: allow to trigger interrupt handled
  by other cells
 
 Generic software mailbox use two SPI interrupt for notification,

@@ -1,7 +1,7 @@
-From 97d13d8118f2bd5af8c6c290986b7944c9f2da3e Mon Sep 17 00:00:00 2001
+From 51b87c07434f2e44276818db577fbc008d07cc39 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 2 May 2022 13:11:00 +0000
-Subject: [PATCH 14/30] configs: arm64: imx8m{m,n,p}: add harpoon zephyr
+Subject: [PATCH 14/31] configs: arm64: imx8m{m,n,p}: add harpoon zephyr
  industrial cell config
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>

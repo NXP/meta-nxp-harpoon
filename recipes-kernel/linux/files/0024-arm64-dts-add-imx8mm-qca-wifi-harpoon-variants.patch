@@ -1,7 +1,7 @@
-From 595e88b7fd4e146bee42e7a7a9628fea864b9ab5 Mon Sep 17 00:00:00 2001
+From 1ed8f992468ace3e63b5718edf5375675853377e Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Tue, 1 Oct 2024 15:59:25 +0200
-Subject: [PATCH 24/26] arm64: dts: add imx8mm qca-wifi harpoon variants
+Subject: [PATCH 24/30] arm64: dts: add imx8mm qca-wifi harpoon variants
 
 Current default root and evk (and hence harpoon) device tree files are destined for
 the i.MX 8M Mini LPDDR4 EVKB board (with the PCA PMIC). For old boards, i.MX 8M Mini

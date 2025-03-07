@@ -1,7 +1,7 @@
-From 0500947f413f1d2f1316bedc17dfbf67c0a4bc28 Mon Sep 17 00:00:00 2001
+From 5c466c419d39b96026a05b5de540672257b47834 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Mon, 11 Dec 2023 17:22:33 +0100
-Subject: [PATCH 27/30] configs: arm64: imx8m{m,n,p}: zephyr: add a core for
+Subject: [PATCH 27/31] configs: arm64: imx8m{m,n,p}: zephyr: add a core for
  audio AVB SMP support
 
 Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>

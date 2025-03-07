@@ -1,7 +1,7 @@
-From 2e997aa65da0e1c771dc7c21604d213a2a5d851c Mon Sep 17 00:00:00 2001
+From 617f844aca270c01178e0d4531801f0cd21009cb Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Tue, 19 Apr 2022 11:58:21 +0800
-Subject: [PATCH 15/30] configs: arm64: imx8m{m,n,p}: add harpoon audio zephyr
+Subject: [PATCH 15/31] configs: arm64: imx8m{m,n,p}: add harpoon audio zephyr
  cell config
 
 Move common configuration to be imx8m{m,n,p}-audio.h, so that FreeRTOS,

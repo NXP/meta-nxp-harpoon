@@ -30,3 +30,4 @@ SRC_URI += "file://0027-configs-arm64-imx8m-m-n-p-zephyr-add-a-core-for-audi.pat
 SRC_URI += "file://0028-configs-arm64-add-harpoon-cell-for-i.MX-95-EVK.patch"
 SRC_URI += "file://0029-configs-arm64-imx95-add-TPM-2-and-4-to-harpoon-cell.patch"
 SRC_URI += "file://0030-configs-arm64-imx95-add-RPMsg.patch"
+SRC_URI += "file://0031-configs-arm64-imx95-add-industrial-configuration-for.patch"

@@ -1,7 +1,7 @@
-From fe975baef2709d41931c0fd118e419074666f131 Mon Sep 17 00:00:00 2001
+From f22bf39e6eb45a1266caf8f2f2b6682a15078932 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Thu, 29 Dec 2022 15:07:48 +0800
-Subject: [PATCH 07/26] dma-mapping: Respect to device 'dma-coherent' property
+Subject: [PATCH 07/30] dma-mapping: Respect to device 'dma-coherent' property
 
 Currently, the coherent DMA memory is always mapped as writecombine
 and uncached, ignored the 'dma-coherent' property in device node,

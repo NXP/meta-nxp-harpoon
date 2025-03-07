@@ -1,7 +1,7 @@
-From d6fc782c88328431c79d2ceb78007f37278fd7e3 Mon Sep 17 00:00:00 2001
+From 924bb11d49795a968a3c3b3576fe491377f34b16 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Thu, 25 Jul 2024 15:28:52 +0200
-Subject: [PATCH 25/26] arm64: dts: imx95-19x19: add harpoon device tree
+Subject: [PATCH 25/30] arm64: dts: imx95-19x19: add harpoon device tree
 
 Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
 ---

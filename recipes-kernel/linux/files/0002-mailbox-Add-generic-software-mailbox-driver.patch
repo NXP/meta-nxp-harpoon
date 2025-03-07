@@ -1,7 +1,7 @@
-From 714268dc831452e63a5dfcd1e67c69e53b02541b Mon Sep 17 00:00:00 2001
+From af87b12b57092143eaf7807bf185fa9b06fd1928 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Wed, 14 Sep 2022 10:52:36 +0800
-Subject: [PATCH 02/26] mailbox: Add generic software mailbox driver
+Subject: [PATCH 02/30] mailbox: Add generic software mailbox driver
 
 This driver is introduced for RPMSG usecases between Linux and RTOS
 or Baremetal both running on Cortex-A cores.

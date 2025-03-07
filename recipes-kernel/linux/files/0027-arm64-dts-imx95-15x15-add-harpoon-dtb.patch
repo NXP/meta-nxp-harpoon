@@ -1,0 +1,57 @@
+From 1f0d030d0d1d6bba0a938eadf93692704299f181 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Fri, 27 Dec 2024 13:53:39 +0100
+Subject: [PATCH 27/30] arm64: dts: imx95-15x15: add harpoon dtb
+
+Add Harpoon device tree for i.MX 95 15x15 EVK.
+Disable lpuart3 and mu3 on Linux for usage in inmate cell.
+Use imx95 rpmsg dtsi for RPMsg usage to communicate between Root and inmate cell.
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  2 +-
+ .../dts/freescale/imx95-15x15-evk-harpoon.dts | 19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx95-15x15-evk-harpoon.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index b43c8158dcdb..61b75fe0ad16 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -459,7 +459,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx91-9x9-qsb-i3c.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-mqs.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-aud-hat.dtb
+-dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-root.dtb imx95-15x15-evk-inmate.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-root.dtb imx95-15x15-evk-inmate.dtb imx95-15x15-evk-harpoon.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-ab2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-i2c-spi-slave.dtb
+ DTC_FLAGS_imx95-15x15-evk-boe-wxga-lvds0-panel := -@
+diff --git a/arch/arm64/boot/dts/freescale/imx95-15x15-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx95-15x15-evk-harpoon.dts
+new file mode 100644
+index 000000000000..8838cd44871c
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx95-15x15-evk-harpoon.dts
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2024 NXP
++ */
++
++/dts-v1/;
++
++#include "imx95-15x15-evk-root.dts"
++#include "imx95-rpmsg-ca55.dtsi"
++
++&lpuart3 {
++	/* To use this, needs dedicated SM to allow RTOS access lpuart3 and lpuart3 pinmux */
++	status = "disabled";
++};
++
++/* This Message Unit is used for communication between the RTOS cell and the SM */
++&mu3 {
++	status = "disabled";
++};
+-- 
+2.34.1
+

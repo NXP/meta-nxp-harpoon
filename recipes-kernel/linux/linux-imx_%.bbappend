@@ -26,3 +26,7 @@ SRC_URI += "file://0023-arm64-harpoon-imx93-disable-flexcan2-and-lpi2c4-for-.pat
 SRC_URI += "file://0024-arm64-dts-add-imx8mm-qca-wifi-harpoon-variants.patch"
 SRC_URI += "file://0025-arm64-dts-imx95-19x19-add-harpoon-device-tree.patch"
 SRC_URI += "file://0026-arm64-dts-imx95-evk-19x19-add-support-for-rpmsg.patch"
+SRC_URI += "file://0027-arm64-dts-imx95-15x15-add-harpoon-dtb.patch"
+SRC_URI += "file://0028-arm64-dts-imx93-harpoon-disable-DSI-node.patch"
+SRC_URI += "file://0029-dts-imx95-15x15-add-Harpoon-industrial-device-tree.patch"
+SRC_URI += "file://0030-arm64-dts-imx95-evk-19x19-harpoon-add-industrial-dev.patch"

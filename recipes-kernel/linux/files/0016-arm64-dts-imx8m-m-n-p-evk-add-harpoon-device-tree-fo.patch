@@ -1,7 +1,7 @@
-From 5231038bdf303c3d737ce944ef5958a70fb6ca10 Mon Sep 17 00:00:00 2001
+From 49a02e66186d0a23fe46c21dd84f174ade9e8def Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Mon, 25 Oct 2021 17:18:31 +0200
-Subject: [PATCH 16/26] arm64: dts: imx8m{m,n,p}-evk: add harpoon device tree
+Subject: [PATCH 16/30] arm64: dts: imx8m{m,n,p}-evk: add harpoon device tree
  for audio usecases
 
 - Disable all SAI instances

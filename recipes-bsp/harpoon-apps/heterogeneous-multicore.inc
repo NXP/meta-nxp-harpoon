@@ -1,4 +1,4 @@
-# Copyright 2023 NXP
+# Copyright 2023, 2025 NXP
 
 LICENSE += "& BSD-3-Clause"
 LIC_FILES_CHKSUM += " \
@@ -11,4 +11,4 @@ SRC_HETEROGENEOUS_MULTICORE = "git://github.com/nxp-real-time-edge-sw/heterogene
 SRC_URI += "${SRC_HETEROGENEOUS_MULTICORE}"
 SRCREV_FORMAT:append = "_heterogeneous-multicore"
 
-SRCREV_heterogeneous-multicore = "4655749a7962f3713687d1cdaecadc1742d9427d"
+SRCREV_heterogeneous-multicore = "8140eb0bb2f28219ed1c00cdcf5564abedf1f338"

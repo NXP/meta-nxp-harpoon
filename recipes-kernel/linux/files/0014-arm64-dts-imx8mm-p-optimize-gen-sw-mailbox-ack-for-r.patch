@@ -1,7 +1,7 @@
-From 83d01dc962822c1fed766e859bd75b0a8486928c Mon Sep 17 00:00:00 2001
+From 055596303fbbe38d09835a43ecd26ed5794b1024 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Fri, 27 Oct 2023 18:35:37 +0800
-Subject: [PATCH 14/26] arm64: dts: imx8mm/p: optimize gen-sw-mailbox ack for
+Subject: [PATCH 14/30] arm64: dts: imx8mm/p: optimize gen-sw-mailbox ack for
  rpmsg
 
 Now for the mailbox message sent from RTOS to linux, Linux will sent

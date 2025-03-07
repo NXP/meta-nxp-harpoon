@@ -7,7 +7,8 @@ The following boards were tested in this release:
    * NXP i.MX 8MNano LPDDR4 EVK (imx8mn-lpddr4-evk)
    * NXP i.MX 8MPlus LPDDR4 EVK (imx8mp-lpddr4-evk)
    * NXP i.MX 93 LPDDR4 EVK (imx93evk)
-   * NXP i.MX 95 LPDDR5 EVK (imx95-19x19-lpddr5-evk)
+   * NXP i.MX 95 15x15 LPDDR4x EVK (imx95-15x15-lpddr4x-evk)
+   * NXP i.MX 95 19x19 LPDDR5 EVK (imx95-19x19-lpddr5-evk)
 
 Quick Start Guide
 -----------------

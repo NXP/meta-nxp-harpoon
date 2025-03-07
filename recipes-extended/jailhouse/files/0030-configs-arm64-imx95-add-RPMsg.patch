@@ -1,7 +1,7 @@
-From 9b5a1a1fb4bf240faafad17caaf8e7d67df762fb Mon Sep 17 00:00:00 2001
+From ff52831eb67e5b75379f6d96dd8d5ee579a01689 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Mon, 19 Aug 2024 13:55:18 +0200
-Subject: [PATCH 30/30] configs: arm64: imx95: add RPMsg
+Subject: [PATCH 30/31] configs: arm64: imx95: add RPMsg
 
 Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
 ---

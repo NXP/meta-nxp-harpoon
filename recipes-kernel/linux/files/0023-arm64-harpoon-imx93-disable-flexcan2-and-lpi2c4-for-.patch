@@ -1,7 +1,7 @@
-From b677d8b00317ea6f869831efaba8902ef6d8919d Mon Sep 17 00:00:00 2001
+From 04705926f237e76014db34d3a64660a7f630acd3 Mon Sep 17 00:00:00 2001
 From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
 Date: Thu, 18 Jan 2024 15:53:06 +0100
-Subject: [PATCH 23/26] arm64: harpoon: imx93: disable flexcan2 and lpi2c4 for
+Subject: [PATCH 23/30] arm64: harpoon: imx93: disable flexcan2 and lpi2c4 for
  MX93AUD-HAT use on RTOS
 
 Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>

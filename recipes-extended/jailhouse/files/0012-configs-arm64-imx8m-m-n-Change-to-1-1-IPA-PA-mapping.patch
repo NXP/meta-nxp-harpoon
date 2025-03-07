@@ -1,7 +1,7 @@
-From ddd5d3691874f4503ce91dc43871dee89cf347ac Mon Sep 17 00:00:00 2001
+From 8a719a4cc20ba219c19c250674971ec975b3daa2 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 14 Mar 2022 12:47:08 +0800
-Subject: [PATCH 12/30] configs: arm64: imx8m{m,n}: Change to 1:1 IPA-PA
+Subject: [PATCH 12/31] configs: arm64: imx8m{m,n}: Change to 1:1 IPA-PA
  mapping
 
 No SMMU implemented on these 2 platforms, so the current non 1:1 mapping

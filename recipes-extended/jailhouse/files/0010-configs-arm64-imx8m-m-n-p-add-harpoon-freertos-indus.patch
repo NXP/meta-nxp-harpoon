@@ -1,7 +1,7 @@
-From c91cb9f2df23435b6b4b08cd7901e86e90c4fa2e Mon Sep 17 00:00:00 2001
+From aea587d52b1e8dddfa679c6c08114fd4f6721fe6 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 8 Jan 2024 13:02:09 +0100
-Subject: [PATCH 10/30] configs: arm64: imx8m{m,n,p}: add harpoon freertos
+Subject: [PATCH 10/31] configs: arm64: imx8m{m,n,p}: add harpoon freertos
  industrial cell
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>

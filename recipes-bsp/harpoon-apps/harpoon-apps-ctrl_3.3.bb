@@ -1,4 +1,4 @@
-# Copyright 2021-2024 NXP
+# Copyright 2021-2025 NXP
 
 require harpoon-apps-uri.inc
 
@@ -69,7 +69,7 @@ RDEPENDS:${PN} += "bash"
 OECMAKE_SOURCEPATH = "${HARPOON_APPS_CODE_DIR}"
 OECMAKE_GENERATOR = "Unix Makefiles"
 
-COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk|imx95-19x19-lpddr5-evk)"
+COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk|imx95-15x15-lpddr4x-evk|imx95-19x19-lpddr5-evk)"
 FILES:${PN} += "${HARPOON_DATADIR}"
 FILES:${PN} += "${bindir}"
 FILES:${PN} += "${sysconfdir}"

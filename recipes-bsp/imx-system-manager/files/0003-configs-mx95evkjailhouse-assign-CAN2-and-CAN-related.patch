@@ -1,0 +1,53 @@
+From c8857c0fd23db9c8ba46d68d2c99a7e3d4dcd23f Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Tue, 4 Feb 2025 11:53:54 +0100
+Subject: [PATCH 3/3] configs: mx95evkjailhouse: assign CAN2 and CAN-related
+ GPIO to inmate
+
+For the Harpoon Industrial use-case, assigne the CAN2 interface and
+GPIOs corresponding to CAN2_TX and CAN2_RX
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/other/mx95evkjailhouse.cfg | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/configs/other/mx95evkjailhouse.cfg b/configs/other/mx95evkjailhouse.cfg
+index 8b924db..9bff551 100755
+--- a/configs/other/mx95evkjailhouse.cfg
++++ b/configs/other/mx95evkjailhouse.cfg
+@@ -547,7 +547,6 @@ CAMERA5             OWNER
+ CAMERA6             OWNER
+ CAMERA7             OWNER
+ CAMERA8             OWNER
+-CAN_FD2             OWNER
+ CAN_FD3             OWNER
+ CAN_FD4             OWNER
+ CAN_FD5             OWNER
+@@ -981,12 +980,14 @@ CHANNEL             db=1, xport=smt, rpc=scmi, type=p2a_notify
+ 
+ CLK_USDHC1          CONTROL
+ CLK_LPUART3         CONTROL
++CLK_CAN2            CONTROL
+ 
+ # Resources
+ 
+ LPUART3             OWNER
+ LPTPM2              OWNER
+ LPTPM4              OWNER
++CAN_FD2             OWNER
+ MU3_A               CONTROL
+ USDHC1              CONTROL
+ 
+@@ -994,6 +995,8 @@ USDHC1              CONTROL
+ 
+ PIN_GPIO_IO14       CONTROL
+ PIN_GPIO_IO15       CONTROL
++PIN_GPIO_IO25       CONTROL
++PIN_GPIO_IO27       CONTROL
+ PIN_SD1_CLK         CONTROL
+ PIN_SD1_CMD         CONTROL
+ PIN_SD1_DATA0       CONTROL
+-- 
+2.34.1
+

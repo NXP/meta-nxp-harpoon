@@ -1,7 +1,7 @@
-From e46c0e4de769a2d66d5a7f91a492af9ee0b3c4a5 Mon Sep 17 00:00:00 2001
+From cb340337cbf72fbb204b1b0ba6f546bbb1470cbd Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Fri, 3 Nov 2023 15:38:35 +0100
-Subject: [PATCH 22/26] arm64: dts: add imx93 avb device tree
+Subject: [PATCH 22/30] arm64: dts: add imx93 avb device tree
 
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 ---

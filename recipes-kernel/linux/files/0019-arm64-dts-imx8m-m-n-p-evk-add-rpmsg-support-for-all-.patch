@@ -1,7 +1,7 @@
-From 22d0a90186f4e78c9db8109a8d971f32a7afee4a Mon Sep 17 00:00:00 2001
+From aaeb408bbc70a8789de1f1dd1a8acf9a418d7af8 Mon Sep 17 00:00:00 2001
 From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
 Date: Thu, 9 Feb 2023 18:33:57 +0100
-Subject: [PATCH 19/26] arm64: dts: imx8m{m,n,p}-evk: add rpmsg support for all
+Subject: [PATCH 19/30] arm64: dts: imx8m{m,n,p}-evk: add rpmsg support for all
  harpoon use cases
 
 Signed-off-by: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>

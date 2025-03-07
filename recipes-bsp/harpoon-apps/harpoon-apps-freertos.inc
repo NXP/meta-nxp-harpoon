@@ -1,4 +1,4 @@
-# Copyright 2021-2024 NXP
+# Copyright 2021-2025 NXP
 
 require harpoon-apps-common.inc
 require harpoon-apps-uri.inc
@@ -23,7 +23,7 @@ SRC_URI = "\
 
 SRCREV_FORMAT = "harpoon-apps_mcux-sdk_CMSIS_FreeRTOS-Kernel_rtos-abstraction-layer"
 
-SRCREV_mcux-sdk = "b4f2684bbbf31f986bdafe6d1540e55709d12831"
+SRCREV_mcux-sdk = "0db10da15d9cc6222744d4854b2cb532b646dcd4"
 SRCREV_CMSIS = "b5916939a8384aac3398e3f4ea97917fa9b030fd"
 SRCREV_FreeRTOS-Kernel = "c747fc1595cfc914021a6534adba86d6b152aac8"
 
@@ -31,6 +31,7 @@ BOARD:imx8mp-lpddr4-evk = "evkmimx8mp"
 BOARD:imx8mm-lpddr4-evk = "evkmimx8mm"
 BOARD:imx8mn-lpddr4-evk = "evkmimx8mn"
 BOARD:imx93evk = "mcimx93evk"
+BOARD:imx95-15x15-lpddr4x-evk = "imx95lp4xevk15"
 BOARD:imx95-19x19-lpddr5-evk = "imx95lpd5evk19"
 
 INMATES_DIR ?= "${HARPOON_DATADIR}/inmates/freertos"

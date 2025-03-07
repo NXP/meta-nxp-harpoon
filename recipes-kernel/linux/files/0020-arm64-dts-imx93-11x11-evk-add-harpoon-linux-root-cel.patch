@@ -1,7 +1,7 @@
-From 7dd4d4da46d1ff9ba6f94b6e47b48910880b6d5e Mon Sep 17 00:00:00 2001
+From 3348f5958dae8fa291b9c2aef4c1be8717a17368 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Tue, 24 Jan 2023 09:09:15 +0000
-Subject: [PATCH 20/26] arm64: dts: imx93-11x11-evk: add harpoon linux root
+Subject: [PATCH 20/30] arm64: dts: imx93-11x11-evk: add harpoon linux root
  cell for audio and industrial use cases
 
 harpoon.dts embeds the audio use case config: SAI interfaces are moved

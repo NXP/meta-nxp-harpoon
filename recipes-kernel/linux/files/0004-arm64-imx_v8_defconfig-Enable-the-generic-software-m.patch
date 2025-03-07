@@ -1,7 +1,7 @@
-From 8f9014184b473925d7bc211989a93fb117256cc6 Mon Sep 17 00:00:00 2001
+From ea8b097ce066711082d5a9d0da6fb3e20622fc85 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Fri, 21 Oct 2022 15:19:53 +0800
-Subject: [PATCH 04/26] arm64: imx_v8_defconfig: Enable the generic software
+Subject: [PATCH 04/30] arm64: imx_v8_defconfig: Enable the generic software
  mailbox
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>

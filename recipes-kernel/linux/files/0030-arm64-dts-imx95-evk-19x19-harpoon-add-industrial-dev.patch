@@ -1,0 +1,74 @@
+From b51f46e69568d82220e2bce4b4bb7a338d6d4d3d Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Tue, 10 Dec 2024 10:19:26 +0100
+Subject: [PATCH 30/30] arm64: dts: imx95-evk-19x19: harpoon: add industrial
+ device tree
+
+Add Harpoon industrial Device Tree for CAN use case.
+Disable the following nodes for their usage on the inmate cell:
+ - LPUART3
+ - Message Unit 3
+ - FlexCAN2
+
+And disable:
+ - Regulatory CAN2_EN: to allow its enablement though gpioset utility
+ - Regulatory CAN2_STBY: to allow its enablement though gpioset utility
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  2 +-
+ .../imx95-19x19-evk-harpoon-industrial.dts    | 29 +++++++++++++++++++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index cff479932cd5..fa8c8cee556b 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -518,7 +518,7 @@ DTC_FLAGS_imx95-15x15-evk-rpmsg-lpv := -@
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-rpmsg.dtb imx95-15x15-evk-rpmsg-lpv.dtb
+ 
+ dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-evk.dtb imx95-19x19-evk-root.dtb imx95-19x19-evk-inmate.dtb \
+-			  imx95-19x19-evk-harpoon.dtb \
++			  imx95-19x19-evk-harpoon.dtb imx95-19x19-evk-harpoon-industrial.dtb \
+ 			  imx95-19x19-evk-lpspi-slave.dtb
+ 
+ imx95-15x15-evk-ox03c10-dtbs := imx95-15x15-evk.dtb imx95-15x15-evk-ox03c10.dtbo
+diff --git a/arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts
+new file mode 100644
+index 000000000000..59fde8aa0a65
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2024 NXP
++ */
++
++#include "imx95-19x19-evk-root.dts"
++#include "imx95-rpmsg-ca55.dtsi"
++
++&lpuart3 {
++	/* To use this, needs dedicated SM to allow RTOS access lpuart3 and lpuart3 pinmux */
++	status = "disabled";
++};
++
++/* This Message Unit is used for communication between the RTOS cell and the SM */
++&mu3 {
++	status = "disabled";
++};
++
++&flexcan2 {
++	status = "disabled";
++};
++
++&reg_can2_en {
++	status = "disabled";
++};
++
++&reg_can2_stby {
++	status = "disabled";
++};
+-- 
+2.34.1
+

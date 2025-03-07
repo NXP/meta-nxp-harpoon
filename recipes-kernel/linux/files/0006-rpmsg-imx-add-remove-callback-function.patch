@@ -1,7 +1,7 @@
-From 01c5e2d765f38ed7b1554bffe1e6cfc06b132347 Mon Sep 17 00:00:00 2001
+From 131077f44becab5b794e78fc2c5b74ccd616bda0 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Fri, 3 Feb 2023 23:17:49 +0800
-Subject: [PATCH 06/26] rpmsg: imx: add remove() callback function
+Subject: [PATCH 06/30] rpmsg: imx: add remove() callback function
 
 Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 ---

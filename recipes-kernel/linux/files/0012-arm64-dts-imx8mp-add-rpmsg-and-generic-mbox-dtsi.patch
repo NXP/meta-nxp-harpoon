@@ -1,7 +1,7 @@
-From c07ada8de9d7d4bfe5ed9b73ae39f313c59c7e87 Mon Sep 17 00:00:00 2001
+From 2214c34e1faf30aab12d1bccf660ce35eecd01a6 Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Thu, 18 Jan 2024 17:18:59 +0100
-Subject: [PATCH 12/26] arm64: dts: imx8mp: add rpmsg and generic mbox dtsi
+Subject: [PATCH 12/30] arm64: dts: imx8mp: add rpmsg and generic mbox dtsi
 
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 (add dma-coherent property and update generic mbox spi irqs)

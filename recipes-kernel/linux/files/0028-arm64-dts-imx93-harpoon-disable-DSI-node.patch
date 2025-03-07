@@ -1,0 +1,34 @@
+From 1a277d8c9d93165ca1069fe4c2cfbfab1e7349a5 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Wed, 13 Nov 2024 14:38:15 +0100
+Subject: [PATCH 28/30] arm64: dts: imx93: harpoon: disable DSI node
+
+When booting on i.MX 93 EVK, we can see an error on the drm driver:
+"[drm:drm_bridge_attach] *ERROR* failed to attach bridge
+/soc@0/dsi@4ae10000 to encoder DSI-34".
+As we do not use it for our harpoon use case. Let's remove the device to
+prevent the error.
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
+index cacd877bc67e..2f3ba10e7033 100644
+--- a/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
+@@ -6,6 +6,10 @@
+ #include "imx93-11x11-evk-root.dts"
+ #include "imx93-rpmsg-ca55.dtsi"
+ 
++&dsi {
++	status = "disabled";
++};
++
+ &lpi2c1 {
+ 	status = "disabled";
+ };
+-- 
+2.34.1
+

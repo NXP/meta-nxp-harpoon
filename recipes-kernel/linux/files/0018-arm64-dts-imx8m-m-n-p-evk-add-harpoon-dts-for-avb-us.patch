@@ -1,7 +1,7 @@
-From be00d62ba4c98aaecac111cb9cf09f675b073bb4 Mon Sep 17 00:00:00 2001
+From 2615da0e6516a2f8cc2ac20b19bd1925ffc8060a Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 3 Oct 2022 08:19:25 +0000
-Subject: [PATCH 18/26] arm64: dts: imx8m{m,n,p}-evk: add harpoon dts for avb
+Subject: [PATCH 18/30] arm64: dts: imx8m{m,n,p}-evk: add harpoon dts for avb
  use case
 
 Signed-off-by: Stephane Viau <stephane.viau@nxp.com>

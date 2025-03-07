@@ -1,7 +1,7 @@
-From 2d0a117d8813f524de4ffc5865fc3cca5a824d2a Mon Sep 17 00:00:00 2001
+From 712e38733eecbed5560e070bb102e0257b18f1e3 Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Thu, 18 Jan 2024 17:48:23 +0100
-Subject: [PATCH 15/26] arm64: dts: imx93: add generic mbox dtsi
+Subject: [PATCH 15/30] arm64: dts: imx93: add generic mbox dtsi
 
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 ---

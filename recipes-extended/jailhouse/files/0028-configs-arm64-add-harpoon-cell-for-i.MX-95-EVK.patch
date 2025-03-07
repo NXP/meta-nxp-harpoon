@@ -1,7 +1,7 @@
-From 520ba0300c9408d3f0d2552f962e12b2a729c11d Mon Sep 17 00:00:00 2001
+From 08891cb5ea5032f076cebd5099c0ac5e6ff20c19 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Mon, 29 Jul 2024 10:12:34 +0200
-Subject: [PATCH 28/30] configs: arm64: add harpoon cell for i.MX 95 EVK
+Subject: [PATCH 28/31] configs: arm64: add harpoon cell for i.MX 95 EVK
 
 Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
 ---

@@ -1,7 +1,7 @@
-From 3a426e4c502c1862815b1f68e4aad8afec527040 Mon Sep 17 00:00:00 2001
+From 6d1bad8a624bc7eb7f1745448542e8c33ecb4a9b Mon Sep 17 00:00:00 2001
 From: Rui Sousa <rui.sousa@nxp.com>
 Date: Tue, 30 Nov 2021 15:36:07 +0100
-Subject: [PATCH 05/30] configs: Guest virtual console
+Subject: [PATCH 05/31] configs: Guest virtual console
 
 Allow guest cells to use hypervisor calls for accessing hypervisor
 virtual console.

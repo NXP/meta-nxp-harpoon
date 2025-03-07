@@ -1,4 +1,4 @@
-# Copyright 2022-2023 NXP
+# Copyright 2022-2023, 2025 NXP
 
 require harpoon-apps-common.inc
 require harpoon-apps-uri.inc
@@ -23,7 +23,7 @@ SRC_URI = "\
 
 SRCREV_FORMAT = "harpoon-apps_zephyr_hal-nxp_rtos-abstraction-layer"
 
-SRCREV_zephyr = "dbc846c798bdec45c2e9ab274f4f139cc3ab003e"
+SRCREV_zephyr = "a050db46ae3d3322cb0cd61a8ca22cee3ef6d67a"
 SRCREV_hal-nxp = "4f076ac96a02a433265fbc1898a00f51449409a3"
 
 INMATES_DIR ?= "${HARPOON_DATADIR}/inmates/zephyr"

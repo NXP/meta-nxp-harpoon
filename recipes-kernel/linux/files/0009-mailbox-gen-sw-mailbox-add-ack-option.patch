@@ -1,7 +1,7 @@
-From 60634b91bc4f8cf0f41f42f2bf34109810f6db47 Mon Sep 17 00:00:00 2001
+From 0530bd7648194a9c45fa7cf81c39f642c7d37863 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Fri, 27 Oct 2023 18:26:20 +0800
-Subject: [PATCH 09/26] mailbox: gen-sw-mailbox: add ack option
+Subject: [PATCH 09/30] mailbox: gen-sw-mailbox: add ack option
 
 Enable dts node property to enable or disable sending ack interrupt
 from receiver back to sender.

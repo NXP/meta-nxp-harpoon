@@ -1,7 +1,7 @@
-From edff88f361a24f3fc8521a439606aa9cf819ecf5 Mon Sep 17 00:00:00 2001
+From 33c087296c9d266cf302f97b439059bb29056e1a Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Fri, 19 May 2023 17:31:37 +0200
-Subject: [PATCH 21/26] arm64: dts: imx93-11x11-evk: harpoon: add support for
+Subject: [PATCH 21/30] arm64: dts: imx93-11x11-evk: harpoon: add support for
  rpmsg
 
 Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>

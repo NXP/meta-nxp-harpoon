@@ -1,0 +1,168 @@
+From 470c6428c895a1591cfb4b1f6c5bfcfbe63fe2a2 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Tue, 10 Dec 2024 10:16:37 +0100
+Subject: [PATCH 31/32] configs: arm64: imx95: add industrial configuration for
+ CAN use case
+
+Add Harpoon industrial configuration for CAN use case on i.MX 95 SoC.
+Add FlexCAN2 IRQ and memory regions.
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ .../arm64/imx95-harpoon-config-industrial.h   | 50 +++++++++++++++++++
+ .../arm64/imx95-harpoon-freertos-industrial.c | 22 ++++++++
+ configs/arm64/imx95-harpoon-rtos.h            |  6 ++-
+ .../arm64/imx95-harpoon-zephyr-industrial.c   | 22 ++++++++
+ 4 files changed, 99 insertions(+), 1 deletion(-)
+ create mode 100644 configs/arm64/imx95-harpoon-config-industrial.h
+ create mode 100644 configs/arm64/imx95-harpoon-freertos-industrial.c
+ create mode 100644 configs/arm64/imx95-harpoon-zephyr-industrial.c
+
+diff --git a/configs/arm64/imx95-harpoon-config-industrial.h b/configs/arm64/imx95-harpoon-config-industrial.h
+new file mode 100644
+index 00000000..d63d035b
+--- /dev/null
++++ b/configs/arm64/imx95-harpoon-config-industrial.h
+@@ -0,0 +1,50 @@
++/*
++ * i.MX95 target - Industrial config
++ *
++ * Copyright 2024 NXP
++ *
++ * Authors:
++ *  Aziz SELLAMI <aziz.sellami@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
++
++/* Memory & peripherals */
++#define CONFIG_INMATE_REGIONS                   \
++	RTOS_COMMON_MEMORY_REGIONS,             \
++	RTOS_MEMRAM_MEMORY_REGIONS,             \
++	RTOS_INDUS_MEMORY_REGIONS
++
++#define CONFIG_INMATE_IRQCHIPS_ADDR	CONFIG_RTOS_IRQCHIPS_ADDR
++#define CONFIG_INMATE_IRQCHIPS 	                \
++	IRQCHIP0(CONFIG_INMATE_IRQCHIPS_ADDR,   \
++		/* interrupts 32..63 */         \
++		RTOS_COMMON_IRQCHIP0_BITMAP1 |  \
++		RTOS_INDUS_IRQCHIP0_BITMAP1,    \
++		/* interrupts 64..95 */         \
++		RTOS_COMMON_IRQCHIP0_BITMAP2 |  \
++		RTOS_INDUS_IRQCHIP0_BITMAP2,    \
++		/* interrupts 96..127 */        \
++		RTOS_COMMON_IRQCHIP0_BITMAP3 |  \
++		RTOS_INDUS_IRQCHIP0_BITMAP3,    \
++		/* interrupts 128..159 */       \
++		RTOS_COMMON_IRQCHIP0_BITMAP4 |  \
++		RTOS_INDUS_IRQCHIP0_BITMAP4),   \
++	IRQCHIP1(CONFIG_INMATE_IRQCHIPS_ADDR,   \
++		/* interrupts 160..191 */       \
++		RTOS_COMMON_IRQCHIP1_BITMAP1 |  \
++		RTOS_INDUS_IRQCHIP1_BITMAP1,    \
++		/* interrupts 192..223 */       \
++		RTOS_COMMON_IRQCHIP1_BITMAP2 |  \
++		RTOS_INDUS_IRQCHIP1_BITMAP2,    \
++		/* interrupts 224..255 */       \
++		RTOS_COMMON_IRQCHIP1_BITMAP3,   \
++		/* interrupts 256..287 */       \
++		RTOS_COMMON_IRQCHIP1_BITMAP4)
++
++/* IVSHMEM PCI */
++#define CONFIG_INMATE_PCI_DEVICES \
++	RTOS_COMMON_PCI_IVSHMEM
+diff --git a/configs/arm64/imx95-harpoon-freertos-industrial.c b/configs/arm64/imx95-harpoon-freertos-industrial.c
+new file mode 100644
+index 00000000..8f91561e
+--- /dev/null
++++ b/configs/arm64/imx95-harpoon-freertos-industrial.c
+@@ -0,0 +1,22 @@
++/*
++ * i.MX95 target - FreeRTOS config
++ *
++ * Copyright 2024 NXP
++ *
++ * Authors:
++ *  Aziz SELLAMI <aziz.sellami@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx95-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"freertos"
++#define CONFIG_INMATE_CORE_BITMAP	(0b100000)  /* inmate uses core 5 */
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx95-harpoon-config-industrial.h"
++
++#include "cell-create.h"
+diff --git a/configs/arm64/imx95-harpoon-rtos.h b/configs/arm64/imx95-harpoon-rtos.h
+index 5ab9cd9e..52baec09 100644
+--- a/configs/arm64/imx95-harpoon-rtos.h
++++ b/configs/arm64/imx95-harpoon-rtos.h
+@@ -13,6 +13,7 @@
+ typedef enum IRQn {
+   /* Device specific interrupts */
+   TPM2_IRQn                    = 62,               /**< Timer PWM Module (TPM) 2 */
++  CAN_FD2_IRQn                 = 70,               /**< CAN2 interrupt */
+   LPUART3_IRQn                 = 96,               /**< Low Power UART 3 */
+   SW_MB_L_IRQn                 = 102,              /**< Unused SPI 70, to be used by generic software mailbox in Linux */
+   TPM4_IRQn                    = 106,              /**< Timer PWM Module (TPM) 4 */
+@@ -40,6 +41,9 @@ typedef enum IRQn {
+ 	MEM_REGION_RWXL(0xf0000000, 0xf0000000, MB(16)), /* RAM */    \
+ 	MEM_REGION_RWX( 0x20480000, 0x20480000, KB(640)) /* OCRAM */
+ 
++#define RTOS_INDUS_MEMORY_REGIONS \
++	MMIO_REGION_RW( 0x425b0000, 0x425b0000, KB(64)) /* FLEXCAN2*/
++
+ /* GIC */
+ #define CONFIG_RTOS_IRQCHIPS_ADDR	(0x48000000)
+ 
+@@ -59,7 +63,7 @@ typedef enum IRQn {
+ #define RTOS_AVB_IRQCHIP0_BITMAP2 \
+ 	RTOS_AUDIO_IRQCHIP0_BITMAP2
+ #define RTOS_INDUS_IRQCHIP0_BITMAP2 \
+-	0
++	IRQnMAP(CAN_FD2_IRQn)
+ 
+ /* interrupts 96..127 */
+ #define RTOS_COMMON_IRQCHIP0_BITMAP3 \
+diff --git a/configs/arm64/imx95-harpoon-zephyr-industrial.c b/configs/arm64/imx95-harpoon-zephyr-industrial.c
+new file mode 100644
+index 00000000..8635f831
+--- /dev/null
++++ b/configs/arm64/imx95-harpoon-zephyr-industrial.c
+@@ -0,0 +1,22 @@
++/*
++ * i.MX95 target - Zephyr industrial config
++ *
++ * Copyright 2024 NXP
++ *
++ * Authors:
++ *  Aziz SELLAMI <aziz.sellami@nxp.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include "cell-helper.h"
++#include "imx95-harpoon-rtos.h"
++
++#define CONFIG_INMATE_NAME		"zephyr"
++#define CONFIG_INMATE_CORE_BITMAP	(0b100000) /* inmate uses core 5 */
++
++/* Base, memory & peripherals, GIC, IVSHMEM PCI */
++#include "imx95-harpoon-config-industrial.h"
++
++#include "cell-create.h"
+-- 
+2.34.1
+

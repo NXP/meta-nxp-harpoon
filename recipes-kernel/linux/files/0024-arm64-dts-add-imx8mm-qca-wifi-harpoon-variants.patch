@@ -1,0 +1,348 @@
+From 71dbc71191dec17f23a7cb4ec12f385b9086fefb Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Tue, 1 Oct 2024 15:59:25 +0200
+Subject: [PATCH 24/36] arm64: dts: add imx8mm qca-wifi harpoon variants
+
+Current default root and evk (and hence harpoon) device tree files are destined for
+the i.MX 8M Mini LPDDR4 EVKB board (with the PCA PMIC). For old boards, i.MX 8M Mini
+Evaluation Kit LPDDR4 (with ROHM PMIC), no root/harpoon dtb is available.
+To be able to share the QCA Wifi (which is the old board version with ROHM PMIC) changes, let's move the
+changes to a specific dtsi to be shared between the imx8mm-evk-qca-wifi.dts and the new imx8mm-evk
+harpoon qca-wifi dts variants.
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |   2 +
+ .../imx8mm-evk-qca-wifi-harpoon-avb.dts       |   7 +
+ ...imx8mm-evk-qca-wifi-harpoon-industrial.dts |   7 +
+ .../freescale/imx8mm-evk-qca-wifi-harpoon.dts |   7 +
+ .../dts/freescale/imx8mm-evk-qca-wifi.dts     | 123 +----------------
+ .../dts/freescale/imx8mm-evk-qca-wifi.dtsi    | 124 ++++++++++++++++++
+ 6 files changed, 149 insertions(+), 121 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-avb.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-industrial.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dtsi
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 040c423c73a9..d43c74d135ca 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -130,6 +130,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb imx8mm-evk-rpmsg.dtb imx8mm-evk-rm67191
+ 			  imx8mm-evk-qca-wifi.dtb \
+ 			  imx8mm-evk-dpdk.dtb \
+ 			  imx8mm-evk-harpoon.dtb imx8mm-evk-harpoon-industrial.dtb imx8mm-evk-harpoon-avb.dtb \
++			  imx8mm-evk-qca-wifi-harpoon.dtb imx8mm-evk-qca-wifi-harpoon-industrial.dtb \
++			  imx8mm-evk-qca-wifi-harpoon-avb.dtb \
+ 			  imx8mm-evk-rm67199.dtb imx8mm-evk-rm67191-cmd-ram.dtb imx8mm-evk-rm67199-cmd-ram.dtb \
+ 			  imx8mm-evk-lk.dtb imx8mm-evk-rpmsg-wm8524-lpv.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-rpmsg-wm8524.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-avb.dts
+new file mode 100644
+index 000000000000..20f26f3b642f
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-avb.dts
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2024 NXP
++ */
++
++#include "imx8mm-evk-harpoon-avb.dts"
++#include "imx8mm-evk-qca-wifi.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-industrial.dts
+new file mode 100644
+index 000000000000..77aae065a883
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-industrial.dts
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2024 NXP
++ */
++
++#include "imx8mm-evk-harpoon-industrial.dts"
++#include "imx8mm-evk-qca-wifi.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon.dts
+new file mode 100644
+index 000000000000..01d7ef234886
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon.dts
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2024 NXP
++ */
++
++#include "imx8mm-evk-harpoon.dts"
++#include "imx8mm-evk-qca-wifi.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dts
+index aa1a25f00f55..cba11387cb08 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dts
+@@ -1,128 +1,9 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2019 NXP
++ * Copyright 2019, 2024 NXP
+  */
+ 
+ /dts-v1/;
+ 
+ #include "imx8mm-evk.dts"
+-
+-/ {
+-	model = "FSL i.MX8MM LPDDR4 EVK with QCA WIFI revC board ";
+-};
+-
+-/delete-node/&pmic_nxp;
+-
+-&i2c1 {
+-	pmic_rohm: pmic@4b {
+-		compatible = "rohm,bd71847";
+-		reg = <0x4b>;
+-		pinctrl-0 = <&pinctrl_pmic>;
+-		pinctrl-names = "default";
+-		interrupt-parent = <&gpio1>;
+-		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+-		rohm,reset-snvs-powered;
+-
+-		#clock-cells = <0>;
+-		clocks = <&osc_32k 0>;
+-		clock-output-names = "clk-32k-out";
+-
+-		regulators {
+-			buck1_reg: BUCK1 {
+-				regulator-name = "BUCK1";
+-				regulator-min-microvolt = <700000>;
+-				regulator-max-microvolt = <1300000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-				regulator-ramp-delay = <1250>;
+-			};
+-
+-			buck2_reg: BUCK2 {
+-				regulator-name = "BUCK2";
+-				regulator-min-microvolt = <700000>;
+-				regulator-max-microvolt = <1300000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-				regulator-ramp-delay = <1250>;
+-				rohm,dvs-run-voltage = <1000000>;
+-				rohm,dvs-idle-voltage = <900000>;
+-			};
+-
+-			buck3_reg: BUCK3 {
+-				// BUCK5 in datasheet
+-				regulator-name = "BUCK3";
+-				regulator-min-microvolt = <700000>;
+-				regulator-max-microvolt = <1350000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			buck4_reg: BUCK4 {
+-				// BUCK6 in datasheet
+-				regulator-name = "BUCK4";
+-				regulator-min-microvolt = <3000000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			buck5_reg: BUCK5 {
+-				// BUCK7 in datasheet
+-				regulator-name = "BUCK5";
+-				regulator-min-microvolt = <1605000>;
+-				regulator-max-microvolt = <1995000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			buck6_reg: BUCK6 {
+-				// BUCK8 in datasheet
+-				regulator-name = "BUCK6";
+-				regulator-min-microvolt = <800000>;
+-				regulator-max-microvolt = <1400000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			ldo1_reg: LDO1 {
+-				regulator-name = "LDO1";
+-				regulator-min-microvolt = <1600000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			ldo2_reg: LDO2 {
+-				regulator-name = "LDO2";
+-				regulator-min-microvolt = <800000>;
+-				regulator-max-microvolt = <900000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			ldo3_reg: LDO3 {
+-				regulator-name = "LDO3";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			ldo4_reg: LDO4 {
+-				regulator-name = "LDO4";
+-				regulator-min-microvolt = <900000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			ldo6_reg: LDO6 {
+-				regulator-name = "LDO6";
+-				regulator-min-microvolt = <900000>;
+-				regulator-max-microvolt = <1800000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-		};
+-	};
+-};
++#include "imx8mm-evk-qca-wifi.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dtsi
+new file mode 100644
+index 000000000000..13d3076ac94c
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dtsi
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2024 NXP
++ */
++
++/ {
++	model = "FSL i.MX8MM LPDDR4 EVK with QCA WIFI revC board ";
++};
++
++/delete-node/&pmic_nxp;
++
++&i2c1 {
++	pmic_rohm: pmic@4b {
++		compatible = "rohm,bd71847";
++		reg = <0x4b>;
++		pinctrl-0 = <&pinctrl_pmic>;
++		pinctrl-names = "default";
++		interrupt-parent = <&gpio1>;
++		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++		rohm,reset-snvs-powered;
++
++		#clock-cells = <0>;
++		clocks = <&osc_32k 0>;
++		clock-output-names = "clk-32k-out";
++
++		regulators {
++			buck1_reg: BUCK1 {
++				regulator-name = "BUCK1";
++				regulator-min-microvolt = <700000>;
++				regulator-max-microvolt = <1300000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <1250>;
++			};
++
++			buck2_reg: BUCK2 {
++				regulator-name = "BUCK2";
++				regulator-min-microvolt = <700000>;
++				regulator-max-microvolt = <1300000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <1250>;
++				rohm,dvs-run-voltage = <1000000>;
++				rohm,dvs-idle-voltage = <900000>;
++			};
++
++			buck3_reg: BUCK3 {
++				// BUCK5 in datasheet
++				regulator-name = "BUCK3";
++				regulator-min-microvolt = <700000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck4_reg: BUCK4 {
++				// BUCK6 in datasheet
++				regulator-name = "BUCK4";
++				regulator-min-microvolt = <3000000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck5_reg: BUCK5 {
++				// BUCK7 in datasheet
++				regulator-name = "BUCK5";
++				regulator-min-microvolt = <1605000>;
++				regulator-max-microvolt = <1995000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck6_reg: BUCK6 {
++				// BUCK8 in datasheet
++				regulator-name = "BUCK6";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1400000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo1_reg: LDO1 {
++				regulator-name = "LDO1";
++				regulator-min-microvolt = <1600000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo2_reg: LDO2 {
++				regulator-name = "LDO2";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <900000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo3_reg: LDO3 {
++				regulator-name = "LDO3";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo4_reg: LDO4 {
++				regulator-name = "LDO4";
++				regulator-min-microvolt = <900000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo6_reg: LDO6 {
++				regulator-name = "LDO6";
++				regulator-min-microvolt = <900000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++		};
++	};
++};
+-- 
+2.34.1
+

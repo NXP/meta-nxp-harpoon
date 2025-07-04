@@ -1,0 +1,39 @@
+From 7347f43e1f9e401eff80d49de0a3ea9d744faad3 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Mon, 10 Mar 2025 16:55:11 +0100
+Subject: [PATCH 31/36] dts: imx95-19x19-evk-harpoon-industrial: disable
+ ethernet0 on Linux
+
+Adapt harpoon industrial device tree for i.MX 95 19x19 LPDDR5 EVK:
+ - Disable enetc_port0, ethphy0 and netc_timer for usage in inmate cell
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ .../freescale/imx95-19x19-evk-harpoon-industrial.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts b/arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts
+index 59fde8aa0a65..aa7794c6d8f9 100644
+--- a/arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts
++++ b/arch/arm64/boot/dts/freescale/imx95-19x19-evk-harpoon-industrial.dts
+@@ -27,3 +27,15 @@ &reg_can2_en {
+ &reg_can2_stby {
+ 	status = "disabled";
+ };
++
++&enetc_port0 {
++	status = "disabled";
++};
++
++&ethphy0 {
++	status = "disabled";
++};
++
++&netc_timer {
++	status = "disabled";
++};
+-- 
+2.34.1
+

@@ -1,0 +1,75 @@
+From 9d6fec6edc0443b8a34815a9bc84bffd952cfdad Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Thu, 22 May 2025 10:42:31 +0200
+Subject: [PATCH 34/36] dts: imx8mp-evk-harpoon: disable nodes that interacts
+ with audiomix
+
+Disable all nodes that refers to the audiomix Power Domain, to prevent
+the Linux Domain to impact the RTOS Domain for Audio use-cases.
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ .../boot/dts/freescale/imx8mp-evk-harpoon.dts | 35 ++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+index 828d15424e8a..f228994e8117 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2021-2023 NXP
++ * Copyright 2021-2023, 2025 NXP
+  */
+ 
+ #include "imx8mp-evk-root.dts"
+@@ -10,6 +10,7 @@ &i2c3 {
+ 	status = "disabled";
+ };
+ 
++/* Disable the whole Audio system for Linux and give full ownership to RTOS. */
+ &sai1 {
+ 	status = "disabled";
+ };
+@@ -33,3 +34,35 @@ &sai6 {
+ &sai7 {
+ 	status = "disabled";
+ };
++
++&audio_blk_ctrl {
++	status = "disabled";
++};
++
++&aud2htx {
++	status = "disabled";
++};
++
++&dsp {
++	status = "disabled";
++};
++
++&easrc {
++	status = "disabled";
++};
++
++&micfil {
++	status = "disabled";
++};
++
++&sdma2 {
++	status = "disabled";
++};
++
++&sdma3 {
++	status = "disabled";
++};
++
++&xcvr {
++	status = "disabled";
++};
+-- 
+2.34.1
+

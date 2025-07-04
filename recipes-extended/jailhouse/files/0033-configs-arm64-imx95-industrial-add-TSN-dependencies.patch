@@ -1,0 +1,67 @@
+From 37e7e889d078c55e1ccff57557a5ba7d8c5fd55f Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Mon, 10 Mar 2025 16:53:35 +0100
+Subject: [PATCH 33/33] configs: arm64: imx95: industrial: add TSN dependencies
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/arm64/imx95-harpoon-config-industrial.h |  3 ++-
+ configs/arm64/imx95-harpoon-rtos.h              | 12 +++++++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/configs/arm64/imx95-harpoon-config-industrial.h b/configs/arm64/imx95-harpoon-config-industrial.h
+index d63d035b..1706bc86 100644
+--- a/configs/arm64/imx95-harpoon-config-industrial.h
++++ b/configs/arm64/imx95-harpoon-config-industrial.h
+@@ -43,7 +43,8 @@
+ 		/* interrupts 224..255 */       \
+ 		RTOS_COMMON_IRQCHIP1_BITMAP3,   \
+ 		/* interrupts 256..287 */       \
+-		RTOS_COMMON_IRQCHIP1_BITMAP4)
++		RTOS_COMMON_IRQCHIP1_BITMAP4 |  \
++		RTOS_INDUS_IRQCHIP1_BITMAP4)
+ 
+ /* IVSHMEM PCI */
+ #define CONFIG_INMATE_PCI_DEVICES \
+diff --git a/configs/arm64/imx95-harpoon-rtos.h b/configs/arm64/imx95-harpoon-rtos.h
+index 52baec09..b312d3c0 100644
+--- a/configs/arm64/imx95-harpoon-rtos.h
++++ b/configs/arm64/imx95-harpoon-rtos.h
+@@ -19,6 +19,7 @@ typedef enum IRQn {
+   TPM4_IRQn                    = 106,              /**< Timer PWM Module (TPM) 4 */
+   SW_MB_R_IRQn                 = 126,              /**< Unused SPI 94, to be used by generic software mailbox in RTOS */
+   MU3_A_IRQn                   = 260,              /**< Message Unit 3 */
++  MSGINTR2_IRQn                = 269,              /**< MSGINTR2 */
+ } IRQn_Type;
+ 
+ #define RTOS_COMMON_MEMORY_REGIONS \
+@@ -42,7 +43,14 @@ typedef enum IRQn {
+ 	MEM_REGION_RWX( 0x20480000, 0x20480000, KB(640)) /* OCRAM */
+ 
+ #define RTOS_INDUS_MEMORY_REGIONS \
+-	MMIO_REGION_RW( 0x425b0000, 0x425b0000, KB(64)) /* FLEXCAN2*/
++	MMIO_REGION_RW( 0x425b0000, 0x425b0000, KB(64)),   /* FLEXCAN2 */                              \
++	MMIO_REGION_RW( 0x446a0000, 0x446a0000, KB(64)),   /* MSGINTR2 */                              \
++	MMIO_REGION_RW( 0x4ca00000, 0x4ca00000, KB(64)),   /* NETC_IERPC_ECAM.ENETC0_PCI_HDR */        \
++	MMIO_REGION_RW( 0x4cac0000, 0x4cac0000, KB(64)),   /* NETC_IERPC_ECAM.TMR0_PCI_HDR */          \
++	MMIO_REGION_RW( 0x4cc00000, 0x4cc00000, KB(64)),   /* ENETC0_PSI */                            \
++	MMIO_REGION_RW( 0x4cc10000, 0x4cc10000, KB(64)),   /* ENETC0 */                                \
++	MMIO_REGION_RW( 0x4ccc0000, 0x4ccc0000, KB(64)),   /* TMR0 */                                  \
++	MMIO_REGION_RW( 0x4cd00000, 0x4cd00000, KB(64))    /* NETC_MSIX_TABLE */                       \
+ 
+ /* GIC */
+ #define CONFIG_RTOS_IRQCHIPS_ADDR	(0x48000000)
+@@ -113,6 +121,8 @@ typedef enum IRQn {
+ /* interrupts 256..287 */
+ #define RTOS_COMMON_IRQCHIP1_BITMAP4 \
+ 	IRQnMAP(MU3_A_IRQn)
++#define RTOS_INDUS_IRQCHIP1_BITMAP4 \
++	IRQnMAP(MSGINTR2_IRQn)
+ 
+ /* IVSHMEM PCI */
+ #define	RTOS_COMMON_PCI_IVSHMEM \
+-- 
+2.34.1
+

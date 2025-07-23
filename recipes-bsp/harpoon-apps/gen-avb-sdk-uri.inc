@@ -8,4 +8,4 @@ GENAVB_BRANCH = "7_3"
 
 SRC_GEN_AVB_SDK = "git://github.com/NXP/GenAVB_TSN.git;protocol=https;branch=${GENAVB_BRANCH};destsuffix=git/gen_avb_sdk;name=gen-avb-sdk"
 
-SRCREV_gen-avb-sdk = "30bf4d8262728627dbec48513831637848e42cf4"
+SRCREV_gen-avb-sdk = "6b962d6c34b0c3f142295a213dfa70bda193b23d"

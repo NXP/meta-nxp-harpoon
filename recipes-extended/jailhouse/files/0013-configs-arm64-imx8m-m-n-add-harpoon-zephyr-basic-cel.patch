@@ -1,7 +1,7 @@
-From c6b39c3ed9f8efe4daa578f990fcc799a5fb63c7 Mon Sep 17 00:00:00 2001
+From 3858a6af7618125c9a477d95cc6598e64adc37f6 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Fri, 25 Feb 2022 18:15:58 +0800
-Subject: [PATCH 13/33] configs: arm64: imx8m{m,n}: add harpoon zephyr basic
+Subject: [PATCH 13/34] configs: arm64: imx8m{m,n}: add harpoon zephyr basic
  cell
 
 Upstream-Status: Pending

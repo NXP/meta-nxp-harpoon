@@ -1,7 +1,7 @@
-From 53a542a926321acc55f4929c7b2698eca159a5db Mon Sep 17 00:00:00 2001
+From abe69e8535ab6b8237259319d9f775db7f73e211 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Fri, 30 Sep 2022 16:31:58 +0000
-Subject: [PATCH 17/33] configs: arm64: imx8m{m,n,p}: add new harpoon freertos
+Subject: [PATCH 17/34] configs: arm64: imx8m{m,n,p}: add new harpoon freertos
  cell for audio avb use case
 
 Upstream-Status: Pending

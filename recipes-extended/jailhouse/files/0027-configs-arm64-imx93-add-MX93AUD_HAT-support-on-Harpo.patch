@@ -1,7 +1,7 @@
-From f691ae4bab0c944ecab2e19453bc854e66fc46c1 Mon Sep 17 00:00:00 2001
+From 69aeec394b87d0b6d11f64281bf665662c8a98d2 Mon Sep 17 00:00:00 2001
 From: Zineb El Azzouzi <zineb.elazzouzi@nxp.com>
 Date: Tue, 2 Jan 2024 18:24:08 +0100
-Subject: [PATCH 27/33] configs: arm64: imx93: add MX93AUD_HAT support on
+Subject: [PATCH 27/34] configs: arm64: imx93: add MX93AUD_HAT support on
  Harpoon audio application
 
 Upstream-Status: Pending

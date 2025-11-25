@@ -1,17 +1,25 @@
 # Copyright 2021-2025 NXP
 
 require harpoon-apps-uri.inc
+require rtos-apps-uri.inc
 
 SUMMARY = "Harpoon Application - Linux Control"
 SECTION = "bsp"
 
 LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSES/COPYING-BSD-3;md5=b1a3c7f4e16fc8aa105097dd385e900f"
+LIC_FILES_CHKSUM = " \
+    file://harpoon-apps/LICENSE;md5=b1a3c7f4e16fc8aa105097dd385e900f \
+    file://rtos-apps/LICENSE.txt;md5=0d6849a6649fa03a6242a4ed265e06ae \
+"
 
-S = "${WORKDIR}/git/harpoon-apps"
+S = "${WORKDIR}/git"
 
-SRC_URI = "${SRC_HARPOON_APPS}"
-SRCREV = "${SRCREV_harpoon-apps}"
+SRC_URI = "\
+    ${SRC_HARPOON_APPS} \
+    ${SRC_RTOS_APPS} \
+"
+
+SRCREV_FORMAT = "harpoon-apps_rtos-apps"
 
 inherit cmake systemd
 
@@ -21,20 +29,22 @@ SYSTEMD_AUTO_ENABLE:${PN} = "disable"
 HARPOON_DATADIR ?= "${datadir}/harpoon"
 SCRIPTS_DIR ?= "${HARPOON_DATADIR}/scripts"
 
-HARPOON_APPS_SCRIPT_DIR = "${S}/scripts"
-HARPOON_APPS_CODE_DIR = "${S}/ctrl"
+HARPOON_APPS_SCRIPT_DIR = "${S}/harpoon-apps/scripts"
+HARPOON_APPS_CODE_DIR = "${S}/harpoon-apps/ctrl"
 HARPOON_APPS_APP_BIN = "harpoon_ctrl"
 
 SOC:mx8mm-nxp-bsp = "imx8mm"
 SOC:mx8mn-nxp-bsp = "imx8mn"
 SOC:mx8mp-nxp-bsp = "imx8mp"
 SOC:mx93-nxp-bsp = "imx93"
+SOC:mx943-nxp-bsp = "imx943"
 SOC:mx95-nxp-bsp = "imx95"
 
 INMATE_ENTRY_ADDRESS:mx8mm-nxp-bsp = "0x93c00000"
 INMATE_ENTRY_ADDRESS:mx8mn-nxp-bsp = "0x93c00000"
 INMATE_ENTRY_ADDRESS:mx8mp-nxp-bsp = "0xc0000000"
 INMATE_ENTRY_ADDRESS:mx93-nxp-bsp = "0xd0000000"
+INMATE_ENTRY_ADDRESS:mx943-nxp-bsp = "0xf0000000"
 INMATE_ENTRY_ADDRESS:mx95-nxp-bsp = "0xf0000000"
 
 do_install() {
@@ -69,7 +79,7 @@ RDEPENDS:${PN} += "bash"
 OECMAKE_SOURCEPATH = "${HARPOON_APPS_CODE_DIR}"
 OECMAKE_GENERATOR = "Unix Makefiles"
 
-COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk|imx95-15x15-lpddr4x-evk|imx95-19x19-lpddr5-evk)"
+COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk|imx943-19x19-lpddr5-evk|imx95-15x15-lpddr4x-evk|imx95-19x19-lpddr5-evk)"
 FILES:${PN} += "${HARPOON_DATADIR}"
 FILES:${PN} += "${bindir}"
 FILES:${PN} += "${sysconfdir}"

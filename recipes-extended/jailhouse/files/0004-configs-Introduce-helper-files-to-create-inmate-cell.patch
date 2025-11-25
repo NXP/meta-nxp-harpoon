@@ -1,7 +1,7 @@
-From f00b6610ab4033b1e6b78f8b7a1ea2e4300c5a3f Mon Sep 17 00:00:00 2001
+From aee5bf8e73a5dcb5a139ea138c05e3a88161e83f Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Wed, 17 Nov 2021 15:00:03 +0000
-Subject: [PATCH 04/33] configs: Introduce helper files to create inmate cell
+Subject: [PATCH 04/34] configs: Introduce helper files to create inmate cell
  config
 
 Inmate cell configurations all look alike. Let's create a couple of

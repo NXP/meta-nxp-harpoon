@@ -1,7 +1,7 @@
-From dfec8cf164506b15698ee99b190b2a109cc5bd6d Mon Sep 17 00:00:00 2001
+From 5b7bf124eadbe1312afe46844c796c9b3369b202 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 8 Jan 2024 13:02:09 +0100
-Subject: [PATCH 10/33] configs: arm64: imx8m{m,n,p}: add harpoon freertos
+Subject: [PATCH 10/34] configs: arm64: imx8m{m,n,p}: add harpoon freertos
  industrial cell
 
 Upstream-Status: Pending

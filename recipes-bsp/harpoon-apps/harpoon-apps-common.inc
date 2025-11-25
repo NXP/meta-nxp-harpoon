@@ -9,11 +9,11 @@ S = "${WORKDIR}/git"
 HARPOON_DATADIR ?= "${datadir}/harpoon"
 
 ARM_TC = "gcc-arm-aa64-elf"
-ARM_PV = "13.2.rel1"
+ARM_PV = "14.2.rel1"
 
 DEPENDS += "${ARM_TC}-native (= ${ARM_PV})"
 RDEPENDS:${PN} += "jailhouse-imx"
 
-COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk|imx95-15x15-lpddr4x-evk|imx95-19x19-lpddr5-evk)"
+COMPATIBLE_MACHINE = "(imx8mp-lpddr4-evk|imx8mm-lpddr4-evk|imx8mn-lpddr4-evk|imx93evk|imx943-19x19-lpddr5-evk|imx95-15x15-lpddr4x-evk|imx95-19x19-lpddr5-evk)"
 FILES:${PN} += "${HARPOON_DATADIR}"
 PACKAGE_ARCH = "${MACHINE_ARCH}"

@@ -1,7 +1,7 @@
-From 7c2c9fce72888ae5b620caef479e20251ed9a90e Mon Sep 17 00:00:00 2001
+From 578d4cde0abba75ad3934a5122b4ca96f88ed61e Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Tue, 24 Jan 2023 16:56:56 +0100
-Subject: [PATCH 01/33] configs: arm64: imx8mn: fix typo in name
+Subject: [PATCH 01/34] configs: arm64: imx8mn: fix typo in name
 
 Upstream-Status: Pending
 

@@ -1,7 +1,7 @@
-From 1e008990a3d6942ea765c3f4dabe83a063e7380c Mon Sep 17 00:00:00 2001
+From 969110ce688e1d802876c710cf5654b846ff4160 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Mon, 19 Aug 2024 13:55:18 +0200
-Subject: [PATCH 31/33] configs: arm64: imx95: add RPMsg
+Subject: [PATCH 31/34] configs: arm64: imx95: add RPMsg
 
 Upstream-Status: Pending
 

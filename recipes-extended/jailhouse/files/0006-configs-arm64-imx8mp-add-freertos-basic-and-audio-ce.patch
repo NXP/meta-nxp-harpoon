@@ -1,7 +1,7 @@
-From 1d77d67e43a3594693ca1b86d8c72c3ba4de3cbe Mon Sep 17 00:00:00 2001
+From 6a716aa8f95389c8495e9f0b2d0a595bd7fd3f1c Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Mon, 26 Apr 2021 15:48:20 +0200
-Subject: [PATCH 06/33] configs: arm64: imx8mp: add freertos basic and audio
+Subject: [PATCH 06/34] configs: arm64: imx8mp: add freertos basic and audio
  cells
 
 The -rtos header can be reused for multiple RTOS (such as upcoming Zephyr)

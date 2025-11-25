@@ -1,7 +1,7 @@
-From 4fd9ceee6c8be565513f0131afd9556bdd7a0566 Mon Sep 17 00:00:00 2001
+From 333122e7f6b59ba1c6dc2cebb6912ae42db9b283 Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 10 Mar 2022 10:55:49 +0100
-Subject: [PATCH 11/33] configs: arm64: imx8m{m,n,p}: Add all SAI instances to
+Subject: [PATCH 11/34] configs: arm64: imx8m{m,n,p}: Add all SAI instances to
  harpoon audio cell config
 
 [HRPN-293] imx8m{m,n,p}-freertos-audio: fix permissions for SAI and I2C

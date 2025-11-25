@@ -1,7 +1,7 @@
-From 711aadc3f0cfc16363d98389ae0cbfa864e6ed58 Mon Sep 17 00:00:00 2001
+From d06f1a772826037a15aab420e4b8b5e7e277d972 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 9 Jan 2023 15:43:25 +0800
-Subject: [PATCH 19/33] configs: arm64: imx93: add freertos and zephyr basic
+Subject: [PATCH 19/34] configs: arm64: imx93: add freertos and zephyr basic
  configs
 
 Upstream-Status: Pending

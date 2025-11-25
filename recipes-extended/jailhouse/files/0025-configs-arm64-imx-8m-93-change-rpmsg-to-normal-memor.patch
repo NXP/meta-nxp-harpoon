@@ -1,7 +1,7 @@
-From e61dc2518b0d4ebfed6d463ac7170aaa71fe3362 Mon Sep 17 00:00:00 2001
+From b3873044f67aef272ca671092cbb39de709205fd Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 11 Sep 2023 15:07:42 +0800
-Subject: [PATCH 25/33] configs: arm64: imx{8m,93}: change rpmsg to normal
+Subject: [PATCH 25/34] configs: arm64: imx{8m,93}: change rpmsg to normal
  memory
 
 Upstream-Status: Pending

@@ -1,7 +1,7 @@
-From 59f7bfc59e30b45c693a6c87fb411bb04ba90df8 Mon Sep 17 00:00:00 2001
+From f69d1519f7da193d1a91173f49f4e76785c3db34 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 2 Feb 2023 15:48:00 +0800
-Subject: [PATCH 21/33] configs: arm64: imx{8mm,8mp,93}: add freertos virtio
+Subject: [PATCH 21/34] configs: arm64: imx{8mm,8mp,93}: add freertos virtio
  support
 
 Upstream-Status: Pending

@@ -1,7 +1,7 @@
-From c82b0c8672f21e37bb5424559b70a0e50d065e01 Mon Sep 17 00:00:00 2001
+From 3a893fdac167398ddbbcacedb9d9ddad2ade348b Mon Sep 17 00:00:00 2001
 From: Fabrice Goucem <fabrice.goucem@nxp.com>
 Date: Thu, 18 Nov 2021 15:02:24 +0100
-Subject: [PATCH 08/33] configs: arm64: imx8mm: add harpoon freertos basic and
+Subject: [PATCH 08/34] configs: arm64: imx8mm: add harpoon freertos basic and
  audio cells
 
 Upstream-Status: Pending

@@ -1,40 +1,40 @@
-From 73011ee0e18cab0e23184334a958f788bbc389ce Mon Sep 17 00:00:00 2001
+From e94a958ca2d7f42e6fefd1575831a1ba238c0685 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
-Date: Mon, 29 Jul 2024 10:12:34 +0200
-Subject: [PATCH 29/34] configs: arm64: add harpoon cell for i.MX 95 EVK
+Date: Tue, 19 Aug 2025 14:57:05 +0200
+Subject: [PATCH 34/34] configs: arm64: imx943 add support
 
 Upstream-Status: Pending
 
 Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
 ---
- configs/arm64/imx95-harpoon-freertos.c |  47 +++++++++++
- configs/arm64/imx95-harpoon-rtos.h     | 104 +++++++++++++++++++++++++
- configs/arm64/imx95-harpoon-zephyr.c   |  47 +++++++++++
- 3 files changed, 198 insertions(+)
- create mode 100644 configs/arm64/imx95-harpoon-freertos.c
- create mode 100644 configs/arm64/imx95-harpoon-rtos.h
- create mode 100644 configs/arm64/imx95-harpoon-zephyr.c
+ configs/arm64/imx943-harpoon-freertos.c |  56 +++++++++++
+ configs/arm64/imx943-harpoon-rtos.h     | 125 ++++++++++++++++++++++++
+ configs/arm64/imx943-harpoon-zephyr.c   |  56 +++++++++++
+ 3 files changed, 237 insertions(+)
+ create mode 100644 configs/arm64/imx943-harpoon-freertos.c
+ create mode 100644 configs/arm64/imx943-harpoon-rtos.h
+ create mode 100644 configs/arm64/imx943-harpoon-zephyr.c
 
-diff --git a/configs/arm64/imx95-harpoon-freertos.c b/configs/arm64/imx95-harpoon-freertos.c
+diff --git a/configs/arm64/imx943-harpoon-freertos.c b/configs/arm64/imx943-harpoon-freertos.c
 new file mode 100644
-index 00000000..52231ad3
+index 00000000..8b5a1ad2
 --- /dev/null
-+++ b/configs/arm64/imx95-harpoon-freertos.c
-@@ -0,0 +1,47 @@
++++ b/configs/arm64/imx943-harpoon-freertos.c
+@@ -0,0 +1,56 @@
 +/*
-+ * i.MX95 target - FreeRTOS config
++ * i.MX943 target - FreeRTOS config
 + *
-+ * Copyright 2024 NXP
++ * Copyright 2025 NXP
 + *
 + * This work is licensed under the terms of the GNU GPL, version 2.  See
 + * the COPYING file in the top-level directory.
 + */
 +
 +#include "cell-helper.h"
-+#include "imx95-harpoon-rtos.h"
++#include "imx943-harpoon-rtos.h"
 +
 +#define CONFIG_INMATE_NAME		"freertos"
-+#define CONFIG_INMATE_CORE_BITMAP	(0b100000)
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
 +#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
 +
 +/* Memory & peripherals */
@@ -61,23 +61,32 @@ index 00000000..52231ad3
 +		/* interrupts 224..255 */       \
 +		RTOS_COMMON_IRQCHIP1_BITMAP3,   \
 +		/* interrupts 256..287 */       \
-+		RTOS_COMMON_IRQCHIP1_BITMAP4)
++		RTOS_COMMON_IRQCHIP1_BITMAP4),  \
++	IRQCHIP2(CONFIG_INMATE_IRQCHIPS_ADDR,   \
++		/* interrupts 288..319 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP1,   \
++		/* interrupts 320..351 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP2,   \
++		/* interrupts 352..383 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP3,   \
++		/* interrupts 384..415 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP4)  \
 +
 +/* IVSHMEM PCI */
 +#define CONFIG_INMATE_PCI_DEVICES \
 +	RTOS_COMMON_PCI_IVSHMEM
 +
 +#include "cell-create.h"
-diff --git a/configs/arm64/imx95-harpoon-rtos.h b/configs/arm64/imx95-harpoon-rtos.h
+diff --git a/configs/arm64/imx943-harpoon-rtos.h b/configs/arm64/imx943-harpoon-rtos.h
 new file mode 100644
-index 00000000..c42cf816
+index 00000000..717921a3
 --- /dev/null
-+++ b/configs/arm64/imx95-harpoon-rtos.h
-@@ -0,0 +1,104 @@
++++ b/configs/arm64/imx943-harpoon-rtos.h
+@@ -0,0 +1,125 @@
 +/*
-+ * i.MX95 target - common RTOS config
++ * i.MX943 target - common RTOS config
 + *
-+ * Copyright 2024 NXP
++ * Copyright 2025 NXP
 + *
 + * This work is licensed under the terms of the GNU GPL, version 2.  See
 + * the COPYING file in the top-level directory.
@@ -88,8 +97,12 @@ index 00000000..c42cf816
 +
 +typedef enum IRQn {
 +  /* Device specific interrupts */
-+  LPUART3_IRQn                 = 96,               /**< Low Power UART 3 */
-+  MU3_A_IRQn                   = 260,              /**< Message Unit 3 */
++  TPM2_IRQn                    = 67,               /**< Timer PWM Module (TPM) 2 */
++  LPUART12_IRQn                = 115,               /**< Low Power UART 12 */
++  TPM4_IRQn                    = 119,               /**< Timer PWM Module (TPM) 2 */
++  SW_MB_L_IRQn                 = 246,              /**< Unused SPI 214, to be used by generic software mailbox in Linux */
++  SW_MB_R_IRQn                 = 247,              /**< Unused SPI 215, to be used by generic software mailbox in RTOS */
++  MU3_A_IRQn                   = 298,              /**< Message Unit 3 */
 +} IRQn_Type;
 +
 +#define RTOS_COMMON_MEMORY_REGIONS \
@@ -99,7 +112,12 @@ index 00000000..c42cf816
 +	MEM_REGION_RWS( 0xff9fc000, 0xff9fc000, KB(8)),  /* IVSHMEM */              \
 +	MEM_REGION_ROS( 0xff9fe000, 0xff9fe000, KB(8)),  /* IVSHMEM */              \
 +	/* IVSHMEM regions should always be kept on top so PCI_IVS doesn't change */\
-+	MMIO_REGION_RW( 0x42570000, 0x42570000, KB(64)), /* LPUART3 */              \
++	MMIO_REGION_RWS(0xc0000000, 0xc0000000, KB(4)),  /* SW MBOX */              \
++	MEM_REGION_RWS( 0xc0100000, 0xc0100000, KB(64)), /* RPMSG */                \
++	MEM_REGION_RWS( 0xc0200000, 0xc0200000, MB(1)),  /* RPMSG BUF */            \
++	MMIO_REGION_RW( 0x42a80000, 0x42a80000, KB(64)), /* LPUART12 */             \
++	MMIO_REGION_RW( 0x424f0000, 0x424f0000, KB(64)), /* TPM4 */                 \
++	MMIO_REGION_RW( 0x44320000, 0x44320000, KB(64)), /* TPM2 */                 \
 +	MMIO_REGION_RW( 0x445d0000, 0x445d0000, KB(4)),  /* MU3 */                  \
 +	MEM_REGION_RWS( 0x445d1000, 0x445d1000, KB(4))   /* MU3 SRAM */
 +
@@ -121,7 +139,8 @@ index 00000000..c42cf816
 +	0
 +
 +/* interrupts 64..95 */
-+#define RTOS_COMMON_IRQCHIP0_BITMAP2 0
++#define RTOS_COMMON_IRQCHIP0_BITMAP2 \
++	IRQnMAP(TPM2_IRQn)
 +#define RTOS_AUDIO_IRQCHIP0_BITMAP2 0
 +#define RTOS_AVB_IRQCHIP0_BITMAP2 \
 +	RTOS_AUDIO_IRQCHIP0_BITMAP2
@@ -130,7 +149,8 @@ index 00000000..c42cf816
 +
 +/* interrupts 96..127 */
 +#define RTOS_COMMON_IRQCHIP0_BITMAP3 \
-+	IRQnMAP(LPUART3_IRQn)
++	IRQnMAP(TPM4_IRQn) |\
++	IRQnMAP(LPUART12_IRQn)
 +#define RTOS_AUDIO_IRQCHIP0_BITMAP3 \
 +	0
 +#define RTOS_AVB_IRQCHIP0_BITMAP3 \
@@ -169,35 +189,45 @@ index 00000000..c42cf816
 +
 +/* interrupts 224..255 */
 +#define RTOS_COMMON_IRQCHIP1_BITMAP3 \
-+	0
++	IRQnMAP(SW_MB_R_IRQn)
 +
 +/* interrupts 256..287 */
 +#define RTOS_COMMON_IRQCHIP1_BITMAP4 \
++	0
++#define RTOS_INDUS_IRQCHIP1_BITMAP4 \
++	0
++
++/* interrupts 288..319 */
++#define RTOS_COMMON_IRQCHIP2_BITMAP1 \
 +	IRQnMAP(MU3_A_IRQn)
++#define RTOS_COMMON_IRQCHIP2_BITMAP2 0
++#define RTOS_COMMON_IRQCHIP2_BITMAP3 0
++#define RTOS_COMMON_IRQCHIP2_BITMAP4 0
++#define RTOS_COMMON_IRQCHIP2_BITMAP5 0
 +
 +/* IVSHMEM PCI */
 +#define	RTOS_COMMON_PCI_IVSHMEM \
-+	PCI_IVSHMEM_UNDEFINED(0, 0, 0, 1, 3)
-diff --git a/configs/arm64/imx95-harpoon-zephyr.c b/configs/arm64/imx95-harpoon-zephyr.c
++	PCI_IVSHMEM_UNDEFINED(4, 0, 0, 1, 1)
+diff --git a/configs/arm64/imx943-harpoon-zephyr.c b/configs/arm64/imx943-harpoon-zephyr.c
 new file mode 100644
-index 00000000..8983e518
+index 00000000..b7260495
 --- /dev/null
-+++ b/configs/arm64/imx95-harpoon-zephyr.c
-@@ -0,0 +1,47 @@
++++ b/configs/arm64/imx943-harpoon-zephyr.c
+@@ -0,0 +1,56 @@
 +/*
-+ * i.MX95 target - Zephyr config
++ * i.MX943 target - Zephyr config
 + *
-+ * Copyright 2024 NXP
++ * Copyright 2025 NXP
 + *
 + * This work is licensed under the terms of the GNU GPL, version 2.  See
 + * the COPYING file in the top-level directory.
 + */
 +
 +#include "cell-helper.h"
-+#include "imx95-harpoon-rtos.h"
++#include "imx943-harpoon-rtos.h"
 +
 +#define CONFIG_INMATE_NAME		"zephyr"
-+#define CONFIG_INMATE_CORE_BITMAP	(0b100000)
++#define CONFIG_INMATE_CORE_BITMAP	(0b1000)
 +#define CONFIG_INMATE_BASE		RTOS_INMATE_BASE
 +
 +/* Memory & peripherals */
@@ -224,7 +254,16 @@ index 00000000..8983e518
 +		/* interrupts 224..255 */       \
 +		RTOS_COMMON_IRQCHIP1_BITMAP3,   \
 +		/* interrupts 256..287 */       \
-+		RTOS_COMMON_IRQCHIP1_BITMAP4)
++		RTOS_COMMON_IRQCHIP1_BITMAP4),  \
++	IRQCHIP2(CONFIG_INMATE_IRQCHIPS_ADDR,   \
++		/* interrupts 288..319 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP1,   \
++		/* interrupts 320..351 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP2,   \
++		/* interrupts 352..383 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP3,   \
++		/* interrupts 384..415 */       \
++		RTOS_COMMON_IRQCHIP2_BITMAP4)  \
 +
 +/* IVSHMEM PCI */
 +#define CONFIG_INMATE_PCI_DEVICES \

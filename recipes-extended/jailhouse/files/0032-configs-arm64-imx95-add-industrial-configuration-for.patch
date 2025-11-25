@@ -1,7 +1,7 @@
-From 7c984403099eb4f450ad7f2cb0f34f0a56e6c789 Mon Sep 17 00:00:00 2001
+From 2eeba755e9ced70324bd771857d0df9efccea035 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Tue, 10 Dec 2024 10:16:37 +0100
-Subject: [PATCH 32/33] configs: arm64: imx95: add industrial configuration for
+Subject: [PATCH 32/34] configs: arm64: imx95: add industrial configuration for
  CAN use case
 
 Add Harpoon industrial configuration for CAN use case on i.MX 95 SoC.

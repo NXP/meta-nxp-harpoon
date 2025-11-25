@@ -1,7 +1,7 @@
-From ba4fc46bfaa775ec7b8023bbe1f018639ecf8134 Mon Sep 17 00:00:00 2001
+From 9dfcac86ab40e77eed32c1cf1807ecffc9d47045 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
-Date: Wed, 25 Jun 2025 17:10:54 +0200
-Subject: [PATCH 35/36] dts: imx8mm-evk-harpoon: disable nodes that use
+Date: Tue, 24 Jun 2025 12:03:03 +0200
+Subject: [PATCH 35/38] dts: imx8mn-evk-harpoon: disable nodes that use
  audiopll
 
 Disable all nodes that uses the audiopll, to prevent the Linux Domain
@@ -11,13 +11,13 @@ Upstream-Status: Pending
 
 Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
 ---
- .../boot/dts/freescale/imx8mm-evk-harpoon.dts | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ .../boot/dts/freescale/imx8mn-evk-harpoon.dts | 23 ++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
-index 70b2fa9b6b31..a2505eb7abb8 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-evk-harpoon.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
+index 1581ea6e9ddc..a05df50a26df 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk-harpoon.dts
 @@ -1,6 +1,6 @@
  // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
  /*
@@ -25,19 +25,23 @@ index 70b2fa9b6b31..a2505eb7abb8 100644
 + * Copyright 2021-2023, 2025 NXP
   */
  
- #include "imx8mm-evk-root.dts"
+ #include "imx8mn-evk-root.dts"
 @@ -10,6 +10,7 @@ &i2c3 {
  	status = "disabled";
  };
  
 +/* Disable the whole Audio system for Linux and give full ownership to RTOS. */
- &sai1 {
+ &sai2 {
  	status = "disabled";
  };
-@@ -29,3 +30,19 @@ &sai5 {
- &sai6 {
+@@ -29,3 +30,23 @@ &sai6 {
+ &sai7 {
  	status = "disabled";
  };
++
++&easrc {
++	status = "disabled";
++};
 +
 +&micfil {
 +	status = "disabled";

@@ -1,7 +1,7 @@
-From a69bc459a2e5541676680beb2139c6e2a86836c7 Mon Sep 17 00:00:00 2001
+From 3059882063105c4ee519ae18418d1962c32d1367 Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Fri, 3 Nov 2023 18:12:05 +0100
-Subject: [PATCH 25/32] configs: arm64: imx93: add avb freertos and zephyr
+Subject: [PATCH 25/33] configs: arm64: imx93: add avb freertos and zephyr
  cells
 
 Upstream-Status: Pending

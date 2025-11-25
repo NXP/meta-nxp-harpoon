@@ -1,7 +1,7 @@
-From 3221e712f30f4c1417e59c03578e79ef833f81bd Mon Sep 17 00:00:00 2001
+From be34ed392c8a7130fcffbb9bd5cff6cbedbce987 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Tue, 18 Oct 2022 10:37:17 +0800
-Subject: [PATCH 10/36] arm64: dts: imx8m: add generic software mailbox dtsi
+Subject: [PATCH 10/38] arm64: dts: imx8m: add generic software mailbox dtsi
 
 Upstream-Status: Pending
 

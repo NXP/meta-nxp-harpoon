@@ -1,7 +1,7 @@
-From 26b4cdb5014704e8c3e1a88bebc05abc7e8435f7 Mon Sep 17 00:00:00 2001
+From 26742cb20e9074229cd9846d3658d3890451014e Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Wed, 13 Sep 2023 00:15:54 +0800
-Subject: [PATCH 05/36] drivers: rpmsg: imx: map vring memory as cacheable for
+Subject: [PATCH 05/38] drivers: rpmsg: imx: map vring memory as cacheable for
  coherent device
 
 On imx SoCs, it supports data coherent within the Cortex-A core

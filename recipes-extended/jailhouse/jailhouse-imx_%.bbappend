@@ -32,3 +32,4 @@ SRC_URI += "file://0029-configs-arm64-imx95-add-TPM-2-and-4-to-harpoon-cell.patc
 SRC_URI += "file://0030-configs-arm64-imx95-add-RPMsg.patch"
 SRC_URI += "file://0031-configs-arm64-imx95-add-industrial-configuration-for.patch"
 SRC_URI += "file://0032-configs-arm64-imx95-industrial-add-TSN-dependencies.patch"
+SRC_URI += "file://0033-configs-arm64-imx943-add-support.patch"

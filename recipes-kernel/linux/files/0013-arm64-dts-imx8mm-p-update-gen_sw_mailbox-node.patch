@@ -1,7 +1,7 @@
-From 2963587d96b7e8b4fa4f1a4af364a8b2d634f81c Mon Sep 17 00:00:00 2001
+From 7ea71a447432804cd8733ae91d58825be27df635 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Fri, 27 Oct 2023 18:32:08 +0800
-Subject: [PATCH 13/36] arm64: dts: imx8mm/p: update gen_sw_mailbox node
+Subject: [PATCH 13/38] arm64: dts: imx8mm/p: update gen_sw_mailbox node
 
 To add ack property.
 

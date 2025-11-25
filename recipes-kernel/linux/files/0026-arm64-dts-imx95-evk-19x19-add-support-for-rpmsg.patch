@@ -1,7 +1,7 @@
-From d8744470f166644581fa5b97892e4ed4c534c90e Mon Sep 17 00:00:00 2001
+From 72cde51c67c5b487247f21a253ba138e30901e4b Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Mon, 12 Aug 2024 15:09:08 +0200
-Subject: [PATCH 26/36] arm64: dts: imx95-evk-19x19: add support for rpmsg
+Subject: [PATCH 26/38] arm64: dts: imx95-evk-19x19: add support for rpmsg
 
 Upstream-Status: Pending
 

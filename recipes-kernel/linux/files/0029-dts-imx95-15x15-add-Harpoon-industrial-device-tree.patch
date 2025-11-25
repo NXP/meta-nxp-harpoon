@@ -1,7 +1,7 @@
-From 7d160e8e0b36da755cf168c89c9588d9dccbbce8 Mon Sep 17 00:00:00 2001
+From 99210c278e1271f6da5cc8e12e5aa754d94329f6 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Tue, 7 Jan 2025 17:44:05 +0100
-Subject: [PATCH 29/36] dts: imx95-15x15: add Harpoon industrial device tree
+Subject: [PATCH 29/38] dts: imx95-15x15: add Harpoon industrial device tree
 
 Add Harpoon industrial device tree for i.MX 95 15x15 EVK.
 Reuse harpoon device tree:
@@ -19,10 +19,10 @@ Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
  create mode 100644 arch/arm64/boot/dts/freescale/imx95-15x15-evk-harpoon-industrial.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 6eca47552529..fb602c4d5499 100644
+index 05a124682330..667377ca34fb 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -579,7 +579,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-flexspi-m2.dtb
+@@ -619,7 +619,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-flexspi-m2.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-mqs.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-aud-hat.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-8mic-reve.dtb

@@ -1,7 +1,7 @@
-From 30ac30ce8557555bf5c295f78cda47613453981d Mon Sep 17 00:00:00 2001
+From 18e5991216329ad661d63cc3fd5719dfe164e070 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Tue, 18 Oct 2022 10:38:24 +0800
-Subject: [PATCH 11/36] arm64: dts: imx8m: add Cortex-A53 RPMSG dtsi file
+Subject: [PATCH 11/38] arm64: dts: imx8m: add Cortex-A53 RPMSG dtsi file
 
 Upstream-Status: Pending
 

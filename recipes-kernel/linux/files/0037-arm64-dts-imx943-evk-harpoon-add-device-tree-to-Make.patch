@@ -1,0 +1,29 @@
+From f4c60a5c589283e6c6f26367450894c9e77ed526 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Tue, 4 Nov 2025 13:46:45 +0100
+Subject: [PATCH 37/38] arm64: dts: imx943-evk-harpoon: add device tree to
+ Makefile
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 0bcacc7dbdc8..79b6ca3e6af5 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -611,7 +611,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx943-evk-crrm.dtb
+ imx943-evk-sdwifi-dtbs := imx943-evk.dtb imx943-evk-sdwifi.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx943-evk-sdwifi.dtb
+ 
+-dtb-$(CONFIG_ARCH_MXC) += imx943-evk-root.dtb imx943-evk-inmate.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx943-evk-root.dtb imx943-evk-inmate.dtb imx943-evk-harpoon.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx943-evk-netc-rpmsg.dtb
+ 
+ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk.dtb
+-- 
+2.34.1
+

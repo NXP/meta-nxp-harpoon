@@ -1,7 +1,7 @@
-From 9d6fec6edc0443b8a34815a9bc84bffd952cfdad Mon Sep 17 00:00:00 2001
+From a3fe2d43926d15cb21ea21d15a1c36b8f532fc2e Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Thu, 22 May 2025 10:42:31 +0200
-Subject: [PATCH 34/36] dts: imx8mp-evk-harpoon: disable nodes that interacts
+Subject: [PATCH 33/38] dts: imx8mp-evk-harpoon: disable nodes that interacts
  with audiomix
 
 Disable all nodes that refers to the audiomix Power Domain, to prevent

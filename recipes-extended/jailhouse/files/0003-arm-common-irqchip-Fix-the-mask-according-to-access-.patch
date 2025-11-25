@@ -1,7 +1,7 @@
-From 074d6a5430c98f6ab9d3af60790dfa4cd493a138 Mon Sep 17 00:00:00 2001
+From 1c6359e60a3a31c9d16d14685c66f6bcc8b3f875 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Mon, 23 Aug 2021 14:34:49 +0800
-Subject: [PATCH 03/32] arm-common: irqchip: Fix the mask according to access
+Subject: [PATCH 03/33] arm-common: irqchip: Fix the mask according to access
  address and size
 
 The current access_mask is implicitly assuming that it always

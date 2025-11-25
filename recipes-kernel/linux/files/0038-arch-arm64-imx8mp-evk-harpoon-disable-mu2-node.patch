@@ -1,0 +1,33 @@
+From c44ddcfe770d409f9d3bdcc59c3297438a00901e Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Wed, 5 Nov 2025 15:12:34 +0100
+Subject: [PATCH 38/38] arch: arm64: imx8mp-evk-harpoon: disable mu2 node
+
+Disable "mu2" node, as its clocks depend on the audio_blk_ctrl node that
+is disabled.
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+index f228994e8117..75d9d3e40621 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk-harpoon.dts
+@@ -35,6 +35,10 @@ &sai7 {
+ 	status = "disabled";
+ };
+ 
++&mu2 {
++	status = "disabled";
++};
++
+ &audio_blk_ctrl {
+ 	status = "disabled";
+ };
+-- 
+2.34.1
+

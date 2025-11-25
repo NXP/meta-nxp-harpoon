@@ -1,7 +1,7 @@
-From 7ed6bb37a841fabc03b5e7b823a9bea1ce1c4053 Mon Sep 17 00:00:00 2001
+From 607ad2e74e16a0a1926266dd525cd6d43cd6b356 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Wed, 28 Sep 2022 15:44:18 +0800
-Subject: [PATCH 18/32] configs: imx8m{m,n,p}: add irqs and memory regions for
+Subject: [PATCH 18/33] configs: imx8m{m,n,p}: add irqs and memory regions for
  sw mailbox and rpmsg
 
 Put the definitions of SW mailbox and RPMSG regions after the IVSHMEM regions

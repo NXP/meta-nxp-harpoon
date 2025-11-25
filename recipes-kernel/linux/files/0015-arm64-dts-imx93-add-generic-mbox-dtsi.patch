@@ -1,7 +1,7 @@
-From 2e6c5f38e885cd2d7801742969597d3fce177b67 Mon Sep 17 00:00:00 2001
+From 4ef4a329d9692bfd9ac89c6b07236e835c80eb50 Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Thu, 18 Jan 2024 17:48:23 +0100
-Subject: [PATCH 15/36] arm64: dts: imx93: add generic mbox dtsi
+Subject: [PATCH 15/38] arm64: dts: imx93: add generic mbox dtsi
 
 Upstream-Status: Pending
 

@@ -1,7 +1,7 @@
-From 5301d154d8f11e3906597be93a4dea2ac5d81119 Mon Sep 17 00:00:00 2001
+From 43bc2ca6be13281a4f32a2f0fca0f864c600992b Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Fri, 3 Feb 2023 23:17:49 +0800
-Subject: [PATCH 06/36] rpmsg: imx: add remove() callback function
+Subject: [PATCH 06/38] rpmsg: imx: add remove() callback function
 
 Upstream-Status: Pending
 

@@ -1,7 +1,7 @@
-From 326fc3cd4811cefd87e0235c2bf7eee2c17bf180 Mon Sep 17 00:00:00 2001
+From 9e3c4581662294aa392e114fdce4b463b369fa85 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Wed, 13 Nov 2024 14:38:15 +0100
-Subject: [PATCH 28/36] arm64: dts: imx93: harpoon: disable DSI node
+Subject: [PATCH 28/38] arm64: dts: imx93: harpoon: disable DSI node
 
 When booting on i.MX 93 EVK, we can see an error on the drm driver:
 "[drm:drm_bridge_attach] *ERROR* failed to attach bridge

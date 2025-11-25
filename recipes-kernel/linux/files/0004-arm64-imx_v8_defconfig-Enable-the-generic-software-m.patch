@@ -1,7 +1,7 @@
-From 07e5cf0c416040c705b9e0454667e4334622fa4a Mon Sep 17 00:00:00 2001
+From 931cfbecf50c6500054b40627a4186c2c0da6b4f Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Fri, 21 Oct 2022 15:19:53 +0800
-Subject: [PATCH 04/36] arm64: imx_v8_defconfig: Enable the generic software
+Subject: [PATCH 04/38] arm64: imx_v8_defconfig: Enable the generic software
  mailbox
 
 Upstream-Status: Pending
@@ -12,10 +12,10 @@ Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/imx_v8_defconfig b/arch/arm64/configs/imx_v8_defconfig
-index 31eabe2708ea..08d21b0fe28e 100644
+index 3dfc96a9710e..f2ce36dd3e6b 100644
 --- a/arch/arm64/configs/imx_v8_defconfig
 +++ b/arch/arm64/configs/imx_v8_defconfig
-@@ -1219,3 +1219,4 @@ CONFIG_MEMTEST=y
+@@ -1193,3 +1193,4 @@ CONFIG_MEMTEST=y
  CONFIG_VHOST_NET=m
  CONFIG_VIDEO_MAX9286=y
  CONFIG_VIDEO_RDACM20=y

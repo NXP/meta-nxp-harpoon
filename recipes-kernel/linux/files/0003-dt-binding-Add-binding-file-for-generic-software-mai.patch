@@ -1,7 +1,7 @@
-From ea5c5a094b1d86c19ee36240ad7b136e2accb09c Mon Sep 17 00:00:00 2001
+From e4084c3e453dc6413a7fdacde0c893e8ac02385b Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Tue, 18 Apr 2023 11:22:07 +0800
-Subject: [PATCH 03/36] dt-binding: Add binding file for generic software
+Subject: [PATCH 03/38] dt-binding: Add binding file for generic software
  mailbox
 
 Upstream-Status: Pending

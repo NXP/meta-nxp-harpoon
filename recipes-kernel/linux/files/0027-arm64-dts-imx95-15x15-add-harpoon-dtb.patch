@@ -1,7 +1,7 @@
-From 221bf49ab6094e4de0d6b918d9ca769aa7589c53 Mon Sep 17 00:00:00 2001
+From d2d70e7a9055ce5164723f6a3c0004859f7d9f38 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Fri, 27 Dec 2024 13:53:39 +0100
-Subject: [PATCH 27/36] arm64: dts: imx95-15x15: add harpoon dtb
+Subject: [PATCH 27/38] arm64: dts: imx95-15x15: add harpoon dtb
 
 Add Harpoon device tree for i.MX 95 15x15 EVK.
 Disable lpuart3 and mu3 on Linux for usage in inmate cell.
@@ -17,10 +17,10 @@ Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
  create mode 100644 arch/arm64/boot/dts/freescale/imx95-15x15-evk-harpoon.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 18e577327d9f..6eca47552529 100644
+index 4820683d5997..05a124682330 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -579,7 +579,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-flexspi-m2.dtb
+@@ -619,7 +619,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-flexspi-m2.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-mqs.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-aud-hat.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx95-15x15-evk-8mic-reve.dtb

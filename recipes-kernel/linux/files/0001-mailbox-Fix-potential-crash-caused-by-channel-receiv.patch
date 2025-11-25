@@ -1,7 +1,7 @@
-From da5f61f21b763d233c5a5afc12fa45adafdffc10 Mon Sep 17 00:00:00 2001
+From 9413fe21e578db416c3342bf802155e041a6b04b Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Fri, 11 Nov 2022 16:17:19 +0800
-Subject: [PATCH 01/36] mailbox: Fix potential crash caused by channel receive
+Subject: [PATCH 01/38] mailbox: Fix potential crash caused by channel receive
  function
 
 Mailbox may receive fake messages on a channel without binding to a

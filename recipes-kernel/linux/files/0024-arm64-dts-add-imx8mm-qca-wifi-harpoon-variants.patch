@@ -1,7 +1,7 @@
-From 71dbc71191dec17f23a7cb4ec12f385b9086fefb Mon Sep 17 00:00:00 2001
+From 8151794886be9c8d37264aa2c784979cabb6ef2c Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Tue, 1 Oct 2024 15:59:25 +0200
-Subject: [PATCH 24/36] arm64: dts: add imx8mm qca-wifi harpoon variants
+Subject: [PATCH 24/38] arm64: dts: add imx8mm qca-wifi harpoon variants
 
 Current default root and evk (and hence harpoon) device tree files are destined for
 the i.MX 8M Mini LPDDR4 EVKB board (with the PCA PMIC). For old boards, i.MX 8M Mini
@@ -27,7 +27,7 @@ Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi.dtsi
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 040c423c73a9..d43c74d135ca 100644
+index a33d8e4a9d4a..190a32720477 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
 @@ -130,6 +130,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb imx8mm-evk-rpmsg.dtb imx8mm-evk-rm67191
@@ -37,7 +37,7 @@ index 040c423c73a9..d43c74d135ca 100644
 +			  imx8mm-evk-qca-wifi-harpoon.dtb imx8mm-evk-qca-wifi-harpoon-industrial.dtb \
 +			  imx8mm-evk-qca-wifi-harpoon-avb.dtb \
  			  imx8mm-evk-rm67199.dtb imx8mm-evk-rm67191-cmd-ram.dtb imx8mm-evk-rm67199-cmd-ram.dtb \
- 			  imx8mm-evk-lk.dtb imx8mm-evk-rpmsg-wm8524-lpv.dtb
+ 			  imx8mm-evk-lk.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk-rpmsg-wm8524.dtb
 diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-avb.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk-qca-wifi-harpoon-avb.dts
 new file mode 100644

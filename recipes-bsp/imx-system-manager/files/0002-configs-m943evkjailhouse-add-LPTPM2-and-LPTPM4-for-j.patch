@@ -1,0 +1,29 @@
+From 1cc21cfb7bec3e8dc1d058f188bcb36c86552867 Mon Sep 17 00:00:00 2001
+From: Aziz Sellami <aziz.sellami@nxp.com>
+Date: Mon, 29 Sep 2025 15:42:37 +0200
+Subject: [PATCH 2/3] configs: m943evkjailhouse: add LPTPM2 and LPTPM4 for
+ jailhouse cell
+
+Upstream-Status: Pending
+
+Signed-off-by: Aziz Sellami <aziz.sellami@nxp.com>
+---
+ configs/other/mx94evkjailhouse.cfg | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configs/other/mx94evkjailhouse.cfg b/configs/other/mx94evkjailhouse.cfg
+index 5af941b..edf4902 100755
+--- a/configs/other/mx94evkjailhouse.cfg
++++ b/configs/other/mx94evkjailhouse.cfg
+@@ -1340,6 +1340,8 @@ CLK_LPUART12        ACCESS
+ LPUART12            OWNER
+ MU3_A               ACCESS
+ USDHC1              ACCESS
++LPTPM2              OWNER
++LPTPM4              OWNER
+ 
+ # Pins
+ 
+-- 
+2.34.1
+

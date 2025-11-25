@@ -1,7 +1,7 @@
-From 42f6caa2516a192fb4d5387d6313a7799bae83fb Mon Sep 17 00:00:00 2001
+From cb50ca658c29f60157b7ae0dda0a4ecf81b58282 Mon Sep 17 00:00:00 2001
 From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 Date: Tue, 19 Sep 2023 13:03:33 +0800
-Subject: [PATCH 23/32] configs: arm64: add audio cell config for imx93
+Subject: [PATCH 23/33] configs: arm64: add audio cell config for imx93
 
 Upstream-Status: Pending
 

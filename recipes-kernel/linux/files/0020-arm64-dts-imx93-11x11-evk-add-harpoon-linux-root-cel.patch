@@ -1,7 +1,7 @@
-From a10da7c831c2e26aa4381b595d374e8756db0b66 Mon Sep 17 00:00:00 2001
+From 85e6695702aed81a6ca63c0e582d5d164c956fd6 Mon Sep 17 00:00:00 2001
 From: Stephane Viau <stephane.viau@nxp.com>
 Date: Tue, 24 Jan 2023 09:09:15 +0000
-Subject: [PATCH 20/36] arm64: dts: imx93-11x11-evk: add harpoon linux root
+Subject: [PATCH 20/38] arm64: dts: imx93-11x11-evk: add harpoon linux root
  cell for audio and industrial use cases
 
 harpoon.dts embeds the audio use case config: SAI interfaces are moved
@@ -33,10 +33,10 @@ Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
  create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 4f254801423f..28ee4c98d5ad 100644
+index 5bb02b3e5945..3b4091b3a8d2 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -476,6 +476,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
+@@ -484,6 +484,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
  			  imx93-14x14-evk-flexspi-m2.dtb imx93-14x14-evk-dsi-serdes.dtb \
  			  imx93-14x14-evk-i3c.dtb imx93-14x14-evk-8mic-reve.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb \

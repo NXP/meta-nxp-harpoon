@@ -1,7 +1,7 @@
-From 1e5713d9d118f6ce26789b7f574f9f7af31ddd79 Mon Sep 17 00:00:00 2001
+From dea3989e2b185c82c93ce813df02885f26ba62c7 Mon Sep 17 00:00:00 2001
 From: Aziz Sellami <aziz.sellami@nxp.com>
 Date: Mon, 10 Mar 2025 16:53:35 +0100
-Subject: [PATCH 32/32] configs: arm64: imx95: industrial: add TSN dependencies
+Subject: [PATCH 32/33] configs: arm64: imx95: industrial: add TSN dependencies
 
 Upstream-Status: Pending
 

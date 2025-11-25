@@ -1,7 +1,7 @@
-From bf47af883028cc861256319d4fb1ad70a53510d5 Mon Sep 17 00:00:00 2001
+From bc719a9c66ad1bf8c56b355e47fa1e18b9296322 Mon Sep 17 00:00:00 2001
 From: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
 Date: Fri, 3 Nov 2023 15:38:35 +0100
-Subject: [PATCH 22/36] arm64: dts: add imx93 avb device tree
+Subject: [PATCH 22/38] arm64: dts: add imx93 avb device tree
 
 Upstream-Status: Pending
 
@@ -13,10 +13,10 @@ Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
  create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-evk-harpoon-avb.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 28ee4c98d5ad..040c423c73a9 100644
+index 3b4091b3a8d2..a33d8e4a9d4a 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -476,7 +476,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
+@@ -484,7 +484,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-14x14-evk.dtb \
  			  imx93-14x14-evk-flexspi-m2.dtb imx93-14x14-evk-dsi-serdes.dtb \
  			  imx93-14x14-evk-i3c.dtb imx93-14x14-evk-8mic-reve.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx93-11x11-evk.dtb \

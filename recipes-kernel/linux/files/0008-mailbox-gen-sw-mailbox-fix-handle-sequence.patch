@@ -1,7 +1,7 @@
-From fb90519c9780425b72d2ed4fcc54bd2697b9b1e7 Mon Sep 17 00:00:00 2001
+From fda25a7e4fc1ed0d12c0fcb0dde7ced2125ff140 Mon Sep 17 00:00:00 2001
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 Date: Thu, 26 Oct 2023 15:15:13 +0800
-Subject: [PATCH 08/36] mailbox: gen-sw-mailbox: fix handle sequence
+Subject: [PATCH 08/38] mailbox: gen-sw-mailbox: fix handle sequence
 
 Change mailbox state machine only after the message have already
 be handled.
